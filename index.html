@@ -1,0 +1,1642 @@
+<meta charset="utf-8">
+<title>Book with èllash</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Jost:wght@300;400;500;600&display=swap">
+
+<style>
+/* ============================================================
+   èllash — booking
+   Structure (spacing / radii / type scale) from the supplied
+   design tokens. Identity palette from the èllash brand.
+   Dark-first: :root is the dark set; light is redefined for
+   prefers-color-scheme AND for the explicit [data-theme] stamp.
+   ============================================================ */
+
+:root {
+  /* --- tokens: spacing (from design system) --- */
+  --s-2:  2px;   --s-4:  4px;   --s-5:  5px;   --s-7:  7px;
+  --s-8:  8px;   --s-10: 10px;  --s-15: 15px;  --s-25: 25px;
+  --s-40: 40px;  --s-55: 55px;  --s-80: 80px;
+
+  /* --- tokens: radii (from design system) --- */
+  --r-1: 4px;  --r-4: 8px;  --r-3: 10px;  --r-2: 20px;
+
+  /* --- tokens: type scale (anchored on 15 / 17 / 34) --- */
+  --t-xs: 12px;  --t-sm: 13px;  --t-2:  15px;  --t-1:  17px;
+  --t-md: 21px;  --t-lg: 26px;  --t-3:  34px;  --t-xl: 46px;
+
+  --font-display: 'Italiana', 'Didot', 'Bodoni MT', Georgia, serif;
+  --font-body: 'Jost', 'Futura', 'Century Gothic', system-ui, sans-serif;
+
+  /* --- identity palette: dark (default) --- */
+  --ground:      #14120e;
+  --surface:     #1c1a14;
+  --surface-2:   #24211a;
+  --line:        #332f25;
+  --line-strong: #4a4536;
+
+  --ink:         #f4f1e8;
+  --ink-soft:    #bdb8a6;
+  --ink-faint:   #948e7a;
+
+  --gold:        #a8a183;
+  --gold-bright: #c9c1a0;
+  --gold-dim:    #6d684f;
+  --gold-wash:   rgba(168, 161, 131, 0.11);
+
+  --blush:       #c99aa5;
+  --blush-wash:  rgba(179, 132, 143, 0.16);
+
+  --good:        #8fae87;
+  --alert:       #d69a8f;
+
+  --shadow: 0 var(--s-10) var(--s-40) rgba(0, 0, 0, 0.45);
+  --ring: 0 0 0 3px rgba(168, 161, 131, 0.38);
+}
+
+/* light: system preference, unless the viewer explicitly chose dark */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --ground:      #f7f4ec;
+    --surface:     #ffffff;
+    --surface-2:   #f8f1f4;
+    --line:        #e7dae2;
+    --line-strong: #cfc7b4;
+
+    --ink:         #393939;
+    --ink-soft:    #5d5749;
+    --ink-faint:   #6f6a59;
+
+    --gold:        #5f5a41;
+    --gold-bright: #3f3c2b;
+    --gold-dim:    #b4ad91;
+    --gold-wash:   rgba(168, 161, 131, 0.16);
+
+    --blush:       #8e5c69;
+    --blush-wash:  rgba(239, 215, 229, 0.7);
+
+    --good:        #4f6b48;
+    --alert:       #9a4f42;
+
+    --shadow: 0 var(--s-10) var(--s-40) rgba(63, 32, 33, 0.10);
+    --ring: 0 0 0 3px rgba(95, 90, 65, 0.32);
+  }
+}
+
+/* light: explicit viewer choice, beats a dark OS */
+:root[data-theme="light"] {
+  --ground:      #f7f4ec;
+  --surface:     #ffffff;
+  --surface-2:   #f8f1f4;
+  --line:        #e7dae2;
+  --line-strong: #cfc7b4;
+
+  --ink:         #393939;
+  --ink-soft:    #5d5749;
+  --ink-faint:   #6f6a59;
+
+  --gold:        #5f5a41;
+  --gold-bright: #3f3c2b;
+  --gold-dim:    #b4ad91;
+  --gold-wash:   rgba(168, 161, 131, 0.16);
+
+  --blush:       #8e5c69;
+  --blush-wash:  rgba(239, 215, 229, 0.7);
+
+  --good:        #4f6b48;
+  --alert:       #9a4f42;
+
+  --shadow: 0 var(--s-10) var(--s-40) rgba(63, 32, 33, 0.10);
+  --ring: 0 0 0 3px rgba(95, 90, 65, 0.32);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--t-1);
+  font-weight: 400;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 { margin: 0; font-weight: 400; text-wrap: balance; }
+p { margin: 0; }
+button { font: inherit; color: inherit; }
+
+:where(button, a, input, select, textarea):focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+  border-radius: var(--r-1);
+}
+
+.eyebrow {
+  font-size: var(--t-xs);
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.num { font-variant-numeric: tabular-nums; }
+
+/* ---------------------------------------------------------- shell */
+
+.shell {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: var(--s-25) var(--s-15) var(--s-80);
+  display: grid;
+  gap: var(--s-40);
+}
+
+@media (min-width: 900px) {
+  .shell {
+    grid-template-columns: 340px minmax(0, 1fr);
+    align-items: start;
+    padding: var(--s-55) var(--s-40) var(--s-80);
+    gap: var(--s-55);
+  }
+}
+
+/* ---------------------------------------------------------- rail */
+
+.rail { display: grid; gap: var(--s-25); }
+
+@media (min-width: 900px) {
+  .rail { position: sticky; top: var(--s-40); }
+}
+
+.brand { display: grid; gap: var(--s-15); justify-items: start; }
+
+.lashmark {
+  width: 100%;
+  height: 96px;
+  display: block;
+  overflow: visible;
+}
+
+.lashmark path {
+  fill: none;
+  stroke: var(--gold);
+  stroke-linecap: round;
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-size: var(--t-xl);
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+}
+
+.brand-role {
+  font-size: var(--t-2);
+  color: var(--ink-soft);
+  line-height: 1.6;
+  max-width: 30ch;
+}
+
+.brand-role b { color: var(--gold); font-weight: 500; }
+
+/* live summary card */
+
+.summary {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  padding: var(--s-25);
+  display: grid;
+  gap: var(--s-15);
+  box-shadow: var(--shadow);
+}
+
+.summary-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-10);
+  padding-bottom: var(--s-15);
+  border-bottom: 1px solid var(--line);
+}
+
+.summary-title {
+  font-family: var(--font-display);
+  font-size: var(--t-md);
+  color: var(--ink);
+}
+
+.summary-rows { display: grid; gap: var(--s-10); }
+
+.srow {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  gap: var(--s-10);
+  align-items: baseline;
+  font-size: var(--t-2);
+}
+
+.srow dt { color: var(--ink-faint); }
+.srow dd { margin: 0; color: var(--ink); }
+.srow dd.empty { color: var(--ink-faint); font-style: italic; }
+
+.summary-total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-top: var(--s-15);
+  border-top: 1px solid var(--line);
+}
+
+.summary-total .amount {
+  font-family: var(--font-body);
+  font-size: var(--t-md);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--gold);
+}
+
+.deposit-note {
+  font-size: var(--t-sm);
+  color: var(--ink-faint);
+  line-height: 1.55;
+}
+
+/* ---------------------------------------------------------- steps */
+
+.flow { display: grid; gap: var(--s-25); }
+
+.progress {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-8);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.progress li {
+  display: flex;
+  align-items: center;
+  gap: var(--s-7);
+  font-size: var(--t-sm);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  padding: var(--s-7) var(--s-10);
+  border-radius: var(--r-3);
+  border: 1px solid transparent;
+  transition: color 0.25s, border-color 0.25s, background 0.25s;
+}
+
+.progress li .pip {
+  width: var(--s-8);
+  height: var(--s-8);
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  flex: none;
+}
+
+.progress li[data-state="current"] {
+  color: var(--ink);
+  border-color: var(--gold-dim);
+  background: var(--gold-wash);
+}
+
+.progress li[data-state="current"] .pip {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+
+.progress li[data-state="done"] { color: var(--gold); }
+.progress li[data-state="done"] .pip { background: var(--gold-dim); border-color: var(--gold-dim); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  padding: var(--s-25);
+  display: grid;
+  gap: var(--s-25);
+  box-shadow: var(--shadow);
+}
+
+@media (min-width: 620px) {
+  .card { padding: var(--s-40); }
+}
+
+.card-head { display: grid; gap: var(--s-7); }
+
+.card-head h2 {
+  font-family: var(--font-display);
+  font-size: var(--t-3);
+  line-height: 1.1;
+}
+
+.card-head p {
+  font-size: var(--t-2);
+  color: var(--ink-soft);
+  max-width: 58ch;
+  line-height: 1.6;
+}
+
+/* ---------------------------------------------------------- services */
+
+.services { display: grid; gap: var(--s-10); }
+
+.service {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--s-5) var(--s-15);
+  align-items: start;
+  text-align: left;
+  width: 100%;
+  padding: var(--s-15);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+}
+
+.service:not([aria-pressed="true"]):hover { border-color: var(--gold-dim); background: var(--gold-wash); }
+
+.service[aria-pressed="true"] {
+  border-color: var(--gold);
+  background: var(--gold-wash);
+  box-shadow: inset 0 0 0 1px var(--gold);
+}
+
+.service-name { font-size: var(--t-1); font-weight: 500; }
+
+.service-meta {
+  grid-column: 1;
+  font-size: var(--t-sm);
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.service-price {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  align-self: center;
+  font-family: var(--font-body);
+  font-size: var(--t-md);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.service-dur {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-5);
+  padding: var(--s-2) var(--s-7);
+  margin-right: var(--s-7);
+  border-radius: var(--r-1);
+  background: var(--surface-2);
+  color: var(--ink-soft);
+  font-size: var(--t-xs);
+  letter-spacing: 0.04em;
+}
+
+/* ---------------------------------------------------------- areas */
+
+.areas { display: grid; gap: var(--s-10); grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+
+.area {
+  padding: var(--s-15);
+  text-align: left;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  cursor: pointer;
+  display: grid;
+  gap: var(--s-4);
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.area:not([aria-pressed="true"]):hover { border-color: var(--gold-dim); background: var(--gold-wash); }
+
+.area[aria-pressed="true"] {
+  border-color: var(--gold);
+  background: var(--gold-wash);
+  box-shadow: inset 0 0 0 1px var(--gold);
+}
+
+.area-name { font-size: var(--t-1); font-weight: 500; }
+.area-days { font-size: var(--t-sm); color: var(--ink-soft); letter-spacing: 0.04em; }
+
+/* ---------------------------------------------------------- calendar */
+
+.picker { display: grid; gap: var(--s-25); }
+
+@media (min-width: 720px) {
+  .picker { grid-template-columns: minmax(0, 1fr) 220px; align-items: start; }
+}
+
+.cal { display: grid; gap: var(--s-15); }
+
+.cal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-10);
+}
+
+.cal-month {
+  font-family: var(--font-display);
+  font-size: var(--t-md);
+  letter-spacing: 0.02em;
+}
+
+.cal-nav { display: flex; gap: var(--s-5); }
+
+.cal-nav button {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--r-4);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.cal-nav button:hover:not(:disabled) { border-color: var(--gold); color: var(--gold); }
+.cal-nav button:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: var(--s-4); }
+
+.cal-dow {
+  text-align: center;
+  font-size: var(--t-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  padding-bottom: var(--s-5);
+}
+
+.day {
+  aspect-ratio: 1;
+  min-height: 40px;
+  display: grid;
+  place-items: center;
+  gap: 0;
+  border: 1px solid transparent;
+  border-radius: var(--r-4);
+  background: transparent;
+  color: var(--ink-faint);
+  font-size: var(--t-2);
+  cursor: default;
+  position: relative;
+  padding: 0;
+  font-family: inherit;
+  transition: border-color 0.18s, background 0.18s, color 0.18s;
+}
+
+.day.pad { visibility: hidden; }
+
+.day.free {
+  color: var(--ink);
+  border-color: var(--line);
+  cursor: pointer;
+}
+
+.day.free:not([aria-pressed="true"]):hover { border-color: var(--gold); background: var(--gold-wash); }
+
+.day.free::after {
+  content: "";
+  position: absolute;
+  bottom: 5px;
+  width: var(--s-4);
+  height: var(--s-4);
+  border-radius: 50%;
+  background: var(--gold-dim);
+}
+
+.day.full { color: var(--ink-faint); text-decoration: line-through; }
+
+.day[aria-pressed="true"] {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--ground);
+  font-weight: 500;
+}
+
+.day[aria-pressed="true"]::after { background: var(--ground); opacity: 0.5; }
+
+.cal-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-15);
+  font-size: var(--t-sm);
+  color: var(--ink-faint);
+}
+
+.cal-key span { display: inline-flex; align-items: center; gap: var(--s-7); }
+
+.key-dot { width: var(--s-8); height: var(--s-8); border-radius: 50%; background: var(--gold-dim); }
+.key-line { width: 14px; height: 1px; background: var(--line-strong); }
+
+/* time slots */
+
+.slots { display: grid; gap: var(--s-10); align-content: start; }
+
+.slots-title { font-size: var(--t-sm); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); }
+
+.slot-list { display: grid; gap: var(--s-7); grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
+
+@media (min-width: 720px) { .slot-list { grid-template-columns: 1fr; } }
+
+.slot {
+  padding: var(--s-10);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--r-4);
+  cursor: pointer;
+  font-size: var(--t-2);
+  letter-spacing: 0.04em;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+
+.slot:not([aria-pressed="true"]):hover:not(:disabled) { border-color: var(--gold); background: var(--gold-wash); }
+
+.slot:disabled {
+  color: var(--ink-faint);
+  text-decoration: line-through;
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.slot[aria-pressed="true"] {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--ground);
+  font-weight: 500;
+}
+
+.slots-empty {
+  font-size: var(--t-2);
+  color: var(--ink-faint);
+  line-height: 1.6;
+  border: 1px dashed var(--line);
+  border-radius: var(--r-3);
+  padding: var(--s-15);
+}
+
+/* ---------------------------------------------------------- form */
+
+.fields { display: grid; gap: var(--s-15); }
+
+@media (min-width: 620px) {
+  .fields { grid-template-columns: 1fr 1fr; }
+  .field.wide { grid-column: 1 / -1; }
+}
+
+.field { display: grid; gap: var(--s-5); }
+
+.field label {
+  font-size: var(--t-sm);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.field input,
+.field select,
+.field textarea {
+  font-family: var(--font-body);
+  font-size: var(--t-1);
+  color: var(--ink);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-4);
+  padding: var(--s-10) var(--s-15);
+  width: 100%;
+  transition: border-color 0.2s;
+}
+
+.field textarea { resize: vertical; min-height: 84px; line-height: 1.5; }
+
+.field input::placeholder,
+.field textarea::placeholder { color: var(--ink-faint); }
+
+.field input:hover,
+.field select:hover,
+.field textarea:hover { border-color: var(--line-strong); }
+
+.field .err {
+  font-size: var(--t-sm);
+  color: var(--alert);
+  min-height: 0;
+}
+
+.field[data-invalid="true"] input,
+.field[data-invalid="true"] select,
+.field[data-invalid="true"] textarea { border-color: var(--alert); }
+
+/* ---------------------------------------------------------- review */
+
+.review { display: grid; gap: var(--s-15); }
+
+.review-block {
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  padding: var(--s-15);
+  display: grid;
+  gap: var(--s-8);
+}
+
+.review-block .eyebrow { margin-bottom: var(--s-2); }
+
+.rrow {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr);
+  gap: var(--s-10);
+  font-size: var(--t-2);
+  align-items: baseline;
+}
+
+.rrow .k { color: var(--ink-faint); }
+.rrow .v { color: var(--ink); overflow-wrap: anywhere; }
+
+.consent {
+  display: flex;
+  gap: var(--s-10);
+  align-items: flex-start;
+  font-size: var(--t-2);
+  color: var(--ink-soft);
+  line-height: 1.6;
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  padding: var(--s-15);
+  background: var(--blush-wash);
+}
+
+.consent input { margin: var(--s-4) 0 0; accent-color: var(--gold); flex: none; width: 16px; height: 16px; }
+.consent[data-invalid="true"] { border-color: var(--alert); }
+
+/* ---------------------------------------------------------- actions */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-10);
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--s-5);
+}
+
+.btn {
+  padding: var(--s-15) var(--s-25);
+  border-radius: var(--r-3);
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: var(--t-1);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  transition: background 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s;
+}
+
+.btn-primary { background: var(--gold); color: var(--ground); }
+.btn-primary:hover:not(:disabled) { background: var(--gold-bright); }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-quiet { background: transparent; border-color: var(--line); color: var(--ink-soft); }
+.btn-quiet:hover { border-color: var(--gold-dim); color: var(--ink); }
+
+.hint { font-size: var(--t-sm); color: var(--ink-faint); }
+
+/* ---------------------------------------------------------- done */
+
+.done { display: grid; gap: var(--s-25); justify-items: center; text-align: center; padding: var(--s-15) 0; }
+
+.done-mark {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  background: var(--gold-wash);
+}
+
+.done h2 { font-family: var(--font-display); font-size: var(--t-3); line-height: 1.15; }
+.done p { font-size: var(--t-2); color: var(--ink-soft); max-width: 46ch; line-height: 1.65; }
+
+.ref {
+  font-size: var(--t-2);
+  letter-spacing: 0.22em;
+  color: var(--gold);
+  border: 1px dashed var(--gold-dim);
+  border-radius: var(--r-3);
+  padding: var(--s-10) var(--s-15);
+}
+
+.done-card {
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  padding: var(--s-15);
+  display: grid;
+  gap: var(--s-8);
+  background: var(--surface-2);
+}
+
+/* ---------------------------------------------------------- footer */
+
+.foot {
+  grid-column: 1 / -1;
+  border-top: 1px solid var(--line);
+  padding-top: var(--s-25);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-15);
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--t-sm);
+  color: var(--ink-faint);
+}
+
+.foot a { color: var(--gold); text-decoration: none; }
+.foot a:hover { text-decoration: underline; }
+
+.theme-toggle {
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  color: var(--ink-faint);
+  padding: var(--s-7) var(--s-10);
+  font-size: var(--t-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.theme-toggle:hover { border-color: var(--gold-dim); color: var(--ink); }
+
+/* ---------------------------------------------------------- motion */
+
+.step { animation: rise 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.lashmark path {
+  stroke-dasharray: var(--len);
+  stroke-dashoffset: var(--len);
+  animation: draw 1.5s cubic-bezier(0.35, 0.6, 0.2, 1) both;
+  animation-delay: var(--delay);
+}
+
+@keyframes draw { to { stroke-dashoffset: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.001ms !important;
+  }
+  .lashmark path { stroke-dashoffset: 0; }
+}
+</style>
+
+<div class="shell">
+
+  <aside class="rail">
+    <div class="brand">
+      <svg class="lashmark" viewBox="0 0 300 96" aria-hidden="true" id="lashmark"></svg>
+      <h1 class="wordmark">èllash</h1>
+      <p class="brand-role">
+        Lash extensions &amp; BIAB, brought to your door by <b>Ellie Taylor</b>.
+        Mobile across Birmingham, Nuneaton and Coventry.
+      </p>
+    </div>
+
+    <section class="summary" aria-live="polite">
+      <div class="summary-head">
+        <h2 class="summary-title">Your appointment</h2>
+        <span class="eyebrow" id="stepCount">Step 1 of 4</span>
+      </div>
+      <dl class="summary-rows">
+        <div class="srow"><dt>Treatment</dt><dd class="empty" id="sumService">Not chosen yet</dd></div>
+        <div class="srow"><dt>Area</dt><dd class="empty" id="sumArea">Not chosen yet</dd></div>
+        <div class="srow"><dt>Date</dt><dd class="empty" id="sumDate">Not chosen yet</dd></div>
+        <div class="srow"><dt>Time</dt><dd class="empty" id="sumTime">Not chosen yet</dd></div>
+      </dl>
+      <div class="summary-total">
+        <span class="eyebrow">Total</span>
+        <span class="amount num" id="sumTotal">—</span>
+      </div>
+      <p class="deposit-note" id="depositNote">
+        A £10 deposit secures the slot and comes off your total on the day.
+      </p>
+    </section>
+  </aside>
+
+  <main class="flow">
+    <ol class="progress" id="progress"></ol>
+    <div id="stage"></div>
+  </main>
+
+  <footer class="foot">
+    <span>èllash · Fully qualified lash technician · Mobile to Birmingham, Nuneaton &amp; Coventry</span>
+    <span style="display:flex; gap:var(--s-15); align-items:center;">
+      <a href="https://www.instagram.com/ellash_.x" target="_blank" rel="noopener">@ellash_.x</a>
+      <button class="theme-toggle" id="themeToggle" type="button">Theme</button>
+    </span>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------------------------------------------------- safe storage */
+
+  var store = {
+    get: function (k) { try { return window.localStorage.getItem(k); } catch (e) { return null; } },
+    set: function (k, v) { try { window.localStorage.setItem(k, v); } catch (e) { /* private mode */ } }
+  };
+
+  /* ---------------------------------------------------- lash mark */
+
+  (function drawLashes() {
+    var svg = document.getElementById("lashmark");
+    if (!svg) return;
+
+    var n = 26, out = "", BASE = 86;
+
+    // lash line: a shallow arc, the way a lid sits
+    function lidY(t) { return BASE - Math.sin(Math.PI * t) * 5; }
+
+    for (var i = 0; i < n; i++) {
+      var t = i / (n - 1);
+      var x0 = 16 + t * 268;
+      var y0 = lidY(t);
+
+      // longest through the outer third, as a real lash map runs
+      var lift = Math.pow(Math.sin(Math.PI * Math.min(1, t * 0.92 + 0.04)), 0.75);
+      var len = 22 + lift * 46;
+
+      // splay outward from the centre, then curl further at the tip
+      var splay = (t - 0.5) * 1.25;
+      var curl = 0.62;
+
+      var mx = x0 + Math.sin(splay) * len * 0.55;
+      var my = y0 - Math.cos(splay) * len * 0.55;
+      var tx = mx + Math.sin(splay + curl) * len * 0.45;
+      var ty = my - Math.cos(splay + curl) * len * 0.45;
+
+      var c1x = x0 + Math.sin(splay) * len * 0.3;
+      var c1y = y0 - Math.cos(splay) * len * 0.3;
+      var c2x = mx + Math.sin(splay + curl * 0.35) * len * 0.22;
+      var c2y = my - Math.cos(splay + curl * 0.35) * len * 0.22;
+
+      var d = "M " + x0.toFixed(1) + " " + y0.toFixed(1) +
+              " C " + c1x.toFixed(1) + " " + c1y.toFixed(1) +
+              " " + c2x.toFixed(1) + " " + c2y.toFixed(1) +
+              " " + tx.toFixed(1) + " " + ty.toFixed(1);
+
+      out += '<path d="' + d + '" style="--len:' + Math.round(len * 1.25) +
+             "; --delay:" + (140 + i * 30) + "ms; " +
+             "stroke-width:" + (0.6 + lift * 1.0).toFixed(2) +
+             "; opacity:" + (0.35 + lift * 0.6).toFixed(2) + '"/>';
+    }
+
+    // the lash line itself, drawn first
+    var lid = "M 12 " + lidY(0).toFixed(1) + " Q 150 " + (BASE - 11).toFixed(1) +
+              " 288 " + lidY(1).toFixed(1);
+    out += '<path d="' + lid + '" style="--len:290; --delay:0ms; stroke-width:1.4; opacity:0.85"/>';
+
+    svg.innerHTML = out;
+  })();
+
+  /* ---------------------------------------------------- data */
+
+  var SERVICES = [
+    { id: "classic",  name: "Classic Full Set",        price: 40, mins: 105, note: "One extension per natural lash. Soft, mascara-look definition." },
+    { id: "hybrid",   name: "Hybrid Full Set",         price: 45, mins: 120, note: "Classic and volume mixed. Texture with a bit of fullness." },
+    { id: "russian",  name: "Russian Volume Full Set", price: 50, mins: 135, note: "Handmade fans, 4–6D. The fullest, fluffiest finish." },
+    { id: "infills",  name: "Infills",                 price: 25, mins: 75,  note: "Within 2–3 weeks, with at least 40% of your set still on." },
+    { id: "removal",  name: "Lash Removal",            price: 10, mins: 30,  note: "Gentle cream removal. Free when booked with a new full set." },
+    { id: "biab",     name: "BIAB Nails",              price: 30, mins: 90,  note: "Builder gel overlay on natural nails, shaped and finished." }
+  ];
+
+  // Ellie travels on set days — the calendar is filtered by where you are.
+  var AREAS = [
+    { id: "nuneaton",   name: "Nuneaton",   days: [1, 2], label: "Mondays & Tuesdays" },
+    { id: "coventry",   name: "Coventry",   days: [3, 4], label: "Wednesdays & Thursdays" },
+    { id: "birmingham", name: "Birmingham", days: [5, 6], label: "Fridays & Saturdays" }
+  ];
+
+  var START_TIMES = ["09:00", "11:00", "13:00", "15:00", "17:00", "19:00"];
+  var DAY_ENDS_AT = 21 * 60;
+  var DEPOSIT = 10;
+
+  var DOW = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  var DOW_LONG = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  var MONTHS = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"];
+
+  /* ---------------------------------------------------- state */
+
+  var state = {
+    step: 0,
+    serviceId: null,
+    areaId: null,
+    date: null,        // "YYYY-MM-DD"
+    time: null,        // "HH:MM"
+    view: startOfMonth(new Date()),
+    details: { name: "", phone: "", email: "", address: "", postcode: "", history: "", notes: "" },
+    consent: false,
+    ref: null,
+    errors: {}
+  };
+
+  var STEPS = ["Treatment", "Date & time", "Your details", "Confirm"];
+
+  /* ---------------------------------------------------- helpers */
+
+  function startOfMonth(d) { return new Date(d.getFullYear(), d.getMonth(), 1); }
+  function iso(d) {
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") +
+           "-" + String(d.getDate()).padStart(2, "0");
+  }
+  function fromIso(s) {
+    var p = s.split("-");
+    return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+  }
+  function today() { var d = new Date(); d.setHours(0, 0, 0, 0); return d; }
+
+  function service() {
+    for (var i = 0; i < SERVICES.length; i++) if (SERVICES[i].id === state.serviceId) return SERVICES[i];
+    return null;
+  }
+  function area() {
+    for (var i = 0; i < AREAS.length; i++) if (AREAS[i].id === state.areaId) return AREAS[i];
+    return null;
+  }
+
+  function fmtMins(m) {
+    var h = Math.floor(m / 60), r = m % 60;
+    return (h ? h + "h" : "") + (h && r ? " " : "") + (r ? r + "m" : "");
+  }
+
+  function fmtDate(isoStr) {
+    var d = fromIso(isoStr);
+    return DOW[d.getDay()] + " " + d.getDate() + " " + MONTHS[d.getMonth()].slice(0, 3);
+  }
+
+  function fmtDateLong(isoStr) {
+    var d = fromIso(isoStr);
+    return DOW_LONG[d.getDay()] + " " + d.getDate() + " " +
+           MONTHS[d.getMonth()] + " " + d.getFullYear();
+  }
+
+  function endTime(start, mins) {
+    var p = start.split(":");
+    var t = Number(p[0]) * 60 + Number(p[1]) + mins;
+    return String(Math.floor(t / 60)).padStart(2, "0") + ":" + String(t % 60).padStart(2, "0");
+  }
+
+  // Deterministic stand-in for Ellie's real diary, so the same date always
+  // shows the same slots taken.
+  function seed(str) {
+    var h = 2166136261;
+    for (var i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); }
+    return h >>> 0;
+  }
+
+  function bookedSlots() {
+    try { return JSON.parse(store.get("ellash.booked") || "[]"); } catch (e) { return []; }
+  }
+
+  function slotTaken(dateStr, time) {
+    if (bookedSlots().indexOf(dateStr + "T" + time) !== -1) return true;
+    return seed(dateStr + time) % 100 < 34;
+  }
+
+  function slotsFor(dateStr) {
+    var svc = service();
+    if (!svc || !dateStr) return [];
+    var out = [];
+    for (var i = 0; i < START_TIMES.length; i++) {
+      var t = START_TIMES[i];
+      var p = t.split(":");
+      if (Number(p[0]) * 60 + Number(p[1]) + svc.mins > DAY_ENDS_AT) continue;
+      out.push({ time: t, taken: slotTaken(dateStr, t) });
+    }
+    return out;
+  }
+
+  function dayIsWorking(d) {
+    var a = area();
+    if (!a) return false;
+    return a.days.indexOf(d.getDay()) !== -1;
+  }
+
+  function dayBookable(d) {
+    var min = today();
+    min.setDate(min.getDate() + 1);           // needs a day's notice
+    if (d < min) return false;
+    if (!dayIsWorking(d)) return false;
+    var s = slotsFor(iso(d));
+    for (var i = 0; i < s.length; i++) if (!s[i].taken) return true;
+    return false;
+  }
+
+  // The calendar must never open on a month with nothing in it — Ellie only
+  // travels to each area on set days, so the next opening can be weeks out.
+  function firstOpenMonth() {
+    var d = today();
+    var limit = new Date(d.getFullYear(), d.getMonth() + 4, 1);
+    for (var i = 0; i < 200 && d < limit; i++) {
+      if (dayBookable(d)) return startOfMonth(d);
+      d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1);
+    }
+    return startOfMonth(today());
+  }
+
+  function monthHasOpening(view) {
+    var days = new Date(view.getFullYear(), view.getMonth() + 1, 0).getDate();
+    for (var n = 1; n <= days; n++) {
+      if (dayBookable(new Date(view.getFullYear(), view.getMonth(), n))) return true;
+    }
+    return false;
+  }
+
+  function total() {
+    var svc = service();
+    return svc ? svc.price : 0;
+  }
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c];
+    });
+  }
+
+  /* ---------------------------------------------------- persistence */
+
+  function save() {
+    store.set("ellash.draft", JSON.stringify({
+      step: state.step, serviceId: state.serviceId, areaId: state.areaId,
+      date: state.date, time: state.time, details: state.details, consent: state.consent
+    }));
+  }
+
+  function restore() {
+    var raw = store.get("ellash.draft");
+    if (!raw) return;
+    try {
+      var d = JSON.parse(raw);
+      if (d.step === 4) return;               // a finished booking, start fresh
+      state.serviceId = d.serviceId || null;
+      state.areaId = d.areaId || null;
+      state.date = d.date || null;
+      state.time = d.time || null;
+      state.consent = !!d.consent;
+      if (d.details) for (var k in state.details) if (d.details[k]) state.details[k] = d.details[k];
+      if (state.date) state.view = startOfMonth(fromIso(state.date));
+      // a date saved on an earlier visit may since have passed
+      if (state.date && fromIso(state.date) < today()) { state.date = null; state.time = null; }
+
+      // never land on a step whose earlier answers are missing
+      var want = Math.min(Number(d.step) || 0, 3);
+      var reachable = 0;
+      if (state.serviceId) reachable = 1;
+      if (reachable === 1 && state.areaId && state.date && state.time) reachable = 2;
+      if (reachable === 2 && state.details.name && state.details.email) reachable = 3;
+      state.step = Math.min(want, reachable);
+    } catch (e) { /* ignore a corrupt draft */ }
+  }
+
+  /* ---------------------------------------------------- render: chrome */
+
+  function renderProgress() {
+    var ol = document.getElementById("progress");
+    var html = "";
+    for (var i = 0; i < STEPS.length; i++) {
+      var st = state.step > i ? "done" : (state.step === i ? "current" : "todo");
+      html += '<li data-state="' + st + '"><span class="pip"></span>' + STEPS[i] + "</li>";
+    }
+    ol.innerHTML = html;
+    ol.style.display = state.step >= 4 ? "none" : "flex";
+  }
+
+  function setRow(id, value) {
+    var el = document.getElementById(id);
+    el.textContent = value || "Not chosen yet";
+    el.className = value ? "" : "empty";
+  }
+
+  function renderSummary() {
+    var svc = service(), a = area();
+    setRow("sumService", svc ? svc.name : "");
+    setRow("sumArea", a ? a.name : "");
+    setRow("sumDate", state.date ? fmtDate(state.date) : "");
+    setRow("sumTime", state.time && svc ? state.time + "–" + endTime(state.time, svc.mins) : "");
+
+    document.getElementById("sumTotal").textContent = svc ? "£" + total() : "—";
+    document.getElementById("stepCount").textContent =
+      state.step >= 4 ? "Booked" : "Step " + (state.step + 1) + " of 4";
+
+    var note = document.getElementById("depositNote");
+    note.textContent = svc
+      ? "£" + DEPOSIT + " deposit to secure the slot, £" + (svc.price - DEPOSIT) + " due on the day."
+      : "A £10 deposit secures the slot and comes off your total on the day.";
+  }
+
+  /* ---------------------------------------------------- render: steps */
+
+  function stepService() {
+    var html = '<div class="card step">' +
+      '<div class="card-head">' +
+        '<span class="eyebrow">Welcome</span>' +
+        "<h2>What are we booking you in for?</h2>" +
+        "<p>Pick a treatment and I'll show you when I'm next in your area. Every appointment is done at your home — no salon, no parking, no rush.</p>" +
+      "</div><div class=\"services\">";
+
+    for (var i = 0; i < SERVICES.length; i++) {
+      var s = SERVICES[i];
+      html += '<button type="button" class="service" data-service="' + s.id + '" ' +
+        'aria-pressed="' + (state.serviceId === s.id) + '">' +
+        '<span class="service-name">' + esc(s.name) + "</span>" +
+        '<span class="service-price num">£' + s.price + "</span>" +
+        '<span class="service-meta"><span class="service-dur num">' + fmtMins(s.mins) + "</span>" + esc(s.note) + "</span>" +
+        "</button>";
+    }
+
+    html += "</div>" + actions({ next: "Choose a date", back: null, ready: !!state.serviceId,
+      hint: state.serviceId ? "" : "Choose a treatment to continue" }) + "</div>";
+    return html;
+  }
+
+  function stepWhen() {
+    var svc = service();
+    var html = '<div class="card step">' +
+      '<div class="card-head">' +
+        '<span class="eyebrow">Step 2 · ' + esc(svc.name) + " · " + fmtMins(svc.mins) + "</span>" +
+        "<h2>Where are you, and when suits?</h2>" +
+        "<p>I'm mobile, so I work one area at a time. Pick yours and the calendar will show only the days I'm travelling there.</p>" +
+      "</div><div class=\"areas\">";
+
+    for (var i = 0; i < AREAS.length; i++) {
+      var a = AREAS[i];
+      html += '<button type="button" class="area" data-area="' + a.id + '" ' +
+        'aria-pressed="' + (state.areaId === a.id) + '">' +
+        '<span class="area-name">' + esc(a.name) + "</span>" +
+        '<span class="area-days">' + esc(a.label) + "</span></button>";
+    }
+    html += "</div>";
+
+    if (state.areaId) {
+      html += '<div class="picker"><div class="cal">' + calendarHtml() + "</div>" + slotsHtml() + "</div>";
+    }
+
+    html += actions({
+      next: "Add your details",
+      back: "Back",
+      ready: !!(state.areaId && state.date && state.time),
+      hint: !state.areaId ? "Choose your area first"
+          : !state.date ? "Pick an available date"
+          : !state.time ? "Pick a start time" : ""
+    }) + "</div>";
+    return html;
+  }
+
+  function calendarHtml() {
+    var v = state.view;
+    var first = new Date(v.getFullYear(), v.getMonth(), 1);
+    var daysIn = new Date(v.getFullYear(), v.getMonth() + 1, 0).getDate();
+    var lead = (first.getDay() + 6) % 7;            // Monday-first grid
+    var thisMonth = startOfMonth(today());
+    var maxMonth = new Date(thisMonth.getFullYear(), thisMonth.getMonth() + 4, 1);
+
+    var html = '<div class="cal-head">' +
+      '<span class="cal-month">' + MONTHS[v.getMonth()] + " " + v.getFullYear() + "</span>" +
+      '<span class="cal-nav">' +
+        '<button type="button" data-cal="-1" aria-label="Previous month"' +
+          (v <= thisMonth ? " disabled" : "") + ">&#8592;</button>" +
+        '<button type="button" data-cal="1" aria-label="Next month"' +
+          (v >= maxMonth ? " disabled" : "") + ">&#8594;</button>" +
+      "</span></div>";
+
+    html += '<div class="cal-grid" role="grid">';
+    var head = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    for (var h = 0; h < 7; h++) html += '<div class="cal-dow">' + head[h].charAt(0) + "</div>";
+    for (var p = 0; p < lead; p++) html += '<div class="day pad"></div>';
+
+    for (var n = 1; n <= daysIn; n++) {
+      var d = new Date(v.getFullYear(), v.getMonth(), n);
+      var ds = iso(d);
+      var free = dayBookable(d);
+      var working = dayIsWorking(d) && d >= today();
+      var cls = "day" + (free ? " free" : (working ? " full" : ""));
+      var label = DOW[d.getDay()] + " " + n + " " + MONTHS[v.getMonth()] +
+                  (free ? ", available" : (working ? ", fully booked" : ", not travelling"));
+      html += "<" + (free ? "button" : "div") + ' class="' + cls + '" ' +
+        (free ? 'type="button" data-date="' + ds + '" aria-pressed="' + (state.date === ds) + '" ' : "") +
+        'aria-label="' + label + '"><span class="num">' + n + "</span></" + (free ? "button" : "div") + ">";
+    }
+    html += "</div>";
+
+    if (!monthHasOpening(v)) {
+      html += '<p class="slots-empty">I\'m fully booked in ' + esc(area().name) + " through " +
+        MONTHS[v.getMonth()] + ". Try the next month.</p>";
+    }
+
+    html += '<div class="cal-key">' +
+      '<span><span class="key-dot"></span>Free slots</span>' +
+      '<span><s>18</s>Fully booked</span>' +
+      '<span><span class="key-line"></span>Not in ' + esc(area().name) + " that day</span></div>";
+    return html;
+  }
+
+  function slotsHtml() {
+    var html = '<div class="slots"><span class="slots-title">' +
+      (state.date ? fmtDate(state.date) : "Start times") + "</span>";
+
+    if (!state.date) {
+      html += '<p class="slots-empty">Pick a date and your available start times will appear here.</p></div>';
+      return html;
+    }
+
+    var svc = service();
+    var slots = slotsFor(state.date);
+    var free = 0;
+    for (var i = 0; i < slots.length; i++) if (!slots[i].taken) free++;
+
+    if (!free) {
+      html += '<p class="slots-empty">Nothing left on this date. Try another day in ' + esc(area().name) + ".</p></div>";
+      return html;
+    }
+
+    html += '<div class="slot-list">';
+    for (var j = 0; j < slots.length; j++) {
+      var s = slots[j];
+      html += '<button type="button" class="slot num" data-time="' + s.time + '"' +
+        (s.taken ? " disabled" : "") +
+        ' aria-pressed="' + (state.time === s.time) + '"' +
+        (s.taken ? ' aria-label="' + s.time + ', already booked"' : "") + ">" + s.time + "</button>";
+    }
+    html += "</div>";
+    html += '<p class="hint">Finishing around ' +
+      (state.time ? endTime(state.time, svc.mins) : endTime(START_TIMES[0], svc.mins)) +
+      " if you start at " + (state.time || START_TIMES[0]) + ".</p>";
+    return html + "</div>";
+  }
+
+  function field(o) {
+    var err = state.errors[o.name];
+    var v = esc(state.details[o.name] || "");
+    var input;
+    if (o.type === "textarea") {
+      input = '<textarea id="f_' + o.name + '" name="' + o.name + '" placeholder="' +
+        esc(o.placeholder || "") + '">' + v + "</textarea>";
+    } else if (o.type === "select") {
+      input = '<select id="f_' + o.name + '" name="' + o.name + '">';
+      for (var i = 0; i < o.options.length; i++) {
+        var op = o.options[i];
+        input += '<option value="' + esc(op) + '"' +
+          (state.details[o.name] === op ? " selected" : "") + ">" + esc(op || "Choose one…") + "</option>";
+      }
+      input += "</select>";
+    } else {
+      input = '<input id="f_' + o.name + '" name="' + o.name + '" type="' + (o.type || "text") +
+        '" value="' + v + '" placeholder="' + esc(o.placeholder || "") + '"' +
+        (o.mode ? ' inputmode="' + o.mode + '"' : "") +
+        (o.autocomplete ? ' autocomplete="' + o.autocomplete + '"' : "") + ">";
+    }
+    return '<div class="field' + (o.wide ? " wide" : "") + '" data-invalid="' + (err ? "true" : "false") + '">' +
+      '<label for="f_' + o.name + '">' + esc(o.label) + "</label>" + input +
+      '<span class="err">' + (err ? esc(err) : "") + "</span></div>";
+  }
+
+  function stepDetails() {
+    var a = area();
+    var html = '<div class="card step">' +
+      '<div class="card-head">' +
+        '<span class="eyebrow">Step 3</span>' +
+        "<h2>Where am I coming to?</h2>" +
+        "<p>I'll bring the bed, the lighting and everything else — I just need somewhere to set up and a plug socket nearby.</p>" +
+      '</div><div class="fields">' +
+      field({ name: "name", label: "Full name", placeholder: "Ellie Taylor", autocomplete: "name" }) +
+      field({ name: "phone", label: "Mobile number", placeholder: "07…", type: "tel", mode: "tel", autocomplete: "tel" }) +
+      field({ name: "email", label: "Email", placeholder: "you@email.com", type: "email", autocomplete: "email" }) +
+      field({ name: "postcode", label: "Postcode", placeholder: a ? postcodeHint(a.id) : "CV11", autocomplete: "postal-code" }) +
+      field({ name: "address", label: "Address I'm coming to", placeholder: "House number and street", wide: true, autocomplete: "street-address" }) +
+      field({ name: "history", label: "Have you had extensions before?", type: "select", wide: true,
+              options: ["", "First time — never had lashes", "Yes, but not in the last 3 months",
+                        "Yes, I wear them regularly", "I currently have another tech's set on"] }) +
+      field({ name: "notes", label: "Anything I should know?", type: "textarea", wide: true,
+              placeholder: "Allergies, sensitive eyes, parking, pets, the style you're after…" }) +
+      "</div>" +
+      actions({ next: "Review booking", back: "Back", ready: true, hint: "" }) + "</div>";
+    return html;
+  }
+
+  function postcodeHint(id) {
+    return id === "birmingham" ? "B1" : id === "coventry" ? "CV1" : "CV11";
+  }
+
+  function stepConfirm() {
+    var svc = service(), a = area(), d = state.details;
+    var html = '<div class="card step">' +
+      '<div class="card-head">' +
+        '<span class="eyebrow">Step 4</span>' +
+        "<h2>Everything look right?</h2>" +
+        "<p>Check it over, then confirm. You'll get a text from me to arrange the deposit — the slot is held for 24 hours until it's paid.</p>" +
+      '</div><div class="review">' +
+
+      '<div class="review-block"><span class="eyebrow">Appointment</span>' +
+        row("Treatment", svc.name) +
+        row("Duration", fmtMins(svc.mins)) +
+        row("Date", fmtDateLong(state.date)) +
+        row("Time", state.time + " – " + endTime(state.time, svc.mins)) +
+      "</div>" +
+
+      '<div class="review-block"><span class="eyebrow">Coming to</span>' +
+        row("Name", d.name) +
+        row("Address", d.address + (d.postcode ? ", " + d.postcode.toUpperCase() : "")) +
+        row("Area", a.name) +
+        row("Mobile", d.phone) +
+        row("Email", d.email) +
+        (d.history ? row("Experience", d.history) : "") +
+        (d.notes ? row("Notes", d.notes) : "") +
+      "</div>" +
+
+      '<div class="review-block"><span class="eyebrow">Payment</span>' +
+        row("Treatment", "£" + svc.price) +
+        row("Deposit now", "£" + DEPOSIT) +
+        row("Due on the day", "£" + (svc.price - DEPOSIT)) +
+      "</div>" +
+
+      '<label class="consent" data-invalid="' + (state.errors.consent ? "true" : "false") + '">' +
+        '<input type="checkbox" id="consent"' + (state.consent ? " checked" : "") + ">" +
+        "<span>I've read the policies: the £" + DEPOSIT + " deposit is non-refundable, I'll give at least 48 hours' notice to move or cancel, " +
+        "and I'll arrive with clean lashes and no eye makeup.</span>" +
+      "</label>" +
+
+      "</div>" +
+      actions({ next: "Confirm booking", back: "Back", ready: true, hint: "" }) + "</div>";
+    return html;
+  }
+
+  function row(k, v) {
+    return '<div class="rrow"><span class="k">' + esc(k) + '</span><span class="v">' + esc(v) + "</span></div>";
+  }
+
+  function stepDone() {
+    var svc = service(), a = area(), d = state.details;
+    return '<div class="card step"><div class="done">' +
+      '<span class="done-mark" aria-hidden="true">' +
+        '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg>' +
+      "</span>" +
+      "<h2>You're booked in, " + esc(d.name.split(" ")[0]) + "</h2>" +
+      "<p>I'll text " + esc(d.phone) + " within a few hours to confirm and send over the deposit details. " +
+      "A confirmation is on its way to " + esc(d.email) + " too.</p>" +
+      '<span class="ref num">' + esc(state.ref) + "</span>" +
+      '<div class="done-card">' +
+        row("Treatment", svc.name) +
+        row("When", fmtDateLong(state.date) + ", " + state.time) +
+        row("Where", d.address + (d.postcode ? ", " + d.postcode.toUpperCase() : "") + " · " + a.name) +
+        row("Deposit", "£" + DEPOSIT + " to hold the slot") +
+      "</div>" +
+      '<p class="hint">Need to change something? Message <a href="https://www.instagram.com/ellash_.x" target="_blank" rel="noopener" style="color:var(--gold)">@ellash_.x</a> — at least 48 hours before, please.</p>' +
+      '<button type="button" class="btn btn-quiet" data-act="restart">Book another appointment</button>' +
+      "</div></div>";
+  }
+
+  function actions(o) {
+    return '<div class="actions">' +
+      (o.back ? '<button type="button" class="btn btn-quiet" data-act="back">' + esc(o.back) + "</button>" : "<span></span>") +
+      '<span style="display:flex; align-items:center; gap:var(--s-15); flex-wrap:wrap; justify-content:flex-end;">' +
+        (o.hint ? '<span class="hint">' + esc(o.hint) + "</span>" : "") +
+        '<button type="button" class="btn btn-primary" data-act="next"' + (o.ready ? "" : " disabled") + ">" +
+        esc(o.next) + "</button></span></div>";
+  }
+
+  /* ---------------------------------------------------- render */
+
+  function render() {
+    var stage = document.getElementById("stage");
+    var html;
+    if (state.step === 0) html = stepService();
+    else if (state.step === 1) html = stepWhen();
+    else if (state.step === 2) html = stepDetails();
+    else if (state.step === 3) html = stepConfirm();
+    else html = stepDone();
+
+    stage.innerHTML = html;
+    renderProgress();
+    renderSummary();
+    save();
+  }
+
+  /* ---------------------------------------------------- validation */
+
+  function readDetails() {
+    var names = ["name", "phone", "email", "address", "postcode", "history", "notes"];
+    for (var i = 0; i < names.length; i++) {
+      var el = document.getElementById("f_" + names[i]);
+      if (el) state.details[names[i]] = el.value.trim();
+    }
+  }
+
+  function validateDetails() {
+    var e = {}, d = state.details;
+    if (d.name.length < 2) e.name = "Please tell me your name.";
+    if (!/^(\+?44|0)\d[\d\s-]{8,}$/.test(d.phone)) e.phone = "A UK mobile I can text you on, e.g. 07700 900123.";
+    if (!/^[^@\s]+@[^@\s.]+\.[^@\s]+$/.test(d.email)) e.email = "Check the email address — that one won't reach you.";
+    if (d.address.length < 5) e.address = "House number and street, so I know where to park.";
+    if (!/^[a-z]{1,2}\d[a-z\d]?\s*\d?[a-z]{0,2}$/i.test(d.postcode)) e.postcode = "A UK postcode, e.g. CV11 4AB.";
+    state.errors = e;
+    for (var k in e) return false;
+    return true;
+  }
+
+  function firstInvalid() {
+    for (var k in state.errors) {
+      var el = document.getElementById("f_" + k);
+      if (el) { el.focus(); return; }
+    }
+  }
+
+  /* ---------------------------------------------------- transitions */
+
+  function goNext() {
+    if (state.step === 0) {
+      if (!state.serviceId) return;
+      state.step = 1;
+    } else if (state.step === 1) {
+      if (!(state.areaId && state.date && state.time)) return;
+      state.step = 2;
+    } else if (state.step === 2) {
+      readDetails();
+      if (!validateDetails()) { render(); firstInvalid(); return; }
+      state.step = 3;
+    } else if (state.step === 3) {
+      if (!state.consent) {
+        state.errors.consent = "1";
+        render();
+        var c = document.getElementById("consent");
+        if (c) c.focus();
+        return;
+      }
+      confirmBooking();
+      return;
+    }
+    state.errors = {};
+    render();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function goBack() {
+    if (state.step === 0) return;
+    state.step -= 1;
+    state.errors = {};
+    render();
+  }
+
+  function confirmBooking() {
+    var taken = bookedSlots();
+    var key = state.date + "T" + state.time;
+    if (taken.indexOf(key) === -1) taken.push(key);
+    store.set("ellash.booked", JSON.stringify(taken));
+
+    state.ref = "EL-" + String(seed(key + state.details.email) % 100000).padStart(5, "0");
+    state.step = 4;
+    state.errors = {};
+    render();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function restart() {
+    state.step = 0;
+    state.serviceId = null; state.areaId = null; state.date = null; state.time = null;
+    state.consent = false; state.ref = null; state.errors = {};
+    state.details = { name: "", phone: "", email: "", address: "", postcode: "", history: "", notes: "" };
+    state.view = startOfMonth(new Date());
+    render();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  /* ---------------------------------------------------- events */
+
+  document.getElementById("stage").addEventListener("click", function (ev) {
+    var t = ev.target.closest("button");
+    if (!t) return;
+
+    if (t.dataset.service) {
+      state.serviceId = t.dataset.service;
+      // a shorter or longer treatment changes which slots fit
+      if (state.time && slotsFor(state.date).every(function (s) { return s.time !== state.time || s.taken; })) {
+        state.time = null;
+      }
+      render();
+      return;
+    }
+
+    if (t.dataset.area) {
+      if (state.areaId !== t.dataset.area) {
+        state.date = null;
+        state.time = null;
+        state.areaId = t.dataset.area;
+        state.view = firstOpenMonth();
+      }
+      state.areaId = t.dataset.area;
+      render();
+      return;
+    }
+
+    if (t.dataset.cal) {
+      var step = Number(t.dataset.cal);
+      state.view = new Date(state.view.getFullYear(), state.view.getMonth() + step, 1);
+      render();
+      return;
+    }
+
+    if (t.dataset.date) {
+      state.date = t.dataset.date;
+      state.time = null;
+      render();
+      return;
+    }
+
+    if (t.dataset.time) {
+      state.time = t.dataset.time;
+      render();
+      return;
+    }
+
+    var act = t.dataset.act;
+    if (act === "next") goNext();
+    else if (act === "back") { readDetailsIfOnForm(); goBack(); }
+    else if (act === "restart") restart();
+  });
+
+  function readDetailsIfOnForm() { if (state.step === 2) readDetails(); }
+
+  document.getElementById("stage").addEventListener("change", function (ev) {
+    if (ev.target.id === "consent") {
+      state.consent = ev.target.checked;
+      if (state.consent) delete state.errors.consent;
+      var box = ev.target.closest(".consent");
+      if (box) box.dataset.invalid = state.consent ? "false" : "true";
+      save();
+    }
+  });
+
+  // clear a field's error as soon as it's being fixed
+  document.getElementById("stage").addEventListener("input", function (ev) {
+    var name = ev.target.name;
+    if (!name || !(name in state.details)) return;
+    state.details[name] = ev.target.value;
+    if (state.errors[name]) {
+      delete state.errors[name];
+      var f = ev.target.closest(".field");
+      if (f) { f.dataset.invalid = "false"; f.querySelector(".err").textContent = ""; }
+    }
+    save();
+  });
+
+  /* ---------------------------------------------------- theme */
+
+  (function theme() {
+    var btn = document.getElementById("themeToggle");
+    var saved = store.get("ellash.theme");
+    if (saved === "light" || saved === "dark") document.documentElement.dataset.theme = saved;
+
+    btn.addEventListener("click", function () {
+      var root = document.documentElement;
+      var current = root.dataset.theme;
+      if (!current) {
+        // no explicit choice yet — flip away from whatever the OS is showing
+        var osLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+        current = osLight ? "light" : "dark";
+      }
+      var next = current === "dark" ? "light" : "dark";
+      root.dataset.theme = next;
+      store.set("ellash.theme", next);
+    });
+  })();
+
+  /* ---------------------------------------------------- go */
+
+  restore();
+  render();
+})();
+</script>
