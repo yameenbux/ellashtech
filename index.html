@@ -405,6 +405,85 @@ button { font: inherit; color: inherit; }
   letter-spacing: 0.04em;
 }
 
+.svc-group {
+  display: flex;
+  align-items: center;
+  gap: var(--s-15);
+  margin-top: var(--s-10);
+}
+
+.svc-group:first-child { margin-top: 0; }
+
+.svc-group span {
+  font-family: var(--font-display);
+  font-size: var(--t-md);
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.svc-group::before,
+.svc-group::after {
+  content: "";
+  height: 1px;
+  background: var(--line);
+  flex: 1;
+}
+
+.travel-note {
+  font-size: var(--t-2);
+  color: var(--ink-soft);
+  text-align: center;
+  padding: var(--s-10) var(--s-15);
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  background: var(--gold-wash);
+}
+
+/* ---------------------------------------------------------- aftercare */
+
+.aftercare {
+  width: 100%;
+  text-align: left;
+  display: grid;
+  gap: var(--s-15);
+  border-top: 1px solid var(--line);
+  padding-top: var(--s-25);
+}
+
+@media (min-width: 720px) {
+  /* the middle group is the long one — let it run full height beside the two short ones */
+  .aftercare-groups { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-15); align-items: start; }
+  .ac-group:nth-child(1) { grid-column: 1; grid-row: 1; }
+  .ac-group:nth-child(2) { grid-column: 2; grid-row: 1 / span 2; }
+  .ac-group:nth-child(3) { grid-column: 1; grid-row: 2; }
+}
+
+.ac-group {
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  padding: var(--s-15);
+  display: grid;
+  gap: var(--s-8);
+  align-content: start;
+}
+
+.ac-group h3 {
+  font-family: var(--font-display);
+  font-size: var(--t-md);
+  color: var(--gold);
+}
+
+.ac-group ul { margin: 0; padding-left: var(--s-15); display: grid; gap: var(--s-7); }
+
+.ac-group li {
+  font-size: var(--t-2);
+  color: var(--ink-soft);
+  line-height: 1.55;
+  padding-left: var(--s-4);
+}
+
+.ac-group li::marker { color: var(--gold-dim); }
+
 /* ---------------------------------------------------------- areas */
 
 .areas { display: grid; gap: var(--s-10); grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
@@ -818,7 +897,7 @@ button { font: inherit; color: inherit; }
       <svg class="lashmark" viewBox="0 0 300 96" aria-hidden="true" id="lashmark"></svg>
       <h1 class="wordmark">èllash</h1>
       <p class="brand-role">
-        Lash extensions &amp; BIAB, brought to your door by <b>Ellie Taylor</b>.
+        Hybrid and Russian lash extensions, brought to your door by <b>Ellie Taylor</b>.
         Mobile across Birmingham, Nuneaton and Coventry.
       </p>
     </div>
@@ -926,12 +1005,14 @@ button { font: inherit; color: inherit; }
   /* ---------------------------------------------------- data */
 
   var SERVICES = [
-    { id: "classic",  name: "Classic Full Set",        price: 40, mins: 105, note: "One extension per natural lash. Soft, mascara-look definition." },
-    { id: "hybrid",   name: "Hybrid Full Set",         price: 45, mins: 120, note: "Classic and volume mixed. Texture with a bit of fullness." },
-    { id: "russian",  name: "Russian Volume Full Set", price: 50, mins: 135, note: "Handmade fans, 4–6D. The fullest, fluffiest finish." },
-    { id: "infills",  name: "Infills",                 price: 25, mins: 75,  note: "Within 2–3 weeks, with at least 40% of your set still on." },
-    { id: "removal",  name: "Lash Removal",            price: 10, mins: 30,  note: "Gentle cream removal. Free when booked with a new full set." },
-    { id: "biab",     name: "BIAB Nails",              price: 30, mins: 90,  note: "Builder gel overlay on natural nails, shaped and finished." }
+    { id: "hybrid-full",    group: "Full sets",   name: "Hybrid",  label: "Hybrid full set",  price: 45, mins: 120,
+      note: "Classic and volume mixed. Texture with a bit of fullness." },
+    { id: "russian-full",   group: "Full sets",   name: "Russian", label: "Russian full set", price: 50, mins: 135,
+      note: "Handmade fans, 4\u20136D. The fullest, fluffiest finish." },
+    { id: "hybrid-infill",  group: "Infill sets", name: "Hybrid",  label: "Hybrid infills",   price: 35, mins: 75,
+      note: "Top-up within 2\u20133 weeks, with at least 40% of your set still on." },
+    { id: "russian-infill", group: "Infill sets", name: "Russian", label: "Russian infills",  price: 40, mins: 90,
+      note: "Top-up within 2\u20133 weeks, with at least 40% of your set still on." }
   ];
 
   // Ellie travels on set days — the calendar is filtered by where you are.
@@ -939,6 +1020,27 @@ button { font: inherit; color: inherit; }
     { id: "nuneaton",   name: "Nuneaton",   days: [1, 2], label: "Mondays & Tuesdays" },
     { id: "coventry",   name: "Coventry",   days: [3, 4], label: "Wednesdays & Thursdays" },
     { id: "birmingham", name: "Birmingham", days: [5, 6], label: "Fridays & Saturdays" }
+  ];
+
+  // Ellie's aftercare, from her own guide — split by when each rule bites
+  var AFTERCARE = [
+    { title: "First 48 hours", items: [
+      "Keep lashes dry and no contact with water for 48 hours. The adhesive is still drying in this period.",
+      "No hot showers, saunas, or steam rooms. Moisture can weaken the adhesive during curing.",
+      "Be careful with them in the first 24 hours, and brush from above, not underneath."
+    ]},
+    { title: "Keeping them looking good", items: [
+      "Use the mascara wand provided to brush lashes daily with a clean spoolie.",
+      "Clean them regularly with eyelash shampoo, especially after wearing makeup around the eye area.",
+      "No mascara or eyeliner on or near the extensions — it's hard to clean off.",
+      "Only non-oil-based products near the eye. Oil breaks down the adhesive.",
+      "Avoid heavy eye makeup — eyeshadow fallout gets stuck between lashes.",
+      "No picking or pulling, and try not to rub your eyes. Both cause premature fallout.",
+      "Avoid sleeping on your face, or they won't last as long."
+    ]},
+    { title: "If something isn't right", items: [
+      "Any swelling or irritation, contact me. Seek medical advice if you have a severe reaction."
+    ]}
   ];
 
   var START_TIMES = ["09:00", "11:00", "13:00", "15:00", "17:00", "19:00"];
@@ -1144,7 +1246,7 @@ button { font: inherit; color: inherit; }
 
   function renderSummary() {
     var svc = service(), a = area();
-    setRow("sumService", svc ? svc.name : "");
+    setRow("sumService", svc ? svc.label : "");
     setRow("sumArea", a ? a.name : "");
     setRow("sumDate", state.date ? fmtDate(state.date) : "");
     setRow("sumTime", state.time && svc ? state.time + "–" + endTime(state.time, svc.mins) : "");
@@ -1166,21 +1268,28 @@ button { font: inherit; color: inherit; }
       '<div class="card-head">' +
         '<span class="eyebrow">Welcome</span>' +
         "<h2>What are we booking you in for?</h2>" +
-        "<p>Pick a treatment and I'll show you when I'm next in your area. Every appointment is done at your home — no salon, no parking, no rush.</p>" +
-      "</div><div class=\"services\">";
+        "<p>Pick a treatment and I'll show you when I'm next in your area. Every appointment is done at your home \u2014 no salon, no parking, no rush.</p>" +
+      '</div><div class="services">';
 
+    var lastGroup = null;
     for (var i = 0; i < SERVICES.length; i++) {
       var s = SERVICES[i];
+      if (s.group !== lastGroup) {
+        html += '<div class="svc-group"><span>' + esc(s.group) + "</span></div>";
+        lastGroup = s.group;
+      }
       html += '<button type="button" class="service" data-service="' + s.id + '" ' +
         'aria-pressed="' + (state.serviceId === s.id) + '">' +
         '<span class="service-name">' + esc(s.name) + "</span>" +
-        '<span class="service-price num">£' + s.price + "</span>" +
+        '<span class="service-price num">\u00a3' + s.price + "</span>" +
         '<span class="service-meta"><span class="service-dur num">' + fmtMins(s.mins) + "</span>" + esc(s.note) + "</span>" +
         "</button>";
     }
 
-    html += "</div>" + actions({ next: "Choose a date", back: null, ready: !!state.serviceId,
-      hint: state.serviceId ? "" : "Choose a treatment to continue" }) + "</div>";
+    html += "</div>" +
+      '<p class="travel-note">All prices include travel to your appointment.</p>' +
+      actions({ next: "Choose a date", back: null, ready: !!state.serviceId,
+        hint: state.serviceId ? "" : "Choose a treatment to continue" }) + "</div>";
     return html;
   }
 
@@ -1188,7 +1297,7 @@ button { font: inherit; color: inherit; }
     var svc = service();
     var html = '<div class="card step">' +
       '<div class="card-head">' +
-        '<span class="eyebrow">Step 2 · ' + esc(svc.name) + " · " + fmtMins(svc.mins) + "</span>" +
+        '<span class="eyebrow">Step 2 · ' + esc(svc.label) + " · " + fmtMins(svc.mins) + "</span>" +
         "<h2>Where are you, and when suits?</h2>" +
         "<p>I'm mobile, so I work one area at a time. Pick yours and the calendar will show only the days I'm travelling there.</p>" +
       "</div><div class=\"areas\">";
@@ -1362,7 +1471,7 @@ button { font: inherit; color: inherit; }
       '</div><div class="review">' +
 
       '<div class="review-block"><span class="eyebrow">Appointment</span>' +
-        row("Treatment", svc.name) +
+        row("Treatment", svc.label) +
         row("Duration", fmtMins(svc.mins)) +
         row("Date", fmtDateLong(state.date)) +
         row("Time", state.time + " – " + endTime(state.time, svc.mins)) +
@@ -1410,14 +1519,27 @@ button { font: inherit; color: inherit; }
       "A confirmation is on its way to " + esc(d.email) + " too.</p>" +
       '<span class="ref num">' + esc(state.ref) + "</span>" +
       '<div class="done-card">' +
-        row("Treatment", svc.name) +
+        row("Treatment", svc.label) +
         row("When", fmtDateLong(state.date) + ", " + state.time) +
         row("Where", d.address + (d.postcode ? ", " + d.postcode.toUpperCase() : "") + " · " + a.name) +
         row("Deposit", "£" + DEPOSIT + " to hold the slot") +
       "</div>" +
+      aftercareHtml() +
       '<p class="hint">Need to change something? Message <a href="https://www.instagram.com/ellash_.x" target="_blank" rel="noopener" style="color:var(--gold)">@ellash_.x</a> — at least 48 hours before, please.</p>' +
       '<button type="button" class="btn btn-quiet" data-act="restart">Book another appointment</button>' +
       "</div></div>";
+  }
+
+  function aftercareHtml() {
+    var html = '<div class="aftercare"><span class="eyebrow">Looking after them</span>' +
+               '<div class="aftercare-groups">';
+    for (var i = 0; i < AFTERCARE.length; i++) {
+      var g = AFTERCARE[i];
+      html += '<div class="ac-group"><h3>' + esc(g.title) + "</h3><ul>";
+      for (var j = 0; j < g.items.length; j++) html += "<li>" + esc(g.items[j]) + "</li>";
+      html += "</ul></div>";
+    }
+    return html + "</div></div>";
   }
 
   function actions(o) {
