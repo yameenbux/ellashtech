@@ -92,6 +92,25 @@ carried into the review screen, the confirmation and the booking email.
 - **The £10 deposit and 48-hour cancellation terms** — placeholders. The wording
   lives in `stepConfirm()` and the `DEPOSIT` constant.
 
+## Photos
+
+Each treatment carries its own close-up, matched to the treatment by the
+client's own Instagram captions — "Pretty hybrids" to the hybrid full set,
+"Russians on this doll" to the Russian, and so on. Hybrids read visibly
+wispier than the Russians side by side, which is the point: it is the only
+honest way to explain what the extra £5 buys.
+
+They are cropped square on the lash line (Instagram chrome removed), resized
+to 240px and embedded as data URIs — about 12 KB each, 50 KB in total, so the
+page stays self-contained with no external requests.
+
+To swap one, replace the `photo:` value on that treatment in `SERVICES`. A
+treatment with an empty `photo` simply renders without one.
+
+**These are identifiable clients.** They are already public on the business's
+own Instagram, but a booking page is a different use, and permission is the
+client's to obtain before this goes live.
+
 ## Live touches
 
 Everything here is driven by real state — nothing is decorative filler.
