@@ -95,8 +95,15 @@ carried into the review screen, the confirmation and the booking email.
 ## Photos
 
 Each treatment carries its own close-up, matched to the treatment by the
-client's own Instagram captions — "Pretty hybrids" to the hybrid full set,
-"Russians on this doll" to the Russian, and so on. Hybrids read visibly
+client's own Instagram captions:
+
+| Treatment | From the post captioned |
+|---|---|
+| Hybrid full set | "DOLL eye light hybrids — smaller sizes (9mm–12mm)" |
+| Russian full set | "Russians on this doll" |
+| Hybrid infills | "14mm–9mm Cat-eye hybrids" |
+| Russian infills | "3D pre made fans 13mm–9mm" |
+ Hybrids read visibly
 wispier than the Russians side by side, which is the point: it is the only
 honest way to explain what the extra £5 buys.
 
