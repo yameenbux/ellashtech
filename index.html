@@ -225,10 +225,16 @@ button { font: inherit; color: inherit; }
 
 /* ---------------------------------------------------------- rail */
 
-.rail { display: grid; gap: var(--s-25); }
+.rail { display: grid; gap: var(--s-25); align-content: start; }
+
+.rail-inner { display: grid; gap: var(--s-25); }
 
 @media (min-width: 900px) {
-  .rail { position: sticky; top: var(--s-40); }
+  /* The rail stretches the full row so it defines how far the inner card may
+     travel; the inner card sticks inside it. Sticking the rail itself lets it
+     run past its own row and cover the footer on a short viewport. */
+  .rail { align-self: stretch; }
+  .rail-inner { position: sticky; top: var(--s-40); }
 }
 
 .brand { display: grid; gap: var(--s-15); justify-items: start; }
@@ -1168,6 +1174,7 @@ button { font: inherit; color: inherit; }
 <div class="shell">
 
   <aside class="rail">
+   <div class="rail-inner">
     <div class="brand">
       <svg class="lashmark" viewBox="0 0 300 96" aria-hidden="true" id="lashmark"></svg>
       <h1 class="wordmark">èllash</h1>
@@ -1196,6 +1203,7 @@ button { font: inherit; color: inherit; }
         A £10 deposit secures the slot and comes off your total on the day.
       </p>
     </section>
+   </div>
   </aside>
 
   <main class="flow">
@@ -1284,8 +1292,16 @@ button { font: inherit; color: inherit; }
   var CONFIG = {
     // Where a completed booking is sent. Works on any normal host; the
     // claude.ai artifact sandbox blocks outbound POSTs, so the page falls
-    // back to a prefilled email there. Swap for your own handler in time.
+    // back to a prefilled email there.
+    //
+    // ANYONE CAN READ THIS. Once the address is activated, swap in the
+    // relay's aliased endpoint (a random token instead of the address) and
+    // blank notifyEmail — the inbox then works with no address in the page.
     notifyEndpoint: "https://formsubmit.co/ajax/everythingwithyb@gmail.com",
+
+    // Optional. Only used for the "send it yourself" fallback when the POST
+    // is blocked. Leave empty to keep the address out of the page entirely;
+    // the fallback then points people at Instagram instead.
     notifyEmail: "everythingwithyb@gmail.com",
 
     deposit: 10,
@@ -1296,8 +1312,10 @@ button { font: inherit; color: inherit; }
     // A first set needs a patch test this many hours beforehand.
     patchTestHours: 48,
 
-    // Reveals the diary at #diary. NOT security — it sits in the page
-    // source. Real protection needs a server. Fine for a private link.
+    // Reveals the diary at #diary. NOT security — anyone reading the page
+    // source can see it. It holds nothing sensitive: the diary lists only
+    // bookings from the viewer's OWN browser, so a stranger sees an empty
+    // one. Real protection needs a server.
     diaryCode: "ellash",
 
     // Infills are due this many weeks after a full set.
@@ -2005,6 +2023,13 @@ button { font: inherit; color: inherit; }
     if (state.sent) {
       return '<div class="notice good" id="sendState"><span><strong>Booking sent.</strong> ' +
         "It's landed in the booking inbox and you'll get a text to confirm.</span></div>";
+    }
+    if (!CONFIG.notifyEmail) {
+      return '<div class="notice warn" id="sendState"><span>' +
+        "<strong>I couldn't send this automatically.</strong> Send me a message on " +
+        '<a href="https://www.instagram.com/ellash_.x" target="_blank" rel="noopener" ' +
+        'style="color:var(--gold)">@ellash_.x</a> with your reference ' +
+        esc(state.ref || "") + " and I'll get you booked in.</span></div>";
     }
     return '<div class="notice warn" id="sendState">' +
       "<span><strong>I couldn't send this automatically.</strong> Nothing is lost \u2014 " +

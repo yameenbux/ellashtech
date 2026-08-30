@@ -54,12 +54,41 @@ Everything a new client needs changing sits in one `CONFIG` block at the top of
 the script in `index.html`: notification endpoint and email, deposit amount,
 payment link, patch-test lead time, diary code, infill interval.
 
+## Running it
+
+It is one self-contained file. Open `index.html` in a browser and it works —
+no build, no install, no dependencies.
+
+To put it somewhere Ellie's clients can reach, upload `index.html` to any
+static host (GitHub Pages, Netlify, Cloudflare Pages) and point the link at it.
+Hosting it properly is also what makes the booking email work, since the
+claude.ai artifact preview blocks outbound requests.
+
 ## Where bookings go
 
 On confirming, the page POSTs the booking to `CONFIG.notifyEndpoint`. If that
 fails for any reason, it shows a **Send my booking** button that opens a
 prefilled email instead, so a booking is never silently lost. Both paths are
 tested.
+
+### The repository is public
+
+Anything in `index.html` is readable by anyone, so treat the CONFIG block as
+published text:
+
+- **The notification address appears twice** — inside `notifyEndpoint` and again
+  in `notifyEmail`. Blanking one is not enough. To take it out of the page
+  completely: activate the address with the relay, swap `notifyEndpoint` to the
+  aliased URL it gives you (a random token instead of the address), and set
+  `notifyEmail` to `""`. The inbox keeps working and the fallback then points
+  people at Instagram instead of opening a prefilled email.
+- **Anyone can post to the endpoint directly**, bypassing the page. If the inbox
+  starts collecting rubbish, rotate the alias.
+- **`diaryCode` is readable too.** It exposes nothing: the diary lists bookings
+  from the viewer's own browser only, so a stranger who opens `#diary` sees an
+  empty one and can only close off days in their own browser. Verified.
+- **The client photos are in a public repository**, which sharpens the consent
+  point above from theoretical to live.
 
 Two caveats:
 
