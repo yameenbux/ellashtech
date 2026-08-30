@@ -76,12 +76,13 @@ tested.
 Anything in `index.html` is readable by anyone, so treat the CONFIG block as
 published text:
 
-- **The notification address appears twice** — inside `notifyEndpoint` and again
-  in `notifyEmail`. Blanking one is not enough. To take it out of the page
-  completely: activate the address with the relay, swap `notifyEndpoint` to the
-  aliased URL it gives you (a random token instead of the address), and set
-  `notifyEmail` to `""`. The inbox keeps working and the fallback then points
-  people at Instagram instead of opening a prefilled email.
+- **No email address appears in this page.** `notifyEndpoint` uses the relay's
+  aliased token, which stands in for the inbox, and `notifyEmail` is empty so
+  the fallback points people at Instagram with their booking reference rather
+  than opening a prefilled email. Anyone reading the source can still post to
+  the token; if it ever collects rubbish, rotate it with the relay and change
+  the one line. To point bookings at a different inbox, register that address
+  with the relay, activate it, and swap in its token.
 - **Anyone can post to the endpoint directly**, bypassing the page. If the inbox
   starts collecting rubbish, rotate the alias.
 - **`diaryCode` is readable too.** It exposes nothing: the diary lists bookings
