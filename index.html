@@ -431,6 +431,7 @@ button { font: inherit; color: inherit; }
   display: grid;
   gap: var(--s-25);
   box-shadow: var(--shadow);
+  container-type: inline-size;
 }
 
 @media (min-width: 620px) {
@@ -754,8 +755,14 @@ button { font: inherit; color: inherit; }
 
 .picker { display: grid; gap: var(--s-25); }
 
-@media (min-width: 720px) {
-  .picker { grid-template-columns: minmax(0, 1fr) 220px; align-items: start; }
+/* The picker's width comes from the card, not the window — the 340px rail
+   eats most of a tablet's viewport. A viewport query put the calendar in a
+   222px column at 1024px wide, where its grid needs 304px (seven 40px day
+   cells plus gaps), so it spilled over the times beside it. Ask the
+   container instead. Where @container is unsupported the picker simply
+   stacks, which is the safe answer anyway. */
+@container (min-width: 580px) {
+  .picker { grid-template-columns: minmax(304px, 1fr) 220px; align-items: start; }
 }
 
 .cal { display: grid; gap: var(--s-15); }
@@ -880,7 +887,7 @@ button { font: inherit; color: inherit; }
 
 .slot-list { display: grid; gap: var(--s-7); grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
 
-@media (min-width: 720px) { .slot-list { grid-template-columns: 1fr; } }
+@container (min-width: 580px) { .slot-list { grid-template-columns: 1fr; } }
 
 .slot {
   padding: var(--s-10);
@@ -2387,6 +2394,16 @@ button { font: inherit; color: inherit; }
     requestAnimationFrame(step);
   }
 
+  // After a choice, bring the next thing into view — but only if it is not
+  // already on screen, so nothing jumps on a wide display.
+  function revealNext(sel) {
+    var el = document.querySelector(sel);
+    if (!el) return;
+    var r = el.getBoundingClientRect();
+    if (r.top >= 0 && r.bottom <= window.innerHeight) return;
+    el.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "center" });
+  }
+
   /* ---------------------------------------------------- render */
 
   function render() {
@@ -2580,6 +2597,7 @@ button { font: inherit; color: inherit; }
         state.time = null;
       }
       render();
+      revealNext(".actions");
       return;
     }
 
@@ -2592,6 +2610,7 @@ button { font: inherit; color: inherit; }
       }
       state.areaId = t.dataset.area;
       render();
+      revealNext(".cal");
       return;
     }
 
@@ -2606,6 +2625,7 @@ button { font: inherit; color: inherit; }
       state.date = t.dataset.date;
       state.time = null;
       render();
+      revealNext(".slots");
       return;
     }
 
@@ -2613,6 +2633,7 @@ button { font: inherit; color: inherit; }
       state.time = t.dataset.time;
       state.holdUntil = null;
       render();
+      revealNext(".actions");
       return;
     }
 
