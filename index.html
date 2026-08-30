@@ -225,10 +225,16 @@ button { font: inherit; color: inherit; }
 
 /* ---------------------------------------------------------- rail */
 
-.rail { display: grid; gap: var(--s-25); }
+.rail { display: grid; gap: var(--s-25); align-content: start; }
+
+.rail-inner { display: grid; gap: var(--s-25); }
 
 @media (min-width: 900px) {
-  .rail { position: sticky; top: var(--s-40); }
+  /* The rail stretches the full row so it defines how far the inner card may
+     travel; the inner card sticks inside it. Sticking the rail itself lets it
+     run past its own row and cover the footer on a short viewport. */
+  .rail { align-self: stretch; }
+  .rail-inner { position: sticky; top: var(--s-40); }
 }
 
 .brand { display: grid; gap: var(--s-15); justify-items: start; }
@@ -1168,6 +1174,7 @@ button { font: inherit; color: inherit; }
 <div class="shell">
 
   <aside class="rail">
+   <div class="rail-inner">
     <div class="brand">
       <svg class="lashmark" viewBox="0 0 300 96" aria-hidden="true" id="lashmark"></svg>
       <h1 class="wordmark">èllash</h1>
@@ -1196,6 +1203,7 @@ button { font: inherit; color: inherit; }
         A £10 deposit secures the slot and comes off your total on the day.
       </p>
     </section>
+   </div>
   </aside>
 
   <main class="flow">
