@@ -77,6 +77,11 @@
 
   --shadow: 0 var(--s-10) var(--s-40) rgba(0, 0, 0, 0.45);
   --ring: 0 0 0 3px rgba(168, 161, 131, 0.38);
+
+  /* --- motion: one curve, two durations, no overshoot --- */
+  --dur:      200ms;
+  --dur-slow: 300ms;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);   /* ease-out; y never exceeds 1 */
 }
 
 /* light: system preference, unless the viewer explicitly chose dark */
@@ -387,7 +392,7 @@ button { font: inherit; color: inherit; }
   padding: var(--s-7) var(--s-10);
   border-radius: var(--r-3);
   border: 1px solid transparent;
-  transition: color 0.25s, border-color 0.25s, background 0.25s;
+  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease), background var(--dur) var(--ease);
 }
 
 .progress li .pip {
@@ -464,9 +469,8 @@ button { font: inherit; color: inherit; }
   border: 1px solid var(--line);
   border-radius: var(--r-3);
   cursor: pointer;
-  transition: border-color 0.2s, background 0.2s, transform 0.22s;
-  animation: rise 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) both;
-  animation-delay: calc(var(--i, 0) * 55ms);
+  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease),
+              transform var(--dur) var(--ease);
 }
 
 .service:not([aria-pressed="true"]):hover {
@@ -474,6 +478,10 @@ button { font: inherit; color: inherit; }
   background: var(--gold-wash);
   transform: translateY(-3px);
 }
+
+/* the photo is the product — let it come forward with its card */
+.service-photo { transition: transform var(--dur-slow) var(--ease), filter var(--dur-slow) var(--ease); }
+.service:hover .service-photo { transform: scale(1.05); filter: brightness(1.06); }
 
 .service[aria-pressed="true"] {
   border-color: var(--gold);
@@ -723,10 +731,15 @@ button { font: inherit; color: inherit; }
   cursor: pointer;
   display: grid;
   gap: var(--s-4);
-  transition: border-color 0.2s, background 0.2s;
+  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease),
+              transform var(--dur) var(--ease);
 }
 
-.area:not([aria-pressed="true"]):hover { border-color: var(--gold-dim); background: var(--gold-wash); }
+.area:not([aria-pressed="true"]):hover {
+  border-color: var(--gold-dim);
+  background: var(--gold-wash);
+  transform: translateY(-3px);
+}
 
 .area[aria-pressed="true"] {
   border-color: var(--gold);
@@ -773,7 +786,7 @@ button { font: inherit; color: inherit; }
   border-radius: var(--r-4);
   color: var(--ink-soft);
   cursor: pointer;
-  transition: border-color 0.2s, color 0.2s;
+  transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
 }
 
 .cal-nav button:hover:not(:disabled) { border-color: var(--gold); color: var(--gold); }
@@ -806,7 +819,7 @@ button { font: inherit; color: inherit; }
   position: relative;
   padding: 0;
   font-family: inherit;
-  transition: border-color 0.18s, background 0.18s, color 0.18s;
+  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease), color var(--dur) var(--ease);
 }
 
 .day.pad { visibility: hidden; }
@@ -878,7 +891,7 @@ button { font: inherit; color: inherit; }
   font-size: var(--t-2);
   line-height: var(--lh-head);
   letter-spacing: var(--ls-normal);
-  transition: border-color 0.2s, background 0.2s, color 0.2s;
+  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease), color var(--dur) var(--ease);
 }
 
 .slot:not([aria-pressed="true"]):hover:not(:disabled) { border-color: var(--gold); background: var(--gold-wash); }
@@ -1001,7 +1014,7 @@ button { font: inherit; color: inherit; }
   border-radius: var(--r-4);
   padding: var(--s-10) var(--s-15);
   width: 100%;
-  transition: border-color 0.2s;
+  transition: border-color var(--dur) var(--ease);
 }
 
 .field textarea { resize: vertical; min-height: 84px; line-height: var(--lh-body); }
@@ -1084,7 +1097,7 @@ button { font: inherit; color: inherit; }
   font-weight: 500;
   line-height: var(--lh-head);
   letter-spacing: var(--ls-normal);
-  transition: background 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s;
+  transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease), color var(--dur) var(--ease), opacity var(--dur) var(--ease);
 }
 
 .btn-primary { background: var(--gold); color: var(--ground); position: relative; overflow: hidden; }
@@ -1109,7 +1122,7 @@ button { font: inherit; color: inherit; }
 .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .btn-quiet { background: transparent; border-color: var(--line); color: var(--ink-soft); }
-.btn-quiet:hover { border-color: var(--gold-dim); color: var(--ink); }
+.btn-quiet:hover { border-color: var(--gold-dim); color: var(--ink); transform: translateY(-1px); }
 
 .hint { font-size: var(--t-sm); color: var(--ink-faint); }
 
@@ -1171,7 +1184,8 @@ button { font: inherit; color: inherit; }
 }
 
 .foot a { color: var(--gold); text-decoration: none; }
-.foot a:hover { text-decoration: underline; }
+.foot a { transition: color var(--dur) var(--ease); }
+.foot a:hover { text-decoration: underline; color: var(--gold-bright); }
 
 .theme-toggle {
   background: transparent;
@@ -1190,7 +1204,17 @@ button { font: inherit; color: inherit; }
 
 /* ---------------------------------------------------------- motion */
 
-.step { animation: rise 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
+/* Added by script only, so nothing is ever hidden when JS does not run. */
+.reveal {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity var(--dur-slow) var(--ease), transform var(--dur-slow) var(--ease);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal.is-in { opacity: 1; transform: none; }
+
+.step { animation: rise var(--dur-slow) var(--ease) both; }
 
 @keyframes rise {
   from { opacity: 0; transform: translateY(10px); }
@@ -1222,6 +1246,7 @@ button { font: inherit; color: inherit; }
   .lashmark path { stroke-dashoffset: 0; }
   .ticker-track { animation: none; }
   .btn-primary::after { display: none; }
+  .reveal, .reveal.is-in { opacity: 1; transform: none; }
 }
 </style>
 
@@ -2221,6 +2246,42 @@ button { font: inherit; color: inherit; }
   function clearLive() {
     if (timers.hold) { clearInterval(timers.hold); timers.hold = null; }
     if (timers.sparkle) { cancelAnimationFrame(timers.sparkle); timers.sparkle = null; }
+    if (revealer) { revealer.disconnect(); revealer = null; }
+  }
+
+  /* ---------------------------------------------------- scroll reveal */
+
+  // What is worth revealing: list items and blocks that usually sit below
+  // the fold. The hidden state is only ever applied here, so the page reads
+  // fine with no JS, no IntersectionObserver, or reduced motion.
+  var REVEAL = ".service, .area, .review-block, .ac-group, .diary-row, .notice, .pay, .done-card";
+  var revealer = null;
+
+  function armReveal() {
+    if (reduced || !("IntersectionObserver" in window)) return;
+
+    var els = document.getElementById("stage").querySelectorAll(REVEAL);
+    if (!els.length) return;
+
+    revealer = new IntersectionObserver(function (entries) {
+      for (var i = 0; i < entries.length; i++) {
+        if (!entries[i].isIntersecting) continue;
+        entries[i].target.classList.add("is-in");
+        revealer.unobserve(entries[i].target);      // reveal once, never re-hide
+      }
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
+
+    // stagger only within a group of siblings, and cap it so a long list
+    // never leaves the last item waiting
+    var seen = new Map();
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i];
+      var n = seen.get(el.parentElement) || 0;
+      seen.set(el.parentElement, n + 1);
+      el.style.setProperty("--reveal-delay", Math.min(n, 5) * 45 + "ms");
+      el.classList.add("reveal");
+      revealer.observe(el);
+    }
   }
 
   var HOLD_MS = 10 * 60 * 1000;
@@ -2334,6 +2395,7 @@ button { font: inherit; color: inherit; }
     renderSummary();
     if (state.step === 3) startHold();
     if (state.step === 4) startSparkle();
+    armReveal();
     save();
   }
 
