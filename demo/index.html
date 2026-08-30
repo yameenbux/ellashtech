@@ -1,0 +1,2791 @@
+<!doctype html>
+<html lang="en-GB">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Book with Aurelle</title>
+<meta name="description" content="A sample booking page for a mobile beauty studio: choose a treatment, pick a date and time, confirm. Built by YSB Designs.">
+<meta name="theme-color" content="#171315">
+
+<!-- Shared by DM more than it is searched for, so the preview card matters. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Aurelle">
+<meta property="og:title" content="Aurelle — booking page sample">
+<meta property="og:description" content="A working sample of a booking page for a mobile beauty business. Your branding, your treatments, your prices.">
+<meta property="og:url" content="https://ellashtech.ysbdesigns.uk/demo/">
+<meta property="og:image" content="https://ellashtech.ysbdesigns.uk/demo/share.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Aurelle — booking page sample">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Aurelle — booking page sample">
+<meta name="twitter:description" content="A working sample of a booking page for a mobile beauty business.">
+<meta name="twitter:image" content="https://ellashtech.ysbdesigns.uk/demo/share.jpg">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23171315'/%3E%3Cg stroke='%23c99aa5' fill='none' stroke-linecap='round'%3E%3Cpath d='M5 23 Q16 26 27 23' stroke-width='1.6'/%3E%3Cpath d='M8 23 Q8 16 10 12' stroke-width='1.4'/%3E%3Cpath d='M13 23 Q13 14 15 10' stroke-width='1.6'/%3E%3Cpath d='M18 23 Q19 14 22 11' stroke-width='1.6'/%3E%3Cpath d='M23 23 Q25 17 27 14' stroke-width='1.4'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Jost:wght@300;400;500;600&display=swap">
+
+<style>
+/* ============================================================
+   Aurelle — sample booking page
+   Structure (spacing / radii / type scale) from the supplied
+   design tokens, in the blush palette from that same system.
+   Dark-first: :root is the dark set; light is redefined for
+   prefers-color-scheme AND for the explicit [data-theme] stamp.
+   ============================================================ */
+
+:root {
+  /* --- tokens: spacing (from design system) --- */
+  --s-2:  2px;   --s-4:  4px;   --s-5:  5px;   --s-7:  7px;
+  --s-8:  8px;   --s-10: 10px;  --s-15: 15px;  --s-25: 25px;
+  --s-20: 20px;  --s-40: 40px;  --s-55: 55px;  --s-80: 80px;
+
+  /* --- tokens: radii (from design system) --- */
+  --r-1: 4px;  --r-4: 8px;  --r-3: 10px;  --r-2: 20px;
+
+  /* --- type scale ---------------------------------------------------
+     Two-part progression, anchored on the design system's 15 / 17 / 34.
+     Text steps are close (x1.15) because small sizes need fine
+     distinctions; display steps are wide (x1.27) to carry hierarchy.
+
+       13 --x1.15--> 15 --x1.13--> 17     text
+       17 --x1.24--> 21 --x1.62--> 34 --x1.29--> 44     display
+
+     12 is not a step: it is the optical size for uppercase micro-labels,
+     which read about 15% larger than their nominal size.
+     No size is used outside this list. */
+  --t-xs: 12px;  --t-sm: 13px;  --t-2:  15px;  --t-1:  17px;
+  --t-md: 21px;  --t-3:  34px;  --t-xl: 44px;
+
+  /* --- line height: one value per size band --- */
+  --lh-flat:    1;      /* single-line labels and figures */
+  --lh-display: 1.05;   /* 44 */
+  --lh-title:   1.15;   /* 34 */
+  --lh-head:    1.25;   /* 21, and controls */
+  --lh-ui:      1.45;   /* 13 */
+  --lh-body:    1.6;    /* 15 and 17 running text */
+
+  /* --- letter spacing: four roles, no ad-hoc values --- */
+  --ls-display:   -0.01em;  /* Italiana tightens at 34 and above */
+  --ls-normal:    0;        /* body, headings, figures */
+  --ls-caps:      0.12em;   /* uppercase UI labels */
+  --ls-caps-wide: 0.18em;   /* uppercase display labels: ticker, reference */
+
+  --font-display: 'Italiana', 'Didot', 'Bodoni MT', Georgia, serif;
+  --font-body: 'Jost', 'Futura', 'Century Gothic', system-ui, sans-serif;
+
+  /* --- identity palette: dark (default) --- */
+  --ground:      #171315;
+  --surface:     #201b1e;
+  --surface-2:   #292227;
+  --line:        #393136;
+  --line-strong: #50454c;
+
+  --ink:         #f8f1f4;
+  --ink-soft:    #cabdc3;
+  --ink-faint:   #a2939a;
+
+  --gold:        #c99aa5;
+  --gold-bright: #e4c0c9;
+  --gold-dim:    #7d616a;
+  --gold-wash:   rgba(201, 154, 165, 0.12);
+
+  --blush:       #a8a183;
+  --blush-wash:  rgba(168, 161, 131, 0.16);
+
+  --good:        #8fae87;
+  --alert:       #d69a8f;
+
+  --shadow: 0 var(--s-10) var(--s-40) rgba(0, 0, 0, 0.45);
+  --ring: 0 0 0 3px rgba(168, 161, 131, 0.38);
+
+  /* --- motion: one curve, two durations, no overshoot --- */
+  --dur:      200ms;
+  --dur-slow: 300ms;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);   /* ease-out; y never exceeds 1 */
+}
+
+/* light: system preference, unless the viewer explicitly chose dark */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --ground:      #f8f1f4;
+    --surface:     #ffffff;
+    --surface-2:   #fbf3f7;
+    --line:        #e7dae2;
+    --line-strong: #cfb9c4;
+
+    --ink:         #393939;
+    --ink-soft:    #5f4f56;
+    --ink-faint:   #6f5c64;
+
+    --gold:        #8e5c69;
+    --gold-bright: #6d434e;
+    --gold-dim:    #c9a8b3;
+    --gold-wash:   rgba(179, 132, 143, 0.10);
+
+    --blush:       #6b6656;
+    --blush-wash:  rgba(231, 218, 226, 0.65);
+
+    --good:        #4f6b48;
+    --alert:       #9a4f42;
+
+    --shadow: 0 var(--s-10) var(--s-40) rgba(63, 32, 33, 0.10);
+    --ring: 0 0 0 3px rgba(95, 90, 65, 0.32);
+  }
+}
+
+/* light: explicit viewer choice, beats a dark OS */
+:root[data-theme="light"] {
+  --ground:      #f8f1f4;
+  --surface:     #ffffff;
+  --surface-2:   #fbf3f7;
+  --line:        #e7dae2;
+  --line-strong: #cfb9c4;
+
+  --ink:         #393939;
+  --ink-soft:    #5f4f56;
+  --ink-faint:   #6f5c64;
+
+  --gold:        #8e5c69;
+  --gold-bright: #6d434e;
+  --gold-dim:    #c9a8b3;
+  --gold-wash:   rgba(179, 132, 143, 0.10);
+
+  --blush:       #6b6656;
+  --blush-wash:  rgba(231, 218, 226, 0.65);
+
+  --good:        #4f6b48;
+  --alert:       #9a4f42;
+
+  --shadow: 0 var(--s-10) var(--s-40) rgba(63, 32, 33, 0.10);
+  --ring: 0 0 0 3px rgba(95, 90, 65, 0.32);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--t-1);
+  font-weight: 400;
+  line-height: var(--lh-body);
+  letter-spacing: var(--ls-normal);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 { margin: 0; font-weight: 400; text-wrap: balance; }
+p { margin: 0; }
+button { font: inherit; color: inherit; }
+
+:where(button, a, input, select, textarea):focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+  border-radius: var(--r-1);
+}
+
+.eyebrow {
+  font-size: var(--t-xs);
+  font-weight: 500;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.num { font-variant-numeric: tabular-nums; }
+
+/* ---------------------------------------------------------- ticker */
+/* design.md interaction evidence: transform matrix(1,0,0,1,-50,0) — a
+   translateX(-50%) marquee track. Duplicated content makes the loop seamless. */
+
+.ticker {
+  overflow: hidden;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: var(--s-10) 0;
+  position: relative;
+}
+
+.ticker::before,
+.ticker::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--s-55);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ticker::before { left: 0;  background: linear-gradient(to right, var(--surface), transparent); }
+.ticker::after  { right: 0; background: linear-gradient(to left,  var(--surface), transparent); }
+
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: ticker 46s linear infinite;
+}
+
+.ticker:hover .ticker-track { animation-play-state: paused; }
+
+.ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-15);
+  padding: 0 var(--s-15);
+  font-size: var(--t-sm);
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-caps-wide);
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.ticker-item::after {
+  content: "\2726";
+  color: var(--gold);
+  font-size: 0.7em;
+  letter-spacing: var(--ls-normal);
+}
+
+.ticker-item b { color: var(--gold); font-weight: 500; }
+
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ---------------------------------------------------------- shell */
+
+.shell {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: var(--s-25) var(--s-15) var(--s-80);
+  display: grid;
+  gap: var(--s-40);
+}
+
+@media (min-width: 900px) {
+  .shell {
+    grid-template-columns: 340px minmax(0, 1fr);
+    align-items: start;
+    padding: var(--s-55) var(--s-40) var(--s-80);
+    gap: var(--s-55);
+  }
+}
+
+/* ---------------------------------------------------------- rail */
+
+.rail { display: grid; gap: var(--s-25); align-content: start; }
+
+.rail-inner { display: grid; gap: var(--s-25); }
+
+@media (min-width: 900px) {
+  /* The rail stretches the full row so it defines how far the inner card may
+     travel; the inner card sticks inside it. Sticking the rail itself lets it
+     run past its own row and cover the footer on a short viewport. */
+  .rail { align-self: stretch; }
+  .rail-inner { position: sticky; top: var(--s-40); }
+}
+
+.brand { display: grid; gap: var(--s-15); justify-items: start; }
+
+.lashmark {
+  width: 100%;
+  height: 96px;
+  display: block;
+  overflow: visible;
+}
+
+.lashmark path {
+  fill: none;
+  stroke: var(--gold);
+  stroke-linecap: round;
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-size: var(--t-xl);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+  color: var(--ink);
+}
+
+.sample-tag {
+  font-size: var(--t-xs);
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  border: 1px solid var(--line);
+  border-radius: var(--r-1);
+  padding: var(--s-5) var(--s-8);
+}
+
+.brand-role {
+  font-size: var(--t-2);
+  line-height: var(--lh-body);
+  color: var(--ink-soft);
+  max-width: 30ch;
+}
+
+.brand-role b { color: var(--gold); font-weight: 500; }
+
+/* live summary card */
+
+.summary {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  padding: var(--s-25);
+  display: grid;
+  gap: var(--s-15);
+  box-shadow: var(--shadow);
+}
+
+.summary-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-10);
+  padding-bottom: var(--s-15);
+  border-bottom: 1px solid var(--line);
+}
+
+.summary-title {
+  font-family: var(--font-display);
+  font-size: var(--t-md);
+  line-height: var(--lh-head);
+  letter-spacing: var(--ls-normal);
+  color: var(--ink);
+}
+
+.summary-rows { display: grid; gap: var(--s-10); }
+
+.srow {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  gap: var(--s-10);
+  align-items: baseline;
+  font-size: var(--t-2);
+}
+
+.srow dt { color: var(--ink-faint); }
+.srow dd { margin: 0; color: var(--ink); }
+.srow dd.empty { color: var(--ink-faint); font-style: italic; }
+
+.summary-total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-top: var(--s-15);
+  border-top: 1px solid var(--line);
+}
+
+.summary-total .amount {
+  font-family: var(--font-body);
+  font-size: var(--t-md);
+  font-weight: 500;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-normal);
+  color: var(--gold);
+}
+
+.deposit-note {
+  font-size: var(--t-sm);
+  line-height: var(--lh-ui);
+  color: var(--ink-faint);
+}
+
+/* ---------------------------------------------------------- steps */
+
+.flow { display: grid; gap: var(--s-25); }
+
+.progress {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-8);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.progress li {
+  display: flex;
+  align-items: center;
+  gap: var(--s-7);
+  font-size: var(--t-sm);
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  padding: var(--s-7) var(--s-10);
+  border-radius: var(--r-3);
+  border: 1px solid transparent;
+  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+
+.progress li .pip {
+  width: var(--s-8);
+  height: var(--s-8);
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  flex: none;
+}
+
+.progress li[data-state="current"] {
+  color: var(--ink);
+  border-color: var(--gold-dim);
+  background: var(--gold-wash);
+}
+
+.progress li[data-state="current"] .pip {
+  background: var(--gold);
+  border-color: var(--gold);
+  animation: pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(168, 161, 131, 0.55); }
+  70%      { box-shadow: 0 0 0 6px rgba(168, 161, 131, 0); }
+}
+
+.progress li[data-state="done"] { color: var(--gold); }
+.progress li[data-state="done"] .pip { background: var(--gold-dim); border-color: var(--gold-dim); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  padding: var(--s-25);
+  display: grid;
+  gap: var(--s-25);
+  box-shadow: var(--shadow);
+  container-type: inline-size;
+}
+
+@media (min-width: 620px) {
+  .card { padding: var(--s-40); }
+}
+
+.card-head { display: grid; gap: var(--s-15); }
+
+.card-head h2 {
+  font-family: var(--font-display);
+  font-size: var(--t-3);
+  line-height: var(--lh-title);
+  letter-spacing: var(--ls-display);
+}
+
+.card-head p {
+  font-size: var(--t-2);
+  line-height: var(--lh-body);
+  color: var(--ink-soft);
+  max-width: 58ch;
+}
+
+/* ---------------------------------------------------------- services */
+
+.services { display: grid; gap: var(--s-20); }
+
+.service {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--s-5) var(--s-15);
+  align-items: start;
+  text-align: left;
+  width: 100%;
+  padding: var(--s-15);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  cursor: pointer;
+  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease),
+              transform var(--dur) var(--ease);
+}
+
+.service:not([aria-pressed="true"]):hover {
+  border-color: var(--gold-dim);
+  background: var(--gold-wash);
+  transform: translateY(-3px);
+}
+
+/* the photo is the product — let it come forward with its card */
+.service-photo { transition: transform var(--dur-slow) var(--ease), filter var(--dur-slow) var(--ease); }
+.service:hover .service-photo { transform: scale(1.05); filter: brightness(1.06); }
+
+.service[aria-pressed="true"] {
+  border-color: var(--gold);
+  background: var(--gold-wash);
+  box-shadow: inset 0 0 0 1px var(--gold);
+}
+
+.service-name { font-size: var(--t-1); font-weight: 500; }
+
+.service-meta {
+  grid-column: 1;
+  font-size: var(--t-sm);
+  line-height: var(--lh-ui);
+  color: var(--ink-soft);
+}
+
+.service-price {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  align-self: center;
+  font-family: var(--font-body);
+  font-size: var(--t-md);
+  font-weight: 500;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-normal);
+  color: var(--gold);
+}
+
+.service-dur {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-5);
+  padding: var(--s-2) var(--s-7);
+  margin-right: var(--s-7);
+  border-radius: var(--r-1);
+  background: var(--surface-2);
+  color: var(--ink-soft);
+  font-size: var(--t-xs);
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-normal);
+}
+
+.service.has-photo {
+  grid-template-columns: 78px minmax(0, 1fr) auto;
+}
+
+.service-photo {
+  grid-row: 1 / span 2;
+  grid-column: 1;
+  width: 78px;
+  height: 78px;
+  border-radius: var(--r-4);
+  object-fit: cover;
+  background: var(--surface-2);
+  align-self: center;
+}
+
+.service.has-photo .service-name  { grid-column: 2; }
+.service.has-photo .service-meta  { grid-column: 2; }
+.service.has-photo .service-price { grid-column: 3; }
+
+/* ---------------------------------------------------------- notices */
+
+.notice {
+  display: grid;
+  gap: var(--s-8);
+  padding: var(--s-15);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--blush);
+  border-radius: var(--r-3);
+  background: var(--blush-wash);
+  font-size: var(--t-2);
+  line-height: var(--lh-body);
+  color: var(--ink-soft);
+}
+
+.notice strong { color: var(--ink); font-weight: 500; }
+.notice.warn { border-left-color: var(--alert); }
+.notice.good { border-left-color: var(--good); background: var(--gold-wash); }
+
+/* ---------------------------------------------------------- deposit */
+
+.pay {
+  display: grid;
+  gap: var(--s-10);
+  padding: var(--s-15);
+  border: 1px solid var(--gold-dim);
+  border-radius: var(--r-3);
+  background: var(--gold-wash);
+}
+
+.pay .hint { color: var(--ink-soft); }
+
+.pay-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-10);
+  flex-wrap: wrap;
+}
+
+.pay-amount {
+  font-size: var(--t-md);
+  font-weight: 500;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-normal);
+  color: var(--gold);
+}
+
+.pay-btn {
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  padding: var(--s-10) var(--s-25);
+  border-radius: var(--r-3);
+  background: var(--gold);
+  color: var(--ground);
+  font-weight: 500;
+  line-height: var(--lh-head);
+  letter-spacing: var(--ls-normal);
+}
+
+.pay-btn:hover { background: var(--gold-bright); }
+
+/* ---------------------------------------------------------- diary */
+
+.diary { display: grid; gap: var(--s-25); }
+
+.diary-list { display: grid; gap: var(--s-15); }
+
+.diary-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--s-5) var(--s-15);
+  padding: var(--s-15);
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  align-items: center;
+}
+
+.diary-when { font-weight: 500; }
+.diary-meta { grid-column: 1; font-size: var(--t-sm); color: var(--ink-soft); }
+.diary-ref  { grid-row: 1 / span 2; grid-column: 2; font-size: var(--t-sm); line-height: var(--lh-flat); letter-spacing: var(--ls-caps); color: var(--gold); }
+
+.block-list {
+  display: grid;
+  gap: var(--s-8);
+  grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+  margin-top: var(--s-15);
+}
+
+.blocked-day { text-decoration: line-through; color: var(--ink-faint); }
+
+.svc-group {
+  display: flex;
+  align-items: center;
+  gap: var(--s-15);
+  margin-top: var(--s-25);
+}
+
+.svc-group:first-child { margin-top: 0; }
+
+.svc-group span {
+  font-family: var(--font-display);
+  font-size: var(--t-md);
+  line-height: var(--lh-head);
+  letter-spacing: var(--ls-normal);
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.svc-group::before,
+.svc-group::after {
+  content: "";
+  height: 1px;
+  background: var(--line);
+  flex: 1;
+}
+
+.travel-note {
+  font-size: var(--t-2);
+  color: var(--ink-soft);
+  text-align: center;
+  padding: var(--s-10) var(--s-15);
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  background: var(--gold-wash);
+}
+
+/* ---------------------------------------------------------- aftercare */
+
+.aftercare {
+  width: 100%;
+  text-align: left;
+  display: grid;
+  gap: var(--s-15);
+  border-top: 1px solid var(--line);
+  padding-top: var(--s-25);
+}
+
+@media (min-width: 720px) {
+  /* the middle group is the long one — let it run full height beside the two short ones */
+  .aftercare-groups { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-20); align-items: start; }
+  .ac-group:nth-child(1) { grid-column: 1; grid-row: 1; }
+  .ac-group:nth-child(2) { grid-column: 2; grid-row: 1 / span 2; }
+  .ac-group:nth-child(3) { grid-column: 1; grid-row: 2; }
+}
+
+.ac-group {
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  padding: var(--s-15);
+  display: grid;
+  gap: var(--s-8);
+  align-content: start;
+}
+
+.ac-group h3 {
+  font-family: var(--font-display);
+  font-size: var(--t-md);
+  line-height: var(--lh-head);
+  letter-spacing: var(--ls-normal);
+  color: var(--gold);
+}
+
+.ac-group ul { margin: 0; padding-left: var(--s-15); display: grid; gap: var(--s-7); }
+
+.ac-group li {
+  font-size: var(--t-2);
+  line-height: var(--lh-body);
+  color: var(--ink-soft);
+  padding-left: var(--s-4);
+}
+
+.ac-group li::marker { color: var(--gold-dim); }
+
+/* ---------------------------------------------------------- areas */
+
+.areas { display: grid; gap: var(--s-15); grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+
+.area {
+  padding: var(--s-15);
+  text-align: left;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  cursor: pointer;
+  display: grid;
+  gap: var(--s-4);
+  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease),
+              transform var(--dur) var(--ease);
+}
+
+.area:not([aria-pressed="true"]):hover {
+  border-color: var(--gold-dim);
+  background: var(--gold-wash);
+  transform: translateY(-3px);
+}
+
+.area[aria-pressed="true"] {
+  border-color: var(--gold);
+  background: var(--gold-wash);
+  box-shadow: inset 0 0 0 1px var(--gold);
+}
+
+.area-name { font-size: var(--t-1); font-weight: 500; }
+.area-days { font-size: var(--t-sm); line-height: var(--lh-ui); letter-spacing: var(--ls-normal); color: var(--ink-soft); }
+
+/* ---------------------------------------------------------- calendar */
+
+.picker { display: grid; gap: var(--s-25); }
+
+/* The picker's width comes from the card, not the window — the 340px rail
+   eats most of a tablet's viewport. A viewport query put the calendar in a
+   222px column at 1024px wide, where its grid needs 304px (seven 40px day
+   cells plus gaps), so it spilled over the times beside it. Ask the
+   container instead. Where @container is unsupported the picker simply
+   stacks, which is the safe answer anyway. */
+@container (min-width: 580px) {
+  .picker { grid-template-columns: minmax(304px, 1fr) 220px; align-items: start; }
+}
+
+.cal { display: grid; gap: var(--s-15); }
+
+.cal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-10);
+}
+
+.cal-month {
+  font-family: var(--font-display);
+  font-size: var(--t-md);
+  line-height: var(--lh-head);
+  letter-spacing: var(--ls-normal);
+}
+
+.cal-nav { display: flex; gap: var(--s-5); }
+
+.cal-nav button {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--r-4);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+.cal-nav button:hover:not(:disabled) { border-color: var(--gold); color: var(--gold); }
+.cal-nav button:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: var(--s-4); }
+
+.cal-dow {
+  text-align: center;
+  font-size: var(--t-xs);
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  padding-bottom: var(--s-5);
+}
+
+.day {
+  aspect-ratio: 1;
+  min-height: 40px;
+  display: grid;
+  place-items: center;
+  gap: 0;
+  border: 1px solid transparent;
+  border-radius: var(--r-4);
+  background: transparent;
+  color: var(--ink-faint);
+  font-size: var(--t-2);
+  cursor: default;
+  position: relative;
+  padding: 0;
+  font-family: inherit;
+  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+.day.pad { visibility: hidden; }
+
+.day.free {
+  color: var(--ink);
+  border-color: var(--line);
+  cursor: pointer;
+}
+
+.day.free:not([aria-pressed="true"]):hover { border-color: var(--gold); background: var(--gold-wash); }
+
+.day.free::after {
+  content: "";
+  position: absolute;
+  bottom: 5px;
+  width: var(--s-4);
+  height: var(--s-4);
+  border-radius: 50%;
+  background: var(--gold-dim);
+}
+
+.day.full { color: var(--ink-faint); text-decoration: line-through; }
+
+.day[aria-pressed="true"] {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--ground);
+  font-weight: 500;
+}
+
+.day[aria-pressed="true"]::after { background: var(--ground); opacity: 0.5; }
+
+.cal-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-15);
+  font-size: var(--t-sm);
+  color: var(--ink-faint);
+}
+
+.cal-key span { display: inline-flex; align-items: center; gap: var(--s-7); }
+
+.key-dot { width: var(--s-8); height: var(--s-8); border-radius: 50%; background: var(--gold-dim); }
+.key-line { width: 14px; height: 1px; background: var(--line-strong); }
+
+/* time slots */
+
+.slots { display: grid; gap: var(--s-10); align-content: start; }
+
+.slots-title {
+  font-size: var(--t-sm);
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.slot-list { display: grid; gap: var(--s-7); grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
+
+@container (min-width: 580px) { .slot-list { grid-template-columns: 1fr; } }
+
+.slot {
+  padding: var(--s-10);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--r-4);
+  cursor: pointer;
+  font-size: var(--t-2);
+  line-height: var(--lh-head);
+  letter-spacing: var(--ls-normal);
+  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+.slot:not([aria-pressed="true"]):hover:not(:disabled) { border-color: var(--gold); background: var(--gold-wash); }
+
+.slot:disabled {
+  color: var(--ink-faint);
+  text-decoration: line-through;
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.slot[aria-pressed="true"] {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--ground);
+  font-weight: 500;
+}
+
+.slots-empty {
+  font-size: var(--t-2);
+  line-height: var(--lh-body);
+  color: var(--ink-faint);
+  border: 1px dashed var(--line);
+  border-radius: var(--r-3);
+  padding: var(--s-15);
+}
+
+/* ---------------------------------------------------------- scarcity */
+
+.scarce {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-5);
+  padding: var(--s-2) var(--s-7);
+  border-radius: var(--r-1);
+  background: var(--blush-wash);
+  color: var(--blush);
+  font-size: var(--t-xs);
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.slots-title { display: flex; align-items: center; gap: var(--s-8); flex-wrap: wrap; }
+
+.day.free.low::after { background: var(--blush); }
+
+/* ---------------------------------------------------------- hold timer */
+
+.hold {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-10);
+  flex-wrap: wrap;
+  padding: var(--s-10) var(--s-15);
+  border: 1px dashed var(--gold-dim);
+  border-radius: var(--r-3);
+  background: var(--gold-wash);
+  font-size: var(--t-2);
+  color: var(--ink-soft);
+}
+
+.hold .clock {
+  font-weight: 500;
+  letter-spacing: var(--ls-normal);
+  color: var(--gold);
+}
+
+.hold[data-expired="true"] {
+  border-color: var(--alert);
+  background: transparent;
+}
+
+.hold[data-expired="true"] .clock { color: var(--alert); }
+
+/* ---------------------------------------------------------- sparkle */
+
+.done { position: relative; }
+
+.sparkle {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.done > *:not(.sparkle) { position: relative; z-index: 2; }
+
+/* ---------------------------------------------------------- form */
+
+.fields { display: grid; gap: var(--s-15); }
+
+@media (min-width: 620px) {
+  .fields { grid-template-columns: 1fr 1fr; }
+  .field.wide { grid-column: 1 / -1; }
+}
+
+.field { display: grid; gap: var(--s-5); }
+
+.field label {
+  font-size: var(--t-sm);
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.field input,
+.field select,
+.field textarea {
+  font-family: var(--font-body);
+  font-size: var(--t-1);
+  color: var(--ink);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-4);
+  padding: var(--s-10) var(--s-15);
+  width: 100%;
+  transition: border-color var(--dur) var(--ease);
+}
+
+.field textarea { resize: vertical; min-height: 84px; line-height: var(--lh-body); }
+
+.field input::placeholder,
+.field textarea::placeholder { color: var(--ink-faint); }
+
+.field input:hover,
+.field select:hover,
+.field textarea:hover { border-color: var(--line-strong); }
+
+.field .err {
+  font-size: var(--t-sm);
+  color: var(--alert);
+  min-height: 0;
+}
+
+.field[data-invalid="true"] input,
+.field[data-invalid="true"] select,
+.field[data-invalid="true"] textarea { border-color: var(--alert); }
+
+/* ---------------------------------------------------------- review */
+
+.review { display: grid; gap: var(--s-25); }
+
+.review-block {
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  padding: var(--s-15);
+  display: grid;
+  gap: var(--s-8);
+}
+
+.review-block .eyebrow { margin-bottom: var(--s-8); }
+
+.rrow {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr);
+  gap: var(--s-10);
+  font-size: var(--t-2);
+  align-items: baseline;
+}
+
+.rrow .k { color: var(--ink-faint); }
+.rrow .v { color: var(--ink); overflow-wrap: anywhere; }
+
+.consent {
+  display: flex;
+  gap: var(--s-10);
+  align-items: flex-start;
+  font-size: var(--t-2);
+  line-height: var(--lh-body);
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  padding: var(--s-15);
+  background: var(--blush-wash);
+}
+
+.consent input { margin: var(--s-2) 0 0; accent-color: var(--gold); flex: none; width: 22px; height: 22px; }
+.consent[data-invalid="true"] { border-color: var(--alert); }
+
+/* ---------------------------------------------------------- actions */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-10);
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--s-5);
+}
+
+.btn {
+  padding: var(--s-15) var(--s-25);
+  border-radius: var(--r-3);
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: var(--t-1);
+  font-weight: 500;
+  line-height: var(--lh-head);
+  letter-spacing: var(--ls-normal);
+  transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease), color var(--dur) var(--ease), opacity var(--dur) var(--ease);
+}
+
+.btn-primary { background: var(--gold); color: var(--ground); position: relative; overflow: hidden; }
+
+.btn-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 42%, rgba(255, 255, 255, 0.34) 50%, transparent 58%);
+  transform: translateX(-100%);
+  animation: sweep 5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.btn-primary:disabled::after { display: none; }
+
+@keyframes sweep {
+  0%, 74% { transform: translateX(-100%); }
+  100%    { transform: translateX(100%); }
+}
+.btn-primary:hover:not(:disabled) { background: var(--gold-bright); }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-quiet { background: transparent; border-color: var(--line); color: var(--ink-soft); }
+.btn-quiet:hover { border-color: var(--gold-dim); color: var(--ink); transform: translateY(-1px); }
+
+.hint { font-size: var(--t-sm); color: var(--ink-faint); }
+
+/* ---------------------------------------------------------- done */
+
+.done { display: grid; gap: var(--s-25); justify-items: center; text-align: center; padding: var(--s-15) 0; }
+
+.done-mark {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  background: var(--gold-wash);
+}
+
+.done h2 {
+  font-family: var(--font-display);
+  font-size: var(--t-3);
+  line-height: var(--lh-title);
+  letter-spacing: var(--ls-display);
+}
+.done p { font-size: var(--t-2); line-height: var(--lh-body); color: var(--ink-soft); max-width: 46ch; }
+
+.ref {
+  font-size: var(--t-2);
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-caps-wide);
+  color: var(--gold);
+  border: 1px dashed var(--gold-dim);
+  border-radius: var(--r-3);
+  padding: var(--s-10) var(--s-15);
+}
+
+.done-card {
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  padding: var(--s-15);
+  display: grid;
+  gap: var(--s-8);
+  background: var(--surface-2);
+}
+
+/* ---------------------------------------------------------- footer */
+
+.foot {
+  grid-column: 1 / -1;
+  border-top: 1px solid var(--line);
+  padding-top: var(--s-40);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-15);
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--t-sm);
+  color: var(--ink-faint);
+}
+
+.foot a {
+  color: var(--gold);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.foot a { transition: color var(--dur) var(--ease); }
+.foot a:hover { text-decoration: underline; color: var(--gold-bright); }
+
+.theme-toggle {
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  color: var(--ink-faint);
+  padding: var(--s-15) var(--s-15);
+  font-size: var(--t-xs);
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.theme-toggle:hover { border-color: var(--gold-dim); color: var(--ink); }
+
+/* A 7-column calendar sets a hard floor on the card's width: seven 40px
+   day cells plus gaps is 304px, and that floor propagates to every other
+   child of the card. On a 320px phone the frame around it has to give way,
+   or the whole card overflows. Below 390px the page tightens its margins
+   and the day cells shrink a little. At 375px this actually buys the
+   calendar more room than it had. */
+@media (max-width: 389px) {
+  .shell { padding-left: var(--s-10); padding-right: var(--s-10); }
+  .card { padding: var(--s-15); }
+  .cal-grid { gap: 3px; }
+  .day { min-height: 34px; }
+}
+
+/* ---------------------------------------------------------- motion */
+
+/* Added by script only, so nothing is ever hidden when JS does not run. */
+.reveal {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity var(--dur-slow) var(--ease), transform var(--dur-slow) var(--ease);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal.is-in { opacity: 1; transform: none; }
+
+.step { animation: rise var(--dur-slow) var(--ease) both; }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.lashmark path {
+  stroke-dasharray: var(--len);
+  stroke-dashoffset: var(--len);
+  animation:
+    draw 1.5s cubic-bezier(0.35, 0.6, 0.2, 1) var(--delay) both,
+    flow 3.6s ease-in-out calc(var(--delay) + 1.5s) infinite;
+}
+
+@keyframes draw { to { stroke-dashoffset: 0; } }
+
+/* a wave of brightness travels along the lash line, forever */
+@keyframes flow {
+  0%, 100% { stroke: var(--gold); }
+  50%      { stroke: var(--gold-bright); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.001ms !important;
+  }
+  .lashmark path { stroke-dashoffset: 0; }
+  .ticker-track { animation: none; }
+  .btn-primary::after { display: none; }
+  .reveal, .reveal.is-in { opacity: 1; transform: none; }
+}
+</style>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track" id="tickerTrack"></div>
+</div>
+
+<div class="shell">
+
+  <aside class="rail">
+   <div class="rail-inner">
+    <div class="brand">
+      <svg class="lashmark" viewBox="0 0 300 96" aria-hidden="true" id="lashmark"></svg>
+      <h1 class="wordmark">Aurelle</h1>
+      <span class="sample-tag">Sample page</span>
+      <p class="brand-role">
+        Lashes, brows and nails, brought to your door.
+        A mobile studio that comes to you.
+      </p>
+    </div>
+
+    <section class="summary" aria-live="polite">
+      <div class="summary-head">
+        <h2 class="summary-title">Your appointment</h2>
+        <span class="eyebrow" id="stepCount">Step 1 of 4</span>
+      </div>
+      <dl class="summary-rows">
+        <div class="srow"><dt>Treatment</dt><dd class="empty" id="sumService">Not chosen yet</dd></div>
+        <div class="srow"><dt>Area</dt><dd class="empty" id="sumArea">Not chosen yet</dd></div>
+        <div class="srow"><dt>Date</dt><dd class="empty" id="sumDate">Not chosen yet</dd></div>
+        <div class="srow"><dt>Time</dt><dd class="empty" id="sumTime">Not chosen yet</dd></div>
+      </dl>
+      <div class="summary-total">
+        <span class="eyebrow">Total</span>
+        <span class="amount num" id="sumTotal">—</span>
+      </div>
+      <p class="deposit-note" id="depositNote">
+        A £10 deposit secures the slot and comes off your total on the day.
+      </p>
+    </section>
+   </div>
+  </aside>
+
+  <main class="flow">
+    <ol class="progress" id="progress"></ol>
+    <div id="stage"></div>
+  </main>
+
+  <footer class="foot">
+    <span>Aurelle · Mobile beauty studio · A sample booking page, not a real business</span>
+    <span style="display:flex; gap:var(--s-15); align-items:center;">
+      <button class="theme-toggle" id="themeToggle" type="button">Theme</button>
+    </span>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------------------------------------------------- safe storage */
+
+  var store = {
+    get: function (k) { try { return window.localStorage.getItem(k); } catch (e) { return null; } },
+    set: function (k, v) { try { window.localStorage.setItem(k, v); } catch (e) { /* private mode */ } }
+  };
+
+  /* ---------------------------------------------------- lash mark */
+
+  (function drawLashes() {
+    var svg = document.getElementById("lashmark");
+    if (!svg) return;
+
+    var n = 26, out = "", BASE = 86;
+
+    // lash line: a shallow arc, the way a lid sits
+    function lidY(t) { return BASE - Math.sin(Math.PI * t) * 5; }
+
+    for (var i = 0; i < n; i++) {
+      var t = i / (n - 1);
+      var x0 = 16 + t * 268;
+      var y0 = lidY(t);
+
+      // longest through the outer third, as a real lash map runs
+      var lift = Math.pow(Math.sin(Math.PI * Math.min(1, t * 0.92 + 0.04)), 0.75);
+      var len = 22 + lift * 46;
+
+      // splay outward from the centre, then curl further at the tip
+      var splay = (t - 0.5) * 1.25;
+      var curl = 0.62;
+
+      var mx = x0 + Math.sin(splay) * len * 0.55;
+      var my = y0 - Math.cos(splay) * len * 0.55;
+      var tx = mx + Math.sin(splay + curl) * len * 0.45;
+      var ty = my - Math.cos(splay + curl) * len * 0.45;
+
+      var c1x = x0 + Math.sin(splay) * len * 0.3;
+      var c1y = y0 - Math.cos(splay) * len * 0.3;
+      var c2x = mx + Math.sin(splay + curl * 0.35) * len * 0.22;
+      var c2y = my - Math.cos(splay + curl * 0.35) * len * 0.22;
+
+      var d = "M " + x0.toFixed(1) + " " + y0.toFixed(1) +
+              " C " + c1x.toFixed(1) + " " + c1y.toFixed(1) +
+              " " + c2x.toFixed(1) + " " + c2y.toFixed(1) +
+              " " + tx.toFixed(1) + " " + ty.toFixed(1);
+
+      out += '<path d="' + d + '" style="--len:' + Math.round(len * 1.25) +
+             "; --delay:" + (140 + i * 30) + "ms; " +
+             "stroke-width:" + (0.6 + lift * 1.0).toFixed(2) +
+             "; opacity:" + (0.35 + lift * 0.6).toFixed(2) + '"/>';
+    }
+
+    // the lash line itself, drawn first
+    var lid = "M 12 " + lidY(0).toFixed(1) + " Q 150 " + (BASE - 11).toFixed(1) +
+              " 288 " + lidY(1).toFixed(1);
+    out += '<path d="' + lid + '" style="--len:290; --delay:0ms; stroke-width:1.4; opacity:0.85"/>';
+
+    svg.innerHTML = out;
+  })();
+
+  /* ====================================================================
+     CONFIG — everything a new client needs changing lives here.
+     ==================================================================== */
+
+  var CONFIG = {
+    // Sample page: nothing is sent anywhere and no address appears here.
+    demo: true,
+    notifyEndpoint: "",
+    notifyEmail: "",
+
+    deposit: 10,
+    paymentLink: "",
+    patchTestHours: 48,
+    diaryCode: "demo",
+    infillWeeks: 3
+  };
+
+  /* ---------------------------------------------------- data */
+
+  // photo: set to an image URL (or a data: URI) and the card shows it.
+  // Left empty the card simply renders without one.
+  var SERVICES = [
+    { id: "classic-full", group: "Full sets",   name: "Classic", label: "Classic full set", price: 40, mins: 105,
+      photo: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCADwAPADASIAAhEBAxEB/8QAGgABAQEBAQEBAAAAAAAAAAAAAgEAAwYFCP/EACIQAQEBAQACAQQDAQAAAAAAAAABEQIDMUESIVFhEyJSMv/EABcBAQEBAQAAAAAAAAAAAAAAAAABAwL/xAAWEQEBAQAAAAAAAAAAAAAAAAAAEQH/2gAMAwEAAhEDEQA/AP0izMrVmZgZmYGSqgMlUaKlClQoDRpUKKNGlQqKNGlRorJVSgjMwMzMDIqUVmZgSs1YH2mRlZKza2gzMwMioDUaVGijQp0KA0KdCoo0KdCijRpUaKyKgIzMDMzaDIzCs2owMzID7TI2qzVk1RGbWYGZk0VaNVKA0KdCgNCnQqKNCnQoo0aVGisiiDNqMDM2oKqamtoNrJqaCto62g+1raOtqsz1tHV0CbR1dBWTW0GqM1BKFKjQGhTo0UKFOjUUKNKjRUqVaNBkajaKupqWpoFqaOpoFqampoq2to6mg+3ramsrMtXQXQLV0JV0Ql0dbQXWTWBKlWjQSjSo0UKNKhUUaFKjRUo2rRtBLRta0bRV1NS0bQLU0bRtFK1NC1NFPU0LW0H39bRXVZFraOroE2jq6BauiwFrCwKlZKCUaVGgNClQoo0KXQVFG0LS6rnaK1o2taFoq2jaNo2gVo2paNopWpoWpainqaGpoPSNqa2umS6oqBauhqgWqOsIWtqa2grJqA1GrRoDQpWh0KNrn1StDqoodULVtDqip1QtbqhaK1o2paNo6W0bUtHUC1NHU0UtTR1NB6hkbVYquprAqiqi6o6wFq6GyfKXycz5EdNS1yvl/EqXydfHIsdbQtc715L6mDf5P0Dpa59Ubz3/AKc7z3/oU+q5dVOvrnq659Xv9IpWuXVTrvr8OfXk/MosK0LRvkg3qX1RWtG1rRorWpa1o2oq6OtUFXU1NQHq2ZLZPdVgrBfJPj7p/fr9QHTc9jfJzB/j33bSnHM+AT6+uv8AmNnd93DZQJ4/zbSnHM+FYG+0a1NTQW0bWtG0EtDqra59UUeq52l1Q6qKHVc+i6oUdYHUn4cuuZ8fZ06Ciud5s9Ubep7mug1FD658/Zti9SULxBSFM6nqp9We4BM0svpgen/v1+mnj/1ddGVgkknqKzAyazKNrMmgqayA1qayUGtG1rRtBLXPqla59VFHqh1Stc+qOh6oVaNFChToUVKNIRUo0kRUTCQAvMqZZ6ptgPVMzKwZFQGZk0GqM1UaoyUGqWtRtBrQtW0LRUtc6VCoo9Vz6p9VzoqUKVCijRpVKKKUqgooeIA4hY2IotisD07MysGRagMK1AZKtQGoqlUSjVo0UaFKhUBo1aNFCjVo0dDRpUaCUaSCi2LiCoysCJhY2AONhYmA9IzMMUrNWBKipQRqyAiVaNUSjVqUUKFKjUUaFKhRRoUqNFSotSijWWoCMrAONi4wqITALEmA9EmqgxZKoisi1Aao1QREVKqjRpUKA0KVGoo0KXQUUaNKjRUqValFRqzAjK2AjLiAzYzAmNisD0FRqwySotQVqjVqCCQg1SrUoDQp0KAUaVGih0FOjRQqValFGstQUWWoDMzAzMwMzMDY2MwP/9k=", note: "One extension per natural lash. Soft, everyday definition." },
+    { id: "hybrid-full",  group: "Full sets",   name: "Hybrid",  label: "Hybrid full set",  price: 45, mins: 120,
+      photo: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCADwAPADASIAAhEBAxEB/8QAGgAAAwEBAQEAAAAAAAAAAAAAAAECAwQFBv/EACIQAQEBAQEAAQQDAQEAAAAAAAABEQISQQMTMVEhMmFSIv/EABcBAQEBAQAAAAAAAAAAAAAAAAABAgX/xAAVEQEBAAAAAAAAAAAAAAAAAAAAEf/aAAwDAQACEQMRAD8A+9B4MadEgAAAAAAAAAAAAAAAAAAAAA4RwDOEcA4cKKgHFQocBUMoqCGZGDiB4WCgsMAkGQAAAAAAAAAAAAAAAAAyUAMoqAcOFFQDioUOCKhwooBDAByYSsAqSVhARHQCQZAAAAAAAAAAAAAMBDBwAZRUA4cKKgHFQoqCHDhRUAGIAc2Fi8LARhLsKwEFVUhSKnQCQdIAAAAAAAAAojAGDgBUKKgCKhRUA4cEOCGYhwAeCGDDCsaYVgM7E2NLCsBnYmtLE2AgquxOCkWHgBIUASDMCwwABwHAEOA4AioUioAioUVBDhwQ4BwwYAYYBNhWNMKwGVibGtibAZWJsa2JsBnYmxpYVgM8LF2FgJwsXhYKnBisGAWA8PALDw5DwCkOQ8PAEOQSKkEEOQSKkAQ4JFSADBgMB4YKsTY28pvIjKxNjaxNgrGxNjaxN5BjYmxteU3kGNhY2vKbyDLBjTCwEYMXgwEYMXgwE4eKw8BMhyHhyAUipBisApFSCQ5AEhyHIeAMOQYeAMBngOi8pvLfyXkRheU3lveU3kGF5TeW95TeQYXlN5b3lN5BjeU3ltYi3n9is/JeV3qfEtLer+OQR5HlWd34wvPdAsHk/t9fsfb6/YFh4PHc+Rnf+AMPC3r/AJOd/vkDw8Kdxcsv4oFIch4rAKQ5Dw5ALDw5DwQhisPAd3kvLbym5PyqMrym8r67nxNTZ31/kQRZIz6vMbfY/wCrac+lzPgHJfXX9eSv0+7+bjs8leQcf2f3bR9qT4dV5K8iubx/heXReSvIOfyXlveSvIMfJeW3kvIMsGNPIwGeFjTBgM7xL8Jv0p8fw2wYDH7dn46P/wBz8zWuHgMp3Pn+Gksvyd5l/MT9qfH8AqRWInHfP4unO7P7QF4eFz1L+KvAd2d9f4J9H/q2unBis1hOJPxB5bYXkGN5Ly28leRWPkry28l5BheSvLe8leQYXlN5b3krygwvKby6Lym8gwvKby3vKbyKxvJY2sTYDLCxrhYDPCxphYCcGKw8BOHIeHgFh5+zw8Bnfpy/4Xjuf1utsPAevhYvBisowsaYMBnheWmDAZeSvLXCwGV5K8tcKwGN5TY2sTYDKxNjaxFgrKxNjWxNgM7E2NLE2IM7CsaWJsBGFi8GCowYrBgFgxWDALDwxghHhgHshQVE4MUWAWFisGAnCxZYCMKxdhWAzsTY0sTQZ2JsaVNBnYitKmis6mrpUEWJsWSCLCxVGAnBh4ALDwYeAQwwAwAwe1gwBULBhgCwGAIqYBNKmQJqaqpoJqKuooJqKuooqamqqaBVNVSqCaSgCQeDAIHgwCPDAEYAPZACoAAAAAFQCoEVMqCamqqKCamqqKCamnU0VNKnSAqQpUAAEAAAAAAAAAAAeyAFQAAAKCoAqZAVTTpUE1NVUUE1NVUUE1NOpopJp0qBFTIAAEAAAAAAAAAAAf/Z", note: "Classic and volume mixed. Texture with a bit of fullness." },
+    { id: "russian-full", group: "Full sets",   name: "Russian", label: "Russian full set", price: 50, mins: 135,
+      photo: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCADwAPADASIAAhEBAxEB/8QAGQAAAwEBAQAAAAAAAAAAAAAAAAECAwQH/8QAHhABAQEBAQACAwEAAAAAAAAAAAECERIxUSJBYSH/xAAWAQEBAQAAAAAAAAAAAAAAAAAAAQT/xAAVEQEBAAAAAAAAAAAAAAAAAAAAEf/aAAwDAQACEQMRAD8A9zqbRam1GoWptFqbQFqLRam0UWotGqztFO1NpWptA7U2ptK0VXS6npdBfT6z6Og16crKVUoNZVSspVSiNs1crCVc0DeVUrGaXKI3lVKxlVNCN5VSsZpU0DXp9Zyn1UY2ptTaVqKdqbStRdCnai0taZ3Qp2ptTdIuhVWpukXSboFWldIuk3Qq7oemfovQNfQ9MvQ9A29HNMfRzQN5pc055pU0I6Jpc055pc0DeaXNOeaXNCOiaXK55pU0I6JpU0wmlTQN5o5pj6P0Ii1N0i6TdCqukXSbpF0Kq6RdJ1pGtCndIuk60i6FVdJukXSbQXdJuk2p6Kvo6z6OoL6fWXT9A0lOaZdPoNppU0xlOVUbzS5pzzS5oHRNLmnNNLmhHRNKmmE0qaB0TSpphNHNCOiaOaYTR+ghXSbpF0m6FVdIuiukXQHrSLpN0i0U7pFpWptFO1NpWptQVanqbStBXR1HR0VfR1n0+g06Oo6Og1lVKylOURrKqVlKqUGsq5pjKqVUbTS5phKqUG80qaYSqmhG80fpjNHNAVqbpN0m0VV0i0rUWgdqLRai1FO1FotTaAtK0rU9FO0ugugYIgUEgFdNMMFSnKhUBcqpWcqpRGkqpWcqpQaSqlZSqlUaynKzlOURr0+spT6BWptT0uinam0WotQO1FotTaAtTaLSFBdBAAOkBjpAD6OkAUOlACjSYK6cqTBcVKiHAXKqVEOCLlV1Ep9BfT6gdUT0rStTagdqbRam0Bam0UlUEKSAIAAAAAAAAADgEABSVAIqJMFQ4lUBUOJOAuH1I6Io+pPoM7StKlQFpUUqqlSpkgRU6QAAvU+wMJ9T9Dt/UBQT+X0Py/gKCeX7HL9guBP5fqj8v4ClI7fo/X3AUaZqdV0DOEcBUEIwUCAKHS6BGZArRQRXRXt/gHU3Ug8/Y5IBdt+IXNX5qgCfP3T5PowAAAAAAAABwAAZlDAcHmCGBcs+KcuoZwCmp+/8VKVko8wFwI5Z8UTXPmAsFNS/swY/lf4OfZ0qBCikAIyAAAAAAAAAAAAAAMAAcMoYCGIIBnCOAYgEAwABXMLmp8VQBmVMqoVI6SApHSAAAAAAAAAAAAIDgAAAcMADOEcAHCOAYgEAwAAA4YMqVUQJpKSApHSAAqBTAgEAAAAAAYgAHCOAYgEAzhHABwjgGIBAM4IAAMcBnU1aaCaVVU0CpHSAqBQKDICGAAABwAAYCGAAMQADhGoDhHAMyioAOA0QA+AGdTVFRU1KqmgVSqlQTQdIAAAEMoYAxAAOCGAEBgADiggAAzKGBnCNEOKhQwOAGDIqpNBNTVVNFTSqkgVIyoAAADIwOAQ4BgCAYAA4AFAZGBiAwEVChwQ4qFDiBw4DUf/Z", note: "Handmade fans. The fullest, fluffiest finish." },
+
+    { id: "classic-infill", group: "Infill sets", name: "Classic", label: "Classic infills", price: 25, mins: 60,
+      photo: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCADwAPADASIAAhEBAxEB/8QAGQABAQEBAQEAAAAAAAAAAAAAAgEAAwQH/8QAIxABAQEBAAEDBAMBAAAAAAAAAAERAhIDMUETIVFhIjJSQv/EABYBAQEBAAAAAAAAAAAAAAAAAAABBP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/APrbMw2szMDJVSgiKgDRpUaAUKdCgNClRoo0aVGgiatQFWCoFFgwoBRYMKAUVIsAlgxQVmYHrZmEZmYGFagNRq1KCUKVGgFCnQoDQpUaKNGlRoJWZNBWjMBRYKwDiwYUAosGEBKKwFiooPWyIISIwLUaoDDVqUEoUqFAaFOhQGjVo0UaNKjQSotRBlRlUoUFYIUKDFgHFgxYBxRUCaJFB6mRhF1tRtBrU1qmg1qVkoJQpUKCUKVoUVKNWjQGjVqUERaiK2qjKFFgrBDiwYUAoUCFAKFBiwCiiQPQwtoitqa2gtqalqAto1rUtBKNW0aKlCrRoJRq0bQS0atEGTWZFXWRoCwoKqFCgwoIUKBCgFCGLAJmjA76mpraIusmoC2o2poNqWslBLRq2jRUo1aNBKFWjQajWqVFasjaC6oqCwoKqFCgxYIcKBCgFCgxQJUUHTW1G0RtZNYG1GqAyMlFajVoglGrRoDaNKjQSitGorM1TVFVNYCiwYsA4UCFBDhQYsA4sGFAKLEiwCZmEZK1QGaslBkVBRSrbAvfP5BqNS+pPiWheur7cgVGjb3faYN8wKiPj1/pPHr/AEikznnc+dbe/wBKOjRz8uvwvn+ZQdCjlO5T56l9qDpCgQoIcKDCgFCgwoBRYkWATNiWye4iil9SfH3H+fX6A7ZA67k+W+n+bas4k+ADy6v9YmdX3uOrCuP0/wA21fCT4dBoBiUqlAKFdKNBzo06NAUq1KKiowL4y/DeE+PsqwEnNntSl7nxqw4Cc+pPn7OvPUvyGS+8WenBHWFHGc9T2ulO7P7QHaLA56ln2pwE/n1+mnpz/q664giTmT2jKwImFiALYSYA0aaWAFg2Olg2A50bHSwLBQsCx0sGwHOodg2AONisKyxIUBYcCHBChwIcAoQwoCXiX9N49c+104ojoyoDNjMCMrAiYWICJhIAWJYdg2AFgWOtgWA52DY6WDYK52DY6WDYAYh4mAKyLiyA0KNIUgLCiQpAKFIkWAsJIsEdWZgTGxWAWJMBGXGBMRWAcSwksALBsdLBsBzsGx0sGwHOwbHSxLBXPEx0xMAMWQsXASRZFkKQEkORpCkBpCjSFIIi4si4BMzAzMwMzMDMzAjKwChIA1LDxACwbDxLAc7EsdMTAc8THXEwAxsdMXxAJFkOclOQCQpCnJSAMiyFIUgBi4eNgAzMDMzAzMwMzMDMzAyKwC2K2AKYTAONhY2AGLh42AGLOTkKQAnKzk5FkEGcrIeLgBIuHi4AY2HjYDzMzCszMDMzAzMwMzMDMzAzMwMzNBGbFXATFxcWQEkKRZFkBJCkWQpBBkWQpCkAMWQ8aQAxcLFwH//Z", note: "Top-up within 2\u20133 weeks, with 40%+ of your set still on." },
+    { id: "hybrid-infill",  group: "Infill sets", name: "Hybrid",  label: "Hybrid infills",  price: 30, mins: 75,
+      photo: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCADwAPADASIAAhEBAxEB/8QAGQAAAwEBAQAAAAAAAAAAAAAAAAECAwUH/8QAIhABAQEBAAEDBAMAAAAAAAAAAAERAkEDEjETISJhMlFS/8QAGAEBAQEBAQAAAAAAAAAAAAAAAAEDAgT/xAAVEQEBAAAAAAAAAAAAAAAAAAAAEf/aAAwDAQACEQMRAD8A93AA9IAAAAABoADTIAYLT0AAAOAoYBSTBUOJhwRUOFDgKhwocBUXERcEXFxnFwRUVExUEcQEBqYIaBmnT0D0aWgDNIBQLTEGmRwBDIwBwjgHDhQ4Io4RgcVExUA4uIi4iLi4iKioqKiYqA4ejS0aND0aWjQPRpaNBWhJgZ6k9AwR6B6aTgijiYYGcI4Bw4UMRRkYHFRMVAOLiIuIi4qJioqKiomKgjg6NLRo1PRpaNA9GkAMEAVoLQCjSAUcTqoCjTDghwyOAqGmKgKMjEOKiYqAcXERcRFxUTFRUVFRMMHAAA0AAAAAANAA9BAD0yAKOJOAuHEw4C4cSYiocTFAqKiIqCKioiKgKioiLgi4qIi4IqKiIrQcAEBoYIAY0gB6CAKBDQMaABnEw4C4cTDgLhxMUIqHEnAXFREVBFQ4mKgKioiKgi4qVEVKC4rWcqtEcIGQ0AAAAAAAAAAA4aQChCMFQ4lUBUVERUEVDiVQFRURKqCKioiKgKUiGC5VSohyiLlVrOU9QckDArssGGASFFgEDwgAGpvfM8goI+pPEtHv6vxyK0Nlvd8SH+f6BrDjKc9/6Oc9/wChG0OMZO58XTn1Abw2Pv7/AMn9T++aDaKjLn1OV89S/FRFw4mHBFxURDUVDTDEVp6kwc3ArCuTyOyLCvc8TS/O/oDv2K9yeR9P+7ac45ngEXrq/wAYXt7vzca4BWc9Kebac4k8RYBOfozAhQweADhGBxUSoDhwjgg9svgr6c8fZRgj2dT46Pe58zVqQTz6k8/Zc6nilkvzE/S58CNTjGc98/F056ln8oo2Gp5756+KoHP/AD6/Rz0v7+7bBg6rOcyfEGLwsBGDF4WAjBisGAjBisGAnBisGAWDFYMAsODDkAoqDDEIxDAGIIBnAaIIqFBAM/n5I4om+nzf0n298/xutQDHBisGCowYrBgIwYrBgIwYrBgIwYrBgJwYrBgJwYrBgFgw8PAThngwCPDwYBGYwBDgNEBlDUBwGAAAFgxWDARgxeFgIwsaYWAjCxphYCMGLwYCMGLwYCMGLwYCMGLwYCMGLwYCMM8GAWDDwYAB4AEAOIAwFAAAXgw8AhYSgCcGKLBSwsVgwE4MVgwE4MVgwE4MUQFhYoYCcGKwgTgxRYBYSgCQoAUMAAAAAABqDAhAwBYMPBgJwYrBgJwYrBgJwYrBgJwKwgIsUAThKICwlEBDDwhSBkAAAAAAAADcGBEhQBIUASFAEhRAR4MMCIxgEDwAkqqkBEZUCIwBAAUgZAAAAAAP/9k=", note: "Top-up within 2\u20133 weeks, with 40%+ of your set still on." },
+    { id: "russian-infill", group: "Infill sets", name: "Russian", label: "Russian infills", price: 35, mins: 90,
+      photo: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCADwAPADASIAAhEBAxEB/8QAGwAAAwEBAQEBAAAAAAAAAAAAAAECAwUGBAf/xAAhEAEBAQEBAAICAwEBAAAAAAAAARECEjFBUWEDEyEycf/EABgBAQEBAQEAAAAAAAAAAAAAAAABAgME/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8A/TKAWj3CgACGikAMgKcOFDEOKiTgLioiLgLjTlnFwRry05rHmtJRG3NXzWMq5QbSrlYyqlEaaes/Q9AvS1HovQLtK1F6TegXaVqLS0HGBaQ2YIAAAAAAoMjgHFJioIqKiIqA0iozi5QaStJWMq5RG0qpWMqp0I2nR+mPo/QNvRemfovQNfRemfovQNL0XpneivQNPRemfovQObo0gNgAAAABwCAQHCOCnDKGBqiYcEXKqVEpyg0lVKylOUGsp+mWn6Ea+j9MfQ9A29F6Zei9A19D0y9F6Br6L0y9D0DT0PTP0WivmBADAAoAPAEAOADAAQwAEMjEPT1I0F6NRo0F6NRpaDT0PTP0XoGvovTP0NBppaz0egaaNZ6NBpo1no0EgDBQDwAAeABhg8AjB4IQPABAUCgaVKiHpaVpWgelqdLRV6Wo0aC9Go0aC9Go0aC9Gp0aC9Gp0aDTBisGCJw8PDwE4eHh4CcPDw8Ahh4MAsJRAVIyoFU06mgVK0VNootK0rS0D0tIaB6NLQCtCdMFaaYYHp6QB9WHi8GCIwYvDwEYMXgwE4MVgwE4MVgwEFVpoJqaqpoJqKqpoqam06igKmnUgYIgUEqA4ChgZwoYGcIA6eDGnkYMs8GNMLARgxeDARgxeFgIwsXUXvmfYFU0X+SfUtReuvrkU6ilb3fpN9/oB0ijrnr8s7z1+RTqKLOp96i+v0CiTb1+C9/mUFBPuHLvxRTNOmIoQoYGZHAOGlQO35GNMK5PkYRhYd7n1/pZ31+oBXJ8p665iv6vzbTn8fM+hWW9X/mF57vzcb4VgMP6/wA20eJPprYmwGeRFaVFBnUdNOmfQrPpHS+mfQqaiqqaBUqCArJforxP/FAVPmz4p71PozAp1Pv/ABWwsl+R5giziM6nxdE6z5gLUiWVYO/nfX6E/i/N1vgwYZTmT4gxphYDOwrF2FYDOwrF2JsBFiK0qKDOs+mlR0Kz6Z9NOmXQqOmfS+kdCoqKqpoFSFAoAAAyMDhlDghmUMC8SjOp8VYwHqcLF4Q5owrF2FYCLE2LsKgzsRWlRQRUVpWfQrPpn006Z9Cs+mXTXpl0Kz6Z9NOmfQIqaqpoqaBQKAAAhiHBDMoYHDhGBmUMHq8BlRzJNWkE1NXU0GdRWlRQZ1FaVHQrLpn016ZdCsumfTTpn0Ky6Z9NemfQrOpq6igmgyACHgFCihiCKhGBw4SgBiAHrKRkORUqqpFKpqqmgiorSooM6z6a9M6Ky6Z9NemfQrHpl026ZdCsumfTXpn0DOpq6iopEdJQAHAEOAwOHCUAhwGAMQweqKmKOREZUUqmqqaCKmrqKDPpFaVHQrLpl026ZdAy6ZdNemfQrLpn016Z9CsqmrqaipIwoUMCAIqEoBFQjgHDhKAHhQwepAA5EKdIE0qpNFRU1dRQR0z6aVHQMumfTXpn0Kx6ZdNumXQrLpn016Z9QVnUVdiaKigywAZYYCKhRUARUIwOGBAMAwf/2Q==", note: "Top-up within 2\u20133 weeks, with 40%+ of your set still on." },
+
+    { id: "brow-lam", group: "Brows & nails", name: "Brow lamination", label: "Brow lamination", price: 35, mins: 60,
+      photo: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCADwAPADASIAAhEBAxEB/8QAGQABAQEBAQEAAAAAAAAAAAAAAAECAwQH/8QAIxABAQEAAQQBBQEBAAAAAAAAABEBAgMSMUFhEyEiUVIyQv/EABYBAQEBAAAAAAAAAAAAAAAAAAABBP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/APsWo0yNYAKaioAYAKAKLUAUqAi0qAKhqAogCriANY1jK4I1jWM41gK0y0AqKDzJqoCAAJqmioAILUBVClFApQBAF1BKIolUBUUFxrGcawRrFxnGsBppnGgFRRHmAFTUaZAAFTRUAAAAFAQCglBRKgNCKCiYoitYy1gNY1jONYI1jTONAKYA8wACKAyLqAGgKgAAAqaACagABqAq4igqooitYy1gNY1jON4IuNM40CgYDzAAAAIoDI0kBIigqC7iAmi6grIAIAC4qYuAqpjWCLjWM41gNY1jON4IuLiYuAq4i4DygAAQAUBBQGRYAyau4gqJqgM6jTIoQAFxGgXFxFEaxrGcawGsaxnGsEVpFAVMUHlIoACwEWCgkIsICRGogMxI0mgyjWporOo0gqCgIuCguLiNYIuNYzjWCNY1iYuAuKYAuBgDzRYpARRYCRVASLFhAZguzGd58c9gRIm9TPWbrO8uW+OIq6mp+e+om5z+AXUZ3jy/pO3l/QNkY7eeeNpOp8Ctrjn3cv5Xv/eaI6YuMZzxvjub40GsaxMawRcaTFwFBcAAEcYRqJszzooRnepnrKfny+MBv7YzvPM9mdLPe7rXHhmeMBju5b/nDt5752OsUHLOlnvd1fp8f06JAZ7c/SbjabgOe4m43uJuA57iRvcSAwNQgqCxYCdub6Pp5vj7NZjWA55w5Z41rN555yt41gjHHqZ7+zpm5+03jm+cZ3pcQdFxz7eWeNpnU3P9YDoJnLN8aojh+fL4XOnn/W10iwVnOOZ4xYqwRILFgJCLFgMwjUSAykbiQGNxNxuJBXPcSOm4kBzhG4QGIsahATMXFhAMUWAuAuAYAIzvDN+E7eWeNrYKQjUIIkI1CAkI1CAkWLCAkSNwgMRI3CA5xI6RIDnCNxIDEI3EgMQjcIDMI1CAgsAIKQEFUEhFAahGoQEhGoQEhGoQEhGoQEhGoQRmEahAYhG4QHOJHSEFcokdYkBziR1iQHOEdIkBiEbhAYhG4QGYRqEBmEahAdIRYQRIRqAIRYsBILFgMxY1CAzFjUIDMSOkIDnCOkSA5wjpEgOcI3CA5wjcIDnCNwgMQjcIDEI3CAxCNwgLCNQgJCNQgMxY1CCJCNQgJFixYCQjUWAzCNQgMwjUIDEI3CA5xI6QgOcSOkIDnCOkSA5w7XSEBzh2ukIDnCOkIDMI0AzFiqDMXMVQSEVYCLFACKCJCNQgJCLAEiRoBmEahAZiRuEBiEahAZhGoQGYRqEBmEahAf/Z", note: "Brushed up and set for a fuller shape. Lasts six to eight weeks." },
+    { id: "biab",     group: "Brows & nails", name: "BIAB overlay",    label: "BIAB overlay",    price: 30, mins: 90,
+      photo: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCADwAPADASIAAhEBAxEB/8QAGgABAQEBAQEBAAAAAAAAAAAAAgEAAwYFCP/EACIQAQEBAQACAQQDAQAAAAAAAAABEQIDMUESIVFhEyJSMv/EABcBAQEBAQAAAAAAAAAAAAAAAAABAwL/xAAWEQEBAQAAAAAAAAAAAAAAAAAAEQH/2gAMAwEAAhEDEQA/AP0izMrVmZgZmYGSqgMlUaKlClQoDRpUKKNGlQqKNGlRorJVSgjMwMzMDIqUVmZgSs1YH2mRlZKza2gzMwMioDUaVGijQp0KA0KdCoo0KdCijRpUaKyKgIzMDMzaDIzCs2owMzID7TI2qzVk1RGbWYGZk0VaNVKA0KdCgNCnQqKNCnQoo0aVGisiiDNqMDM2oKqamtoNrJqaCto62g+1raOtqsz1tHV0CbR1dBWTW0GqM1BKFKjQGhTo0UKFOjUUKNKjRUqVaNBkajaKupqWpoFqaOpoFqampoq2to6mg+3ramsrMtXQXQLV0JV0Ql0dbQXWTWBKlWjQSjSo0UKNKhUUaFKjRUo2rRtBLRta0bRV1NS0bQLU0bRtFK1NC1NFPU0LW0H39bRXVZFraOroE2jq6BauiwFrCwKlZKCUaVGgNClQoo0KXQVFG0LS6rnaK1o2taFoq2jaNo2gVo2paNopWpoWpainqaGpoPSNqa2umS6oqBauhqgWqOsIWtqa2grJqA1GrRoDQpWh0KNrn1StDqoodULVtDqip1QtbqhaK1o2paNo6W0bUtHUC1NHU0UtTR1NB6hkbVYquprAqiqi6o6wFq6GyfKXycz5EdNS1yvl/EqXydfHIsdbQtc715L6mDf5P0Dpa59Ubz3/AKc7z3/oU+q5dVOvrnq659Xv9IpWuXVTrvr8OfXk/MosK0LRvkg3qX1RWtG1rRorWpa1o2oq6OtUFXU1NQHq2ZLZPdVgrBfJPj7p/fr9QHTc9jfJzB/j33bSnHM+AT6+uv8AmNnd93DZQJ4/zbSnHM+FYG+0a1NTQW0bWtG0EtDqra59UUeq52l1Q6qKHVc+i6oUdYHUn4cuuZ8fZ06Ciud5s9Ubep7mug1FD658/Zti9SULxBSFM6nqp9We4BM0svpgen/v1+mnj/1ddGVgkknqKzAyazKNrMmgqayA1qayUGtG1rRtBLXPqla59VFHqh1Stc+qOh6oVaNFChToUVKNIRUo0kRUTCQAvMqZZ6ptgPVMzKwZFQGZk0GqM1UaoyUGqWtRtBrQtW0LRUtc6VCoo9Vz6p9VzoqUKVCijRpVKKKUqgooeIA4hY2IotisD07MysGRagMK1AZKtQGoqlUSjVo0UaFKhUBo1aNFCjVo0dDRpUaCUaSCi2LiCoysCJhY2AONhYmA9IzMMUrNWBKipQRqyAiVaNUSjVqUUKFKjUUaFKhRRoUqNFSotSijWWoCMrAONi4wqITALEmA9EmqgxZKoisi1Aao1QREVKqjRpUKA0KVGoo0KXQUUaNKjRUqValFRqzAjK2AjLiAzYzAmNisD0FRqwySotQVqjVqCCQg1SrUoDQp0KAUaVGih0FOjRQqValFGstQUWWoDMzAzMwMzMDY2MwP/9k=", note: "Builder gel on natural nails, shaped and finished." }
+  ];
+
+  // The studio travels on set days — the calendar filters by where you are.
+  var AREAS = [
+    { id: "north",   name: "North side",  days: [1, 2], label: "Mondays & Tuesdays" },
+    { id: "central", name: "City centre", days: [3, 4], label: "Wednesdays & Thursdays" },
+    { id: "south",   name: "South side",  days: [5, 6], label: "Fridays & Saturdays" }
+  ];
+
+  // Aftercare, split by when each rule bites
+  var AFTERCARE = [
+    { title: "First 48 hours", items: [
+      "Keep lashes dry and no contact with water for 48 hours. The adhesive is still drying in this period.",
+      "No hot showers, saunas, or steam rooms. Moisture can weaken the adhesive during curing.",
+      "Be careful with them in the first 24 hours, and brush from above, not underneath."
+    ]},
+    { title: "Keeping them looking good", items: [
+      "Use the mascara wand provided to brush lashes daily with a clean spoolie.",
+      "Clean them regularly with eyelash shampoo, especially after wearing makeup around the eye area.",
+      "No mascara or eyeliner on or near the extensions — it's hard to clean off.",
+      "Only non-oil-based products near the eye. Oil breaks down the adhesive.",
+      "Avoid heavy eye makeup — eyeshadow fallout gets stuck between lashes.",
+      "No picking or pulling, and try not to rub your eyes. Both cause premature fallout.",
+      "Avoid sleeping on your face, or they won't last as long."
+    ]},
+    { title: "If something isn't right", items: [
+      "Any swelling or irritation, contact me. Seek medical advice if you have a severe reaction."
+    ]}
+  ];
+
+  var FIRST_TIME = "First time \u2014 never had lashes";
+
+  var LASH_HISTORY = ["", FIRST_TIME, "Yes, but not in the last 3 months",
+                      "Yes, I wear them regularly", "I currently have another tech's set on"];
+
+  var START_TIMES = ["09:00", "11:00", "13:00", "15:00", "17:00", "19:00"];
+  var DAY_ENDS_AT = 21 * 60;
+  var DEPOSIT = CONFIG.deposit;
+
+  var DOW = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  var DOW_LONG = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  var MONTHS = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"];
+
+  /* ---------------------------------------------------- ticker */
+
+  function buildTicker() {
+    var track = document.getElementById("tickerTrack");
+    if (!track) return;
+
+    var next = nextOpeningAnywhere();
+    var items = [
+      next ? "Next availability <b>" + fmtDate(next.date) + "</b> in " + next.area
+           : "Fully booked for now \u2014 message me to join the waiting list",
+      "A mobile studio that <b>comes to you</b>",
+      "All prices include travel",
+      "Fully qualified &amp; insured",
+      "\u00a3" + DEPOSIT + " deposit secures your slot",
+      "Aftercare guide with every set"
+    ];
+
+    // rendered twice so translateX(-50%) loops seamlessly
+    var one = items.map(function (t) { return '<span class="ticker-item">' + t + "</span>"; }).join("");
+    track.innerHTML = one + one;
+  }
+
+  /* ---------------------------------------------------- state */
+
+  var state = {
+    step: 0,
+    serviceId: null,
+    areaId: null,
+    date: null,        // "YYYY-MM-DD"
+    time: null,        // "HH:MM"
+    view: startOfMonth(new Date()),
+    details: { name: "", phone: "", email: "", address: "", postcode: "", history: "", notes: "" },
+    consent: false,
+    ref: null,
+    holdUntil: null,
+    sent: null,
+    payload: null,
+    diaryOpen: false,
+    errors: {}
+  };
+
+  var STEPS = ["Treatment", "Date & time", "Your details", "Confirm"];
+
+  /* ---------------------------------------------------- helpers */
+
+  function startOfMonth(d) { return new Date(d.getFullYear(), d.getMonth(), 1); }
+  function iso(d) {
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") +
+           "-" + String(d.getDate()).padStart(2, "0");
+  }
+  function fromIso(s) {
+    var p = s.split("-");
+    return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+  }
+  function today() { var d = new Date(); d.setHours(0, 0, 0, 0); return d; }
+
+  function service() {
+    for (var i = 0; i < SERVICES.length; i++) if (SERVICES[i].id === state.serviceId) return SERVICES[i];
+    return null;
+  }
+  function area() {
+    for (var i = 0; i < AREAS.length; i++) if (AREAS[i].id === state.areaId) return AREAS[i];
+    return null;
+  }
+
+  function fmtMins(m) {
+    var h = Math.floor(m / 60), r = m % 60;
+    return (h ? h + "h" : "") + (h && r ? " " : "") + (r ? r + "m" : "");
+  }
+
+  function fmtDate(isoStr) {
+    var d = fromIso(isoStr);
+    return DOW[d.getDay()] + " " + d.getDate() + " " + MONTHS[d.getMonth()].slice(0, 3);
+  }
+
+  function fmtDateLong(isoStr) {
+    var d = fromIso(isoStr);
+    return DOW_LONG[d.getDay()] + " " + d.getDate() + " " +
+           MONTHS[d.getMonth()] + " " + d.getFullYear();
+  }
+
+  function endTime(start, mins) {
+    var p = start.split(":");
+    var t = Number(p[0]) * 60 + Number(p[1]) + mins;
+    return String(Math.floor(t / 60)).padStart(2, "0") + ":" + String(t % 60).padStart(2, "0");
+  }
+
+  // Deterministic stand-in for a real diary, so the same date always
+  // shows the same slots taken.
+  function seed(str) {
+    var h = 2166136261;
+    for (var i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); }
+    return h >>> 0;
+  }
+
+  function readStore(key, fallback) {
+    try { return JSON.parse(store.get(key) || fallback); } catch (e) { return JSON.parse(fallback); }
+  }
+
+  function blockedDays() { return readStore("ellash.blocked", "[]"); }
+
+  function isBlocked(dateStr) { return blockedDays().indexOf(dateStr) !== -1; }
+
+  function toggleBlock(dateStr) {
+    var b = blockedDays(), i = b.indexOf(dateStr);
+    if (i === -1) b.push(dateStr); else b.splice(i, 1);
+    store.set("ellash.blocked", JSON.stringify(b));
+  }
+
+  function savedBookings() { return readStore("ellash.diary", "[]"); }
+
+  function bookedSlots() {
+    try { return JSON.parse(store.get("ellash.booked") || "[]"); } catch (e) { return []; }
+  }
+
+  function slotTaken(dateStr, time) {
+    if (bookedSlots().indexOf(dateStr + "T" + time) !== -1) return true;
+    return seed(dateStr + time) % 100 < 34;
+  }
+
+  function shortestMins() {
+    var m = SERVICES[0].mins;
+    for (var i = 1; i < SERVICES.length; i++) if (SERVICES[i].mins < m) m = SERVICES[i].mins;
+    return m;
+  }
+
+  function slotsFor(dateStr, mins) {
+    if (!dateStr) return [];
+    if (mins == null) {
+      var svc = service();
+      if (!svc) return [];
+      mins = svc.mins;
+    }
+    var out = [];
+    for (var i = 0; i < START_TIMES.length; i++) {
+      var t = START_TIMES[i];
+      var p = t.split(":");
+      if (Number(p[0]) * 60 + Number(p[1]) + mins > DAY_ENDS_AT) continue;
+      out.push({ time: t, taken: slotTaken(dateStr, t) });
+    }
+    return out;
+  }
+
+  function freeCount(dateStr, mins) {
+    var s = slotsFor(dateStr, mins), n = 0;
+    for (var i = 0; i < s.length; i++) if (!s[i].taken) n++;
+    return n;
+  }
+
+  // soonest opening across every area — drives the ticker
+  function nextOpeningAnywhere() {
+    var d = today();
+    d.setDate(d.getDate() + 1);
+    var mins = shortestMins();
+    for (var i = 0; i < 120; i++) {
+      for (var a = 0; a < AREAS.length; a++) {
+        if (AREAS[a].days.indexOf(d.getDay()) !== -1 && freeCount(iso(d), mins) > 0) {
+          return { date: iso(d), area: AREAS[a].name };
+        }
+      }
+      d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1);
+    }
+    return null;
+  }
+
+  function dayIsWorking(d) {
+    var a = area();
+    if (!a) return false;
+    return a.days.indexOf(d.getDay()) !== -1;
+  }
+
+  function dayBookable(d) {
+    var min = today();
+    min.setDate(min.getDate() + 1);           // needs a day's notice
+    if (d < min) return false;
+    if (!dayIsWorking(d)) return false;
+    if (isBlocked(iso(d))) return false;
+    var s = slotsFor(iso(d));
+    for (var i = 0; i < s.length; i++) if (!s[i].taken) return true;
+    return false;
+  }
+
+  // The calendar must never open on a month with nothing in it — the studio only
+  // travels to each area on set days, so the next opening can be weeks out.
+  function firstOpenMonth() {
+    var d = today();
+    var limit = new Date(d.getFullYear(), d.getMonth() + 4, 1);
+    for (var i = 0; i < 200 && d < limit; i++) {
+      if (dayBookable(d)) return startOfMonth(d);
+      d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1);
+    }
+    return startOfMonth(today());
+  }
+
+  function monthHasOpening(view) {
+    var days = new Date(view.getFullYear(), view.getMonth() + 1, 0).getDate();
+    for (var n = 1; n <= days; n++) {
+      if (dayBookable(new Date(view.getFullYear(), view.getMonth(), n))) return true;
+    }
+    return false;
+  }
+
+  function total() {
+    var svc = service();
+    return svc ? svc.price : 0;
+  }
+
+  // A first set needs a patch test beforehand — insurers generally require it,
+  // and a reaction on the day is the worst possible outcome for both sides.
+  function needsPatchTest() {
+    return state.details.history === FIRST_TIME;
+  }
+
+  function hoursUntilAppointment() {
+    if (!state.date || !state.time) return Infinity;
+    var p = state.time.split(":");
+    var d = fromIso(state.date);
+    d.setHours(Number(p[0]), Number(p[1]), 0, 0);
+    return (d.getTime() - Date.now()) / 3600000;
+  }
+
+  function patchTestFits() {
+    return hoursUntilAppointment() >= CONFIG.patchTestHours;
+  }
+
+  // when the patch test has to happen by
+  function patchTestBy() {
+    var p = state.time.split(":");
+    var d = fromIso(state.date);
+    d.setHours(Number(p[0]), Number(p[1]), 0, 0);
+    d.setTime(d.getTime() - CONFIG.patchTestHours * 3600000);
+    return d;
+  }
+
+  function isFullSet() {
+    var svc = service();
+    return !!svc && svc.group === "Full sets";
+  }
+
+  // the matching infill for a full set, so a rebooking suggests the right thing
+  function infillFor(svc) {
+    if (!svc) return null;
+    for (var i = 0; i < SERVICES.length; i++) {
+      if (SERVICES[i].group === "Infill sets" && SERVICES[i].name === svc.name) return SERVICES[i];
+    }
+    return null;
+  }
+
+  // first bookable day at least infillWeeks out, in the same area
+  function suggestedInfillDate() {
+    var inf = infillFor(service());
+    var a = area();
+    if (!inf || !a || !state.date) return null;
+    var d = fromIso(state.date);
+    d.setDate(d.getDate() + CONFIG.infillWeeks * 7);
+    for (var i = 0; i < 28; i++) {
+      if (a.days.indexOf(d.getDay()) !== -1 && freeCount(iso(d), inf.mins) > 0) return iso(d);
+      d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1);
+    }
+    return null;
+  }
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c];
+    });
+  }
+
+  /* ---------------------------------------------------- persistence */
+
+  function save() {
+    if (state.step === "diary") return;
+    store.set("ellash.draft", JSON.stringify({
+      step: state.step, serviceId: state.serviceId, areaId: state.areaId,
+      date: state.date, time: state.time, details: state.details, consent: state.consent
+    }));
+  }
+
+  function restore() {
+    var raw = store.get("ellash.draft");
+    if (!raw) return;
+    try {
+      var d = JSON.parse(raw);
+      if (d.step === 4) return;               // a finished booking, start fresh
+      state.serviceId = d.serviceId || null;
+      state.areaId = d.areaId || null;
+      state.date = d.date || null;
+      state.time = d.time || null;
+      state.consent = !!d.consent;
+      if (d.details) for (var k in state.details) if (d.details[k]) state.details[k] = d.details[k];
+      if (state.date) state.view = startOfMonth(fromIso(state.date));
+      // a date saved on an earlier visit may since have passed
+      if (state.date && fromIso(state.date) < today()) { state.date = null; state.time = null; }
+
+      // never land on a step whose earlier answers are missing
+      var want = Math.min(Number(d.step) || 0, 3);
+      var reachable = 0;
+      if (state.serviceId) reachable = 1;
+      if (reachable === 1 && state.areaId && state.date && state.time) reachable = 2;
+      if (reachable === 2 && state.details.name && state.details.email) reachable = 3;
+      state.step = Math.min(want, reachable);
+    } catch (e) { /* ignore a corrupt draft */ }
+  }
+
+  /* ---------------------------------------------------- render: chrome */
+
+  function renderProgress() {
+    var ol = document.getElementById("progress");
+    var html = "";
+    for (var i = 0; i < STEPS.length; i++) {
+      var st = state.step > i ? "done" : (state.step === i ? "current" : "todo");
+      html += '<li data-state="' + st + '"><span class="pip"></span>' + STEPS[i] + "</li>";
+    }
+    ol.innerHTML = html;
+    ol.style.display = (state.step === "diary" || state.step >= 4) ? "none" : "flex";
+  }
+
+  function setRow(id, value) {
+    var el = document.getElementById(id);
+    el.textContent = value || "Not chosen yet";
+    el.className = value ? "" : "empty";
+  }
+
+  function renderSummary() {
+    var card = document.querySelector(".summary");
+    if (card) card.hidden = state.step === "diary";
+    var svc = service(), a = area();
+    setRow("sumService", svc ? svc.label : "");
+    setRow("sumArea", a ? a.name : "");
+    setRow("sumDate", state.date ? fmtDate(state.date) : "");
+    setRow("sumTime", state.time && svc ? state.time + "–" + endTime(state.time, svc.mins) : "");
+
+    animateTotal(svc ? total() : 0);
+    document.getElementById("stepCount").textContent =
+      state.step === "diary" ? "Diary"
+        : state.step >= 4 ? "Booked" : "Step " + (state.step + 1) + " of 4";
+
+    var note = document.getElementById("depositNote");
+    note.textContent = svc
+      ? "£" + DEPOSIT + " deposit to secure the slot, £" + (svc.price - DEPOSIT) + " due on the day."
+      : "A £10 deposit secures the slot and comes off your total on the day.";
+  }
+
+  /* ---------------------------------------------------- render: steps */
+
+  function stepService() {
+    var html = '<div class="card step">' +
+      '<div class="card-head">' +
+        '<span class="eyebrow">Welcome</span>' +
+        "<h2>What are we booking you in for?</h2>" +
+        "<p>Pick a treatment and I'll show you when I'm next in your area. Every appointment is done at your home \u2014 no salon, no parking, no rush.</p>" +
+      '</div><div class="services">';
+
+    var lastGroup = null;
+    for (var i = 0; i < SERVICES.length; i++) {
+      var s = SERVICES[i];
+      if (s.group !== lastGroup) {
+        html += '<div class="svc-group"><span>' + esc(s.group) + "</span></div>";
+        lastGroup = s.group;
+      }
+      html += '<button type="button" class="service' + (s.photo ? " has-photo" : "") + '" data-service="' + s.id + '" ' +
+        'style="--i:' + i + '" aria-pressed="' + (state.serviceId === s.id) + '">' +
+        (s.photo ? '<img class="service-photo" src="' + esc(s.photo) +
+          '" alt="' + esc(s.label) + ", close up\" loading=\"lazy\">" : "") +
+        '<span class="service-name">' + esc(s.name) + "</span>" +
+        '<span class="service-price num">\u00a3' + s.price + "</span>" +
+        '<span class="service-meta"><span class="service-dur num">' + fmtMins(s.mins) + "</span>" + esc(s.note) + "</span>" +
+        "</button>";
+    }
+
+    html += "</div>" +
+      '<p class="travel-note">All prices include travel to your appointment.</p>' +
+      actions({ next: "Choose a date", back: null, ready: !!state.serviceId,
+        hint: state.serviceId ? "" : "Choose a treatment to continue" }) + "</div>";
+    return html;
+  }
+
+  function stepWhen() {
+    var svc = service();
+    var html = '<div class="card step">' +
+      '<div class="card-head">' +
+        '<span class="eyebrow">Step 2 · ' + esc(svc.label) + " · " + fmtMins(svc.mins) + "</span>" +
+        "<h2>Where are you, and when suits?</h2>" +
+        "<p>I'm mobile, so I work one area at a time. Pick yours and the calendar will show only the days I'm travelling there.</p>" +
+      "</div><div class=\"areas\">";
+
+    for (var i = 0; i < AREAS.length; i++) {
+      var a = AREAS[i];
+      html += '<button type="button" class="area" data-area="' + a.id + '" ' +
+        'aria-pressed="' + (state.areaId === a.id) + '">' +
+        '<span class="area-name">' + esc(a.name) + "</span>" +
+        '<span class="area-days">' + esc(a.label) + "</span></button>";
+    }
+    html += "</div>";
+
+    if (state.areaId) {
+      html += '<div class="picker"><div class="cal">' + calendarHtml() + "</div>" + slotsHtml() + "</div>";
+    }
+
+    html += actions({
+      next: "Add your details",
+      back: "Back",
+      ready: !!(state.areaId && state.date && state.time),
+      hint: !state.areaId ? "Choose your area first"
+          : !state.date ? "Pick an available date"
+          : !state.time ? "Pick a start time" : ""
+    }) + "</div>";
+    return html;
+  }
+
+  function calendarHtml() {
+    var v = state.view;
+    var first = new Date(v.getFullYear(), v.getMonth(), 1);
+    var daysIn = new Date(v.getFullYear(), v.getMonth() + 1, 0).getDate();
+    var lead = (first.getDay() + 6) % 7;            // Monday-first grid
+    var thisMonth = startOfMonth(today());
+    var maxMonth = new Date(thisMonth.getFullYear(), thisMonth.getMonth() + 4, 1);
+
+    var html = '<div class="cal-head">' +
+      '<span class="cal-month">' + MONTHS[v.getMonth()] + " " + v.getFullYear() + "</span>" +
+      '<span class="cal-nav">' +
+        '<button type="button" data-cal="-1" aria-label="Previous month"' +
+          (v <= thisMonth ? " disabled" : "") + ">&#8592;</button>" +
+        '<button type="button" data-cal="1" aria-label="Next month"' +
+          (v >= maxMonth ? " disabled" : "") + ">&#8594;</button>" +
+      "</span></div>";
+
+    html += '<div class="cal-grid" role="grid">';
+    var head = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    for (var h = 0; h < 7; h++) html += '<div class="cal-dow">' + head[h].charAt(0) + "</div>";
+    for (var p = 0; p < lead; p++) html += '<div class="day pad"></div>';
+
+    for (var n = 1; n <= daysIn; n++) {
+      var d = new Date(v.getFullYear(), v.getMonth(), n);
+      var ds = iso(d);
+      var free = dayBookable(d);
+      var working = dayIsWorking(d) && d >= today();
+      var left = free ? freeCount(ds) : 0;
+      var cls = "day" + (free ? " free" + (left <= 2 ? " low" : "") : (working ? " full" : ""));
+      var label = DOW[d.getDay()] + " " + n + " " + MONTHS[v.getMonth()] +
+                  (free ? ", " + left + (left === 1 ? " slot left" : " slots left")
+                        : (working ? ", fully booked" : ", not travelling"));
+      html += "<" + (free ? "button" : "div") + ' class="' + cls + '" ' +
+        (free ? 'type="button" data-date="' + ds + '" aria-pressed="' + (state.date === ds) + '" ' : "") +
+        'aria-label="' + label + '"><span class="num">' + n + "</span></" + (free ? "button" : "div") + ">";
+    }
+    html += "</div>";
+
+    if (!monthHasOpening(v)) {
+      html += '<p class="slots-empty">I\'m fully booked in ' + esc(area().name) + " through " +
+        MONTHS[v.getMonth()] + ". Try the next month.</p>";
+    }
+
+    html += '<div class="cal-key">' +
+      '<span><span class="key-dot"></span>Free slots</span>' +
+      '<span><span class="key-dot" style="background:var(--blush)"></span>Almost gone</span>' +
+      '<span><s>18</s>Fully booked</span>' +
+      '<span><span class="key-line"></span>Not in ' + esc(area().name) + " that day</span></div>";
+    return html;
+  }
+
+  function slotsHtml() {
+    var left = state.date ? freeCount(state.date) : 0;
+    var html = '<div class="slots"><span class="slots-title">' +
+      (state.date ? fmtDate(state.date) : "Start times") +
+      (state.date && left > 0 && left <= 2
+        ? '<span class="scarce">Only ' + left + " left</span>" : "") + "</span>";
+
+    if (!state.date) {
+      html += '<p class="slots-empty">Pick a date and your available start times will appear here.</p></div>';
+      return html;
+    }
+
+    var svc = service();
+    var slots = slotsFor(state.date);
+    var free = 0;
+    for (var i = 0; i < slots.length; i++) if (!slots[i].taken) free++;
+
+    if (!free) {
+      html += '<p class="slots-empty">Nothing left on this date. Try another day in ' + esc(area().name) + ".</p></div>";
+      return html;
+    }
+
+    html += '<div class="slot-list">';
+    for (var j = 0; j < slots.length; j++) {
+      var s = slots[j];
+      html += '<button type="button" class="slot num" data-time="' + s.time + '"' +
+        (s.taken ? " disabled" : "") +
+        ' aria-pressed="' + (state.time === s.time) + '"' +
+        (s.taken ? ' aria-label="' + s.time + ', already booked"' : "") + ">" + s.time + "</button>";
+    }
+    html += "</div>";
+    html += '<p class="hint">Finishing around ' +
+      (state.time ? endTime(state.time, svc.mins) : endTime(START_TIMES[0], svc.mins)) +
+      " if you start at " + (state.time || START_TIMES[0]) + ".</p>";
+    return html + "</div>";
+  }
+
+  function field(o) {
+    var err = state.errors[o.name];
+    var v = esc(state.details[o.name] || "");
+    var input;
+    if (o.type === "textarea") {
+      input = '<textarea id="f_' + o.name + '" name="' + o.name + '" placeholder="' +
+        esc(o.placeholder || "") + '">' + v + "</textarea>";
+    } else if (o.type === "select") {
+      input = '<select id="f_' + o.name + '" name="' + o.name + '">';
+      for (var i = 0; i < o.options.length; i++) {
+        var op = o.options[i];
+        input += '<option value="' + esc(op) + '"' +
+          (state.details[o.name] === op ? " selected" : "") + ">" + esc(op || "Choose one…") + "</option>";
+      }
+      input += "</select>";
+    } else {
+      input = '<input id="f_' + o.name + '" name="' + o.name + '" type="' + (o.type || "text") +
+        '" value="' + v + '" placeholder="' + esc(o.placeholder || "") + '"' +
+        (o.mode ? ' inputmode="' + o.mode + '"' : "") +
+        (o.autocomplete ? ' autocomplete="' + o.autocomplete + '"' : "") + ">";
+    }
+    return '<div class="field' + (o.wide ? " wide" : "") + '" data-invalid="' + (err ? "true" : "false") + '">' +
+      '<label for="f_' + o.name + '">' + esc(o.label) + "</label>" + input +
+      '<span class="err">' + (err ? esc(err) : "") + "</span></div>";
+  }
+
+  function stepDetails() {
+    var a = area();
+    var html = '<div class="card step">' +
+      '<div class="card-head">' +
+        '<span class="eyebrow">Step 3</span>' +
+        "<h2>Where am I coming to?</h2>" +
+        "<p>I'll bring the bed, the lighting and everything else — I just need somewhere to set up and a plug socket nearby.</p>" +
+      '</div><div class="fields">' +
+      field({ name: "name", label: "Full name", placeholder: "Your name", autocomplete: "name" }) +
+      field({ name: "phone", label: "Mobile number", placeholder: "07…", type: "tel", mode: "tel", autocomplete: "tel" }) +
+      field({ name: "email", label: "Email", placeholder: "you@email.com", type: "email", autocomplete: "email" }) +
+      field({ name: "postcode", label: "Postcode", placeholder: a ? postcodeHint(a.id) : "CV11", autocomplete: "postal-code" }) +
+      field({ name: "address", label: "Address I'm coming to", placeholder: "House number and street", wide: true, autocomplete: "street-address" }) +
+      field({ name: "history", label: "Have you had extensions before?", type: "select", wide: true,
+              options: LASH_HISTORY }) +
+      field({ name: "notes", label: "Anything I should know?", type: "textarea", wide: true,
+              placeholder: "Allergies, sensitive eyes, parking, pets, the style you're after…" }) +
+      "</div>" +
+      '<div class="notice" id="patchNotice"' + (needsPatchTest() ? "" : " hidden") + ">" +
+        "<span><strong>First set? You'll need a patch test.</strong> A small amount of " +
+        "adhesive goes behind your ear at least " + CONFIG.patchTestHours + " hours before, so any " +
+        "reaction shows up well away from your eyes. I'll sort it once you've booked — " +
+        "it takes two minutes.</span>" +
+      "</div>" +
+      actions({ next: "Review booking", back: "Back", ready: true, hint: "" }) + "</div>";
+    return html;
+  }
+
+  function postcodeHint(id) {
+    return id === "birmingham" ? "B1" : id === "coventry" ? "CV1" : "CV11";
+  }
+
+  function stepConfirm() {
+    var svc = service(), a = area(), d = state.details;
+    var html = '<div class="card step">' +
+      '<div class="card-head">' +
+        '<span class="eyebrow">Step 4</span>' +
+        "<h2>Everything look right?</h2>" +
+        "<p>Check it over, then confirm. You'll get a text from me to arrange the deposit — the slot is held for 24 hours until it's paid.</p>" +
+      "</div>" +
+      '<div class="hold" id="hold" data-expired="false">' +
+        '<span id="holdMsg">This slot is held while you finish booking.</span>' +
+        '<span class="clock num" id="holdClock">10:00</span>' +
+      "</div>" +
+      '<div class="review">' +
+
+      '<div class="review-block"><span class="eyebrow">Appointment</span>' +
+        row("Treatment", svc.label) +
+        row("Duration", fmtMins(svc.mins)) +
+        row("Date", fmtDateLong(state.date)) +
+        row("Time", state.time + " – " + endTime(state.time, svc.mins)) +
+      "</div>" +
+
+      '<div class="review-block"><span class="eyebrow">Coming to</span>' +
+        row("Name", d.name) +
+        row("Address", d.address + (d.postcode ? ", " + d.postcode.toUpperCase() : "")) +
+        row("Area", a.name) +
+        row("Mobile", d.phone) +
+        row("Email", d.email) +
+        (d.history ? row("Experience", d.history) : "") +
+        (d.notes ? row("Notes", d.notes) : "") +
+      "</div>" +
+
+      patchTestHtml() +
+
+      '<div class="review-block"><span class="eyebrow">Payment</span>' +
+        row("Treatment", "£" + svc.price) +
+        row("Deposit now", "£" + DEPOSIT) +
+        row("Due on the day", "£" + (svc.price - DEPOSIT)) +
+      "</div>" +
+
+      '<label class="consent" data-invalid="' + (state.errors.consent ? "true" : "false") + '">' +
+        '<input type="checkbox" id="consent"' + (state.consent ? " checked" : "") + ">" +
+        "<span>I've read the policies: the £" + DEPOSIT + " deposit is non-refundable, I'll give at least 48 hours' notice to move or cancel, " +
+        "and I'll arrive with clean lashes and no eye makeup.</span>" +
+      "</label>" +
+
+      "</div>" +
+      actions({ next: "Confirm booking", back: "Back", ready: true, hint: "" }) + "</div>";
+    return html;
+  }
+
+  function row(k, v) {
+    return '<div class="rrow"><span class="k">' + esc(k) + '</span><span class="v">' + esc(v) + "</span></div>";
+  }
+
+  function stepDone() {
+    var svc = service(), a = area(), d = state.details;
+    return '<div class="card step"><div class="done">' +
+      '<canvas class="sparkle" id="sparkle" aria-hidden="true"></canvas>' +
+      '<span class="done-mark" aria-hidden="true">' +
+        '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg>' +
+      "</span>" +
+      "<h2>You're booked in, " + esc(d.name.split(" ")[0]) + "</h2>" +
+      "<p>I'll text " + esc(d.phone) + " within a few hours to confirm and send over the deposit details. " +
+      "A confirmation is on its way to " + esc(d.email) + " too.</p>" +
+      '<span class="ref num">' + esc(state.ref) + "</span>" +
+      '<div class="done-card">' +
+        row("Treatment", svc.label) +
+        row("When", fmtDateLong(state.date) + ", " + state.time) +
+        row("Where", d.address + (d.postcode ? ", " + d.postcode.toUpperCase() : "") + " · " + a.name) +
+        row("Deposit", "£" + DEPOSIT + " to hold the slot") +
+      "</div>" +
+      sendStateHtml() +
+      depositHtml() +
+      patchTestHtml() +
+      rebookHtml() +
+      aftercareHtml() +
+      '<p class="hint">Need to change something? Get in touch \u2014 at least 48 hours before, please.</p>' +
+      '<button type="button" class="btn btn-quiet" data-act="restart">Book another appointment</button>' +
+      "</div></div>";
+  }
+
+  function sendStateHtml() {
+    if (CONFIG.demo) {
+      return '<div class="notice" id="sendState"><span><strong>This is a sample page.</strong> ' +
+        "On a live one your booking would land in the studio's inbox straight away, and you'd get " +
+        "a text to confirm. Nothing has been sent from here.</span></div>";
+    }
+    if (state.sent === null) {
+      return '<div class="notice" id="sendState"><span>Sending your booking over\u2026</span></div>';
+    }
+    if (state.sent) {
+      return '<div class="notice good" id="sendState"><span><strong>Booking sent.</strong> ' +
+        "It's landed in the booking inbox and you'll get a text to confirm.</span></div>";
+    }
+    if (!CONFIG.notifyEmail) {
+      return '<div class="notice warn" id="sendState"><span>' +
+        "<strong>I couldn't send this automatically.</strong> Get in touch quoting reference " +
+        esc(state.ref || "") + " and we'll get you booked in.</span></div>";
+    }
+    return '<div class="notice warn" id="sendState">' +
+      "<span><strong>I couldn't send this automatically.</strong> Nothing is lost \u2014 " +
+      'tap below and it will open a prefilled email with all your details.</span>' +
+      '<a class="pay-btn" style="justify-self:start" href="' + esc(mailtoFallback(state.payload || {})) +
+      '">Send my booking</a></div>';
+  }
+
+  function depositHtml() {
+    var svc = service();
+    return '<div class="pay">' +
+      '<div class="pay-row"><span>Deposit to secure the slot</span>' +
+        '<span class="pay-amount num">\u00a3' + DEPOSIT + "</span></div>" +
+      '<div class="pay-row"><span class="hint">\u00a3' + (svc.price - DEPOSIT) +
+        " due on the day, cash or transfer.</span>" +
+        (CONFIG.paymentLink
+          ? '<a class="pay-btn" href="' + esc(CONFIG.paymentLink) +
+            '" target="_blank" rel="noopener">Pay \u00a3' + DEPOSIT + " deposit</a>"
+          : '<span class="hint">I\'ll text you the payment details.</span>') +
+      "</div></div>";
+  }
+
+  function patchTestHtml() {
+    if (!needsPatchTest()) return "";
+    return '<div class="notice"><span><strong>Patch test first.</strong> ' +
+      "Because this is your first set, I'll patch test you by <strong>" +
+      esc(fmtDateLong(iso(patchTestBy()))) + "</strong> \u2014 at least " +
+      CONFIG.patchTestHours + " hours before your appointment. I'll be in touch to arrange it.</span></div>";
+  }
+
+  function rebookHtml() {
+    if (!isFullSet()) return "";
+    var inf = infillFor(service());
+    var when = suggestedInfillDate();
+    if (!inf || !when) return "";
+    return '<div class="notice"><span><strong>Keep them looking full.</strong> ' +
+      esc(inf.name) + " infills are due about " + CONFIG.infillWeeks +
+      " weeks on. I'm next in " + esc(area().name) + " on <strong>" + esc(fmtDate(when)) +
+      "</strong> \u2014 shall I pencil you in?</span>" +
+      '<button type="button" class="btn btn-quiet" style="justify-self:start" ' +
+      'data-act="rebook" data-svc="' + inf.id + '" data-when="' + when + '">' +
+      "Book my infill for " + esc(fmtDate(when)) + "</button></div>";
+  }
+
+  function aftercareHtml() {
+    var html = '<div class="aftercare"><span class="eyebrow">Looking after them</span>' +
+               '<div class="aftercare-groups">';
+    for (var i = 0; i < AFTERCARE.length; i++) {
+      var g = AFTERCARE[i];
+      html += '<div class="ac-group"><h3>' + esc(g.title) + "</h3><ul>";
+      for (var j = 0; j < g.items.length; j++) html += "<li>" + esc(g.items[j]) + "</li>";
+      html += "</ul></div>";
+    }
+    return html + "</div></div>";
+  }
+
+  function stepDiary() {
+    if (!state.diaryOpen) {
+      return '<div class="card step"><div class="card-head">' +
+        '<span class="eyebrow">Private</span><h2>Your diary</h2>' +
+        "<p>Enter the code to see upcoming bookings and close off days you can't work.</p></div>" +
+        '<div class="field" data-invalid="' + (state.errors.code ? "true" : "false") + '">' +
+          '<label for="f_code">Access code</label>' +
+          '<input id="f_code" type="password" autocomplete="off" placeholder="Code">' +
+          '<span class="err">' + (state.errors.code ? esc(state.errors.code) : "") + "</span></div>" +
+        '<div class="actions"><a class="btn btn-quiet" href="#" data-act="leave-diary">Back to booking</a>' +
+        '<button type="button" class="btn btn-primary" data-act="diary-in">Open diary</button></div></div>';
+    }
+
+    var list = savedBookings().filter(function (b) { return b.date >= iso(today()); })
+      .sort(function (x, y) { return (x.date + x.time) < (y.date + y.time) ? -1 : 1; });
+
+    var html = '<div class="card step"><div class="diary">' +
+      '<div class="card-head"><span class="eyebrow">Private</span>' +
+      "<h2>Your diary</h2><p>" +
+      (list.length ? list.length + (list.length === 1 ? " booking" : " bookings") + " coming up."
+                   : "Nothing booked yet.") +
+      " Close a day off below and it disappears from the calendar straight away.</p></div>";
+
+    if (list.length) {
+      html += '<div class="diary-list">';
+      for (var i = 0; i < list.length; i++) {
+        var b = list[i];
+        html += '<div class="diary-row">' +
+          '<span class="diary-when">' + esc(fmtDate(b.date)) + " \u00b7 " + esc(b.time) +
+            "\u2013" + esc(endTime(b.time, b.mins)) + "</span>" +
+          '<span class="diary-meta">' + esc(b.treatment) + " \u00b7 " + esc(b.name) +
+            " \u00b7 " + esc(b.phone) + " \u00b7 " + esc(b.area) +
+            (b.patch ? " \u00b7 patch test needed" : "") + "</span>" +
+          '<span class="diary-ref num">' + esc(b.ref) + "</span></div>";
+      }
+      html += "</div>";
+    }
+
+    // next 21 travelling days, so she can close any of them
+    html += '<div><span class="eyebrow">Close off a day</span><div class="block-list">';
+    var d = today(), shown = 0;
+    for (var n = 0; n < 90 && shown < 21; n++) {
+      d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + (n === 0 ? 0 : 1));
+      var works = false;
+      for (var k = 0; k < AREAS.length; k++) if (AREAS[k].days.indexOf(d.getDay()) !== -1) works = true;
+      if (!works) continue;
+      shown++;
+      var ds = iso(d);
+      html += '<button type="button" class="slot' + (isBlocked(ds) ? " blocked-day" : "") +
+        '" data-block="' + ds + '" aria-pressed="' + isBlocked(ds) + '">' +
+        esc(fmtDate(ds)) + "</button>";
+    }
+    html += "</div></div>";
+
+    html += '<div class="actions"><a class="btn btn-quiet" href="#" data-act="leave-diary">Back to booking</a>' +
+      '<span class="hint">This code sits in the page source \u2014 it keeps a casual visitor out, nothing more.</span></div>';
+
+    return html + "</div></div>";
+  }
+
+  function actions(o) {
+    return '<div class="actions">' +
+      (o.back ? '<button type="button" class="btn btn-quiet" data-act="back">' + esc(o.back) + "</button>" : "<span></span>") +
+      '<span style="display:flex; align-items:center; gap:var(--s-15); flex-wrap:wrap; justify-content:flex-end;">' +
+        (o.hint ? '<span class="hint">' + esc(o.hint) + "</span>" : "") +
+        '<button type="button" class="btn btn-primary" data-act="next"' + (o.ready ? "" : " disabled") + ">" +
+        esc(o.next) + "</button></span></div>";
+  }
+
+  /* ---------------------------------------------------- live bits */
+
+  var timers = { hold: null, sparkle: null };
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function clearLive() {
+    if (timers.hold) { clearInterval(timers.hold); timers.hold = null; }
+    if (timers.sparkle) { cancelAnimationFrame(timers.sparkle); timers.sparkle = null; }
+    if (revealer) { revealer.disconnect(); revealer = null; }
+  }
+
+  /* ---------------------------------------------------- scroll reveal */
+
+  // What is worth revealing: list items and blocks that usually sit below
+  // the fold. The hidden state is only ever applied here, so the page reads
+  // fine with no JS, no IntersectionObserver, or reduced motion.
+  var REVEAL = ".service, .area, .review-block, .ac-group, .diary-row, .notice, .pay, .done-card";
+  var revealer = null;
+
+  function armReveal() {
+    if (reduced || !("IntersectionObserver" in window)) return;
+
+    var els = document.getElementById("stage").querySelectorAll(REVEAL);
+    if (!els.length) return;
+
+    revealer = new IntersectionObserver(function (entries) {
+      for (var i = 0; i < entries.length; i++) {
+        if (!entries[i].isIntersecting) continue;
+        entries[i].target.classList.add("is-in");
+        revealer.unobserve(entries[i].target);      // reveal once, never re-hide
+      }
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
+
+    // Only hide what is genuinely below the fold. render() re-runs on every
+    // click, so hiding something already on screen would flash it out and
+    // back in each time.
+    var fold = window.innerHeight;
+    var seen = new Map();
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i];
+      if (el.getBoundingClientRect().top < fold) continue;
+      var n = seen.get(el.parentElement) || 0;
+      seen.set(el.parentElement, n + 1);
+      el.style.setProperty("--reveal-delay", Math.min(n, 5) * 45 + "ms");
+      el.classList.add("reveal");
+      revealer.observe(el);
+    }
+  }
+
+  var HOLD_MS = 10 * 60 * 1000;
+
+  function startHold() {
+    var el = document.getElementById("holdClock");
+    var box = document.getElementById("hold");
+    if (!el || !box) return;
+    if (!state.holdUntil || state.holdUntil < Date.now()) state.holdUntil = Date.now() + HOLD_MS;
+
+    function tick() {
+      var ms = state.holdUntil - Date.now();
+      if (ms <= 0) {
+        el.textContent = "0:00";
+        box.dataset.expired = "true";
+        var msg = document.getElementById("holdMsg");
+        if (msg) msg.textContent = "Your hold has run out \u2014 the slot may still be free, so do carry on.";
+        clearInterval(timers.hold);
+        timers.hold = null;
+        return;
+      }
+      var total = Math.ceil(ms / 1000);
+      el.textContent = Math.floor(total / 60) + ":" + String(total % 60).padStart(2, "0");
+    }
+    tick();
+    timers.hold = setInterval(tick, 1000);
+  }
+
+  // a brief shower of gold, once, when the booking lands
+  function startSparkle() {
+    var cv = document.getElementById("sparkle");
+    if (!cv || reduced) return;
+    var box = cv.parentElement;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var w = box.clientWidth, h = box.clientHeight;
+    if (!w || !h) return;
+    cv.width = w * dpr; cv.height = h * dpr;
+    var ctx = cv.getContext("2d");
+    ctx.scale(dpr, dpr);
+
+    var gold = getComputedStyle(document.documentElement).getPropertyValue("--gold").trim() || "#a8a183";
+    var bits = [];
+    for (var i = 0; i < 70; i++) {
+      bits.push({
+        x: w / 2 + (Math.random() - 0.5) * w * 0.5,
+        y: h * 0.18 + (Math.random() - 0.5) * 40,
+        vx: (Math.random() - 0.5) * 1.5,
+        vy: -Math.random() * 2.2 - 0.4,
+        r: Math.random() * 1.8 + 0.6,
+        life: 0,
+        max: 90 + Math.random() * 70
+      });
+    }
+
+    function frame() {
+      ctx.clearRect(0, 0, w, h);
+      var alive = false;
+      for (var i = 0; i < bits.length; i++) {
+        var b = bits[i];
+        b.life++;
+        if (b.life > b.max) continue;
+        alive = true;
+        b.x += b.vx;
+        b.y += b.vy;
+        b.vy += 0.035;                       // gravity, so they arc and fall
+        ctx.globalAlpha = Math.max(0, 1 - b.life / b.max) * 0.9;
+        ctx.fillStyle = gold;
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      timers.sparkle = alive ? requestAnimationFrame(frame) : null;
+    }
+    frame();
+  }
+
+  // the total counts to its new value rather than snapping
+  var shownTotal = 0;
+  function animateTotal(to) {
+    var el = document.getElementById("sumTotal");
+    if (!el) return;
+    if (!to) { shownTotal = 0; el.textContent = "\u2014"; return; }
+    if (reduced) { shownTotal = to; el.textContent = "\u00a3" + to; return; }
+    var from = shownTotal, start = null;
+    function step(ts) {
+      if (start === null) start = ts;
+      var k = Math.min(1, (ts - start) / 420);
+      var v = Math.round(from + (to - from) * (1 - Math.pow(1 - k, 3)));
+      el.textContent = "\u00a3" + v;
+      if (k < 1) requestAnimationFrame(step); else shownTotal = to;
+    }
+    requestAnimationFrame(step);
+  }
+
+  // After a choice, bring the next thing into view — but only if it is not
+  // already on screen, so nothing jumps on a wide display.
+  function revealNext(sel) {
+    var el = document.querySelector(sel);
+    if (!el) return;
+    var r = el.getBoundingClientRect();
+    if (r.top >= 0 && r.bottom <= window.innerHeight) return;
+    el.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "center" });
+  }
+
+  /* ---------------------------------------------------- render */
+
+  function render() {
+    clearLive();
+    var stage = document.getElementById("stage");
+    var html;
+    if (state.step === "diary") html = stepDiary();
+    else if (state.step === 0) html = stepService();
+    else if (state.step === 1) html = stepWhen();
+    else if (state.step === 2) html = stepDetails();
+    else if (state.step === 3) html = stepConfirm();
+    else html = stepDone();
+
+    stage.innerHTML = html;
+    renderProgress();
+    renderSummary();
+    if (state.step === 3) startHold();
+    if (state.step === 4) startSparkle();
+    armReveal();
+    save();
+  }
+
+  /* ---------------------------------------------------- validation */
+
+  function readDetails() {
+    var names = ["name", "phone", "email", "address", "postcode", "history", "notes"];
+    for (var i = 0; i < names.length; i++) {
+      var el = document.getElementById("f_" + names[i]);
+      if (el) state.details[names[i]] = el.value.trim();
+    }
+  }
+
+  function validateDetails() {
+    var e = {}, d = state.details;
+    if (d.name.length < 2) e.name = "Please tell me your name.";
+    if (!/^(\+?44|0)\d[\d\s-]{8,}$/.test(d.phone)) e.phone = "A UK mobile I can text you on, e.g. 07700 900123.";
+    if (!/^[^@\s]+@[^@\s.]+\.[^@\s]+$/.test(d.email)) e.email = "Check the email address — that one won't reach you.";
+    if (d.address.length < 5) e.address = "House number and street, so I know where to park.";
+    if (!/^[a-z]{1,2}\d[a-z\d]?\s*\d?[a-z]{0,2}$/i.test(d.postcode)) e.postcode = "A UK postcode, e.g. CV11 4AB.";
+    if (needsPatchTest() && !patchTestFits()) {
+      e.history = "A first set needs a patch test " + CONFIG.patchTestHours +
+                  " hours beforehand. Go back and pick a date a little further out.";
+    }
+    state.errors = e;
+    for (var k in e) return false;
+    return true;
+  }
+
+  function firstInvalid() {
+    for (var k in state.errors) {
+      var el = document.getElementById("f_" + k);
+      if (el) { el.focus(); return; }
+    }
+  }
+
+  /* ---------------------------------------------------- transitions */
+
+  function goNext() {
+    if (state.step === 0) {
+      if (!state.serviceId) return;
+      state.step = 1;
+    } else if (state.step === 1) {
+      if (!(state.areaId && state.date && state.time)) return;
+      state.step = 2;
+    } else if (state.step === 2) {
+      readDetails();
+      if (!validateDetails()) { render(); firstInvalid(); return; }
+      state.step = 3;
+    } else if (state.step === 3) {
+      if (!state.consent) {
+        state.errors.consent = "1";
+        render();
+        var c = document.getElementById("consent");
+        if (c) c.focus();
+        return;
+      }
+      confirmBooking();
+      return;
+    }
+    state.errors = {};
+    render();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function goBack() {
+    if (state.step === 0) return;
+    state.step -= 1;
+    state.errors = {};
+    render();
+  }
+
+  function bookingPayload() {
+    var svc = service(), a = area(), d = state.details;
+    return {
+      _subject: "New booking — " + svc.label + " — " + fmtDate(state.date) + " " + state.time,
+      reference: state.ref,
+      treatment: svc.label,
+      when: fmtDateLong(state.date) + ", " + state.time + "–" + endTime(state.time, svc.mins),
+      area: a.name,
+      name: d.name,
+      mobile: d.phone,
+      email: d.email,
+      address: d.address + (d.postcode ? ", " + d.postcode.toUpperCase() : ""),
+      lash_history: d.history || "not given",
+      patch_test: needsPatchTest()
+        ? "REQUIRED — by " + fmtDateLong(iso(patchTestBy())) + ", first set"
+        : "not needed",
+      notes: d.notes || "none",
+      price: "£" + svc.price,
+      deposit_due: "£" + DEPOSIT
+    };
+  }
+
+  // Posts the booking to the inbox. The claude.ai artifact sandbox blocks
+  // outbound POSTs, so this fails there by design and the page offers a
+  // prefilled email instead — on a normal host it just works.
+  function notify(payload) {
+    if (!CONFIG.notifyEndpoint) return Promise.resolve(false);
+    return fetch(CONFIG.notifyEndpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(payload)
+    }).then(function (r) { return r.ok; }).catch(function () { return false; });
+  }
+
+  function mailtoFallback(payload) {
+    var lines = [];
+    for (var k in payload) {
+      if (k === "_subject") continue;
+      lines.push(k.replace(/_/g, " ") + ": " + payload[k]);
+    }
+    return "mailto:" + CONFIG.notifyEmail +
+      "?subject=" + encodeURIComponent(payload._subject) +
+      "&body=" + encodeURIComponent(lines.join("\n"));
+  }
+
+  function confirmBooking() {
+    var taken = bookedSlots();
+    var key = state.date + "T" + state.time;
+    if (taken.indexOf(key) === -1) taken.push(key);
+    store.set("ellash.booked", JSON.stringify(taken));
+
+    state.ref = "EL-" + String(seed(key + state.details.email) % 100000).padStart(5, "0");
+
+    var svc = service();
+    var diary = savedBookings();
+    diary.push({
+      ref: state.ref, date: state.date, time: state.time,
+      treatment: svc.label, mins: svc.mins, price: svc.price,
+      area: area().name, name: state.details.name, phone: state.details.phone,
+      patch: needsPatchTest()
+    });
+    store.set("ellash.diary", JSON.stringify(diary));
+    state.step = 4;
+    state.errors = {};
+    state.sent = null;
+    render();
+
+    var payload = bookingPayload();
+    state.payload = payload;
+    notify(payload).then(function (ok) {
+      state.sent = ok;
+      var el = document.getElementById("sendState");
+      if (el) el.outerHTML = sendStateHtml();
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function restart(keepArea) {
+    var area0 = keepArea ? state.areaId : null;
+    state.step = 0;
+    state.serviceId = null; state.areaId = area0; state.date = null; state.time = null;
+    state.consent = false; state.ref = null; state.errors = {}; state.holdUntil = null;
+    state.details = { name: "", phone: "", email: "", address: "", postcode: "", history: "", notes: "" };
+    state.view = startOfMonth(new Date());
+    render();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  /* ---------------------------------------------------- events */
+
+  document.getElementById("stage").addEventListener("click", function (ev) {
+    var t = ev.target.closest("button, a[data-act]");
+    if (!t) return;
+    if (t.tagName === "A" && t.dataset.act) ev.preventDefault();
+
+    if (t.dataset.service) {
+      state.serviceId = t.dataset.service;
+      // a shorter or longer treatment changes which slots fit
+      if (state.time && slotsFor(state.date).every(function (s) { return s.time !== state.time || s.taken; })) {
+        state.time = null;
+      }
+      render();
+      revealNext(".actions");
+      return;
+    }
+
+    if (t.dataset.area) {
+      if (state.areaId !== t.dataset.area) {
+        state.date = null;
+        state.time = null;
+        state.areaId = t.dataset.area;
+        state.view = firstOpenMonth();
+      }
+      state.areaId = t.dataset.area;
+      render();
+      revealNext(".cal");
+      return;
+    }
+
+    if (t.dataset.cal) {
+      var step = Number(t.dataset.cal);
+      state.view = new Date(state.view.getFullYear(), state.view.getMonth() + step, 1);
+      render();
+      return;
+    }
+
+    if (t.dataset.date) {
+      state.date = t.dataset.date;
+      state.time = null;
+      render();
+      revealNext(".slots");
+      return;
+    }
+
+    if (t.dataset.time) {
+      state.time = t.dataset.time;
+      state.holdUntil = null;
+      render();
+      revealNext(".actions");
+      return;
+    }
+
+    if (t.dataset.block) {
+      toggleBlock(t.dataset.block);
+      render();
+      return;
+    }
+
+    var act = t.dataset.act;
+    if (act === "next") goNext();
+    else if (act === "back") { readDetailsIfOnForm(); goBack(); }
+    else if (act === "restart") restart();
+    else if (act === "diary-in") {
+      var f = document.getElementById("f_code");
+      if (f && f.value.trim().toLowerCase() === CONFIG.diaryCode.toLowerCase()) {
+        state.diaryOpen = true;
+        state.errors = {};
+      } else {
+        state.errors.code = "That code isn't right.";
+      }
+      render();
+      return;
+    }
+    else if (act === "leave-diary") {
+      if (location.hash) location.hash = "";
+      state.step = 0; state.errors = {};
+      render();
+      return;
+    }
+    else if (act === "rebook") {
+      var svcId = t.dataset.svc, when = t.dataset.when;
+      restart(true);
+      state.serviceId = svcId;
+      state.date = when;
+      state.view = startOfMonth(fromIso(when));
+      state.step = 1;
+      render();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  });
+
+  function readDetailsIfOnForm() { if (state.step === 2) readDetails(); }
+
+  document.getElementById("stage").addEventListener("change", function (ev) {
+    if (ev.target.name === "history") {
+      state.details.history = ev.target.value;
+      var n = document.getElementById("patchNotice");
+      if (n) n.hidden = !needsPatchTest();
+      save();
+      return;
+    }
+    if (ev.target.id === "consent") {
+      state.consent = ev.target.checked;
+      if (state.consent) delete state.errors.consent;
+      var box = ev.target.closest(".consent");
+      if (box) box.dataset.invalid = state.consent ? "false" : "true";
+      save();
+    }
+  });
+
+  // clear a field's error as soon as it's being fixed
+  document.getElementById("stage").addEventListener("input", function (ev) {
+    var name = ev.target.name;
+    if (!name || !(name in state.details)) return;
+    state.details[name] = ev.target.value;
+    if (state.errors[name]) {
+      delete state.errors[name];
+      var f = ev.target.closest(".field");
+      if (f) { f.dataset.invalid = "false"; f.querySelector(".err").textContent = ""; }
+    }
+    save();
+  });
+
+  /* ---------------------------------------------------- theme */
+
+  (function theme() {
+    var btn = document.getElementById("themeToggle");
+    var saved = store.get("ellash.theme");
+    if (saved === "light" || saved === "dark") document.documentElement.dataset.theme = saved;
+
+    btn.addEventListener("click", function () {
+      var root = document.documentElement;
+      var current = root.dataset.theme;
+      if (!current) {
+        // no explicit choice yet — flip away from whatever the OS is showing
+        var osLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+        current = osLight ? "light" : "dark";
+      }
+      var next = current === "dark" ? "light" : "dark";
+      root.dataset.theme = next;
+      store.set("ellash.theme", next);
+    });
+  })();
+
+  /* ---------------------------------------------------- go */
+
+  function applyHash() {
+    if (location.hash.toLowerCase() === "#diary") {
+      state.step = "diary";
+      state.errors = {};
+      render();
+    }
+  }
+
+  window.addEventListener("hashchange", function () {
+    if (location.hash.toLowerCase() === "#diary") applyHash();
+    else if (state.step === "diary") { state.step = 0; render(); }
+  });
+
+  restore();
+  buildTicker();
+  render();
+  applyHash();
+})();
+</script>
