@@ -22,9 +22,33 @@
   /* --- tokens: radii (from design system) --- */
   --r-1: 4px;  --r-4: 8px;  --r-3: 10px;  --r-2: 20px;
 
-  /* --- tokens: type scale (anchored on 15 / 17 / 34) --- */
+  /* --- type scale ---------------------------------------------------
+     Two-part progression, anchored on the design system's 15 / 17 / 34.
+     Text steps are close (x1.15) because small sizes need fine
+     distinctions; display steps are wide (x1.27) to carry hierarchy.
+
+       13 --x1.15--> 15 --x1.13--> 17     text
+       17 --x1.24--> 21 --x1.62--> 34 --x1.29--> 44     display
+
+     12 is not a step: it is the optical size for uppercase micro-labels,
+     which read about 15% larger than their nominal size.
+     No size is used outside this list. */
   --t-xs: 12px;  --t-sm: 13px;  --t-2:  15px;  --t-1:  17px;
-  --t-md: 21px;  --t-lg: 26px;  --t-3:  34px;  --t-xl: 46px;
+  --t-md: 21px;  --t-3:  34px;  --t-xl: 44px;
+
+  /* --- line height: one value per size band --- */
+  --lh-flat:    1;      /* single-line labels and figures */
+  --lh-display: 1.05;   /* 44 */
+  --lh-title:   1.15;   /* 34 */
+  --lh-head:    1.25;   /* 21, and controls */
+  --lh-ui:      1.45;   /* 13 */
+  --lh-body:    1.6;    /* 15 and 17 running text */
+
+  /* --- letter spacing: four roles, no ad-hoc values --- */
+  --ls-display:   -0.01em;  /* Italiana tightens at 34 and above */
+  --ls-normal:    0;        /* body, headings, figures */
+  --ls-caps:      0.12em;   /* uppercase UI labels */
+  --ls-caps-wide: 0.18em;   /* uppercase display labels: ticker, reference */
 
   --font-display: 'Italiana', 'Didot', 'Bodoni MT', Georgia, serif;
   --font-body: 'Jost', 'Futura', 'Century Gothic', system-ui, sans-serif;
@@ -120,7 +144,8 @@ body {
   font-family: var(--font-body);
   font-size: var(--t-1);
   font-weight: 400;
-  line-height: 1.5;
+  line-height: var(--lh-body);
+  letter-spacing: var(--ls-normal);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -137,7 +162,8 @@ button { font: inherit; color: inherit; }
 .eyebrow {
   font-size: var(--t-xs);
   font-weight: 500;
-  letter-spacing: 0.18em;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--ink-faint);
 }
@@ -184,7 +210,8 @@ button { font: inherit; color: inherit; }
   gap: var(--s-15);
   padding: 0 var(--s-15);
   font-size: var(--t-sm);
-  letter-spacing: 0.16em;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-caps-wide);
   text-transform: uppercase;
   color: var(--ink-soft);
   white-space: nowrap;
@@ -193,8 +220,8 @@ button { font: inherit; color: inherit; }
 .ticker-item::after {
   content: "\2726";
   color: var(--gold);
-  font-size: 9px;
-  letter-spacing: 0;
+  font-size: 0.7em;
+  letter-spacing: var(--ls-normal);
 }
 
 .ticker-item b { color: var(--gold); font-weight: 500; }
@@ -255,15 +282,15 @@ button { font: inherit; color: inherit; }
 .wordmark {
   font-family: var(--font-display);
   font-size: var(--t-xl);
-  line-height: 1;
-  letter-spacing: 0.01em;
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
   color: var(--ink);
 }
 
 .brand-role {
   font-size: var(--t-2);
+  line-height: var(--lh-body);
   color: var(--ink-soft);
-  line-height: 1.6;
   max-width: 30ch;
 }
 
@@ -293,6 +320,8 @@ button { font: inherit; color: inherit; }
 .summary-title {
   font-family: var(--font-display);
   font-size: var(--t-md);
+  line-height: var(--lh-head);
+  letter-spacing: var(--ls-normal);
   color: var(--ink);
 }
 
@@ -322,14 +351,15 @@ button { font: inherit; color: inherit; }
   font-family: var(--font-body);
   font-size: var(--t-md);
   font-weight: 500;
-  letter-spacing: 0.01em;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-normal);
   color: var(--gold);
 }
 
 .deposit-note {
   font-size: var(--t-sm);
+  line-height: var(--lh-ui);
   color: var(--ink-faint);
-  line-height: 1.55;
 }
 
 /* ---------------------------------------------------------- steps */
@@ -350,7 +380,8 @@ button { font: inherit; color: inherit; }
   align-items: center;
   gap: var(--s-7);
   font-size: var(--t-sm);
-  letter-spacing: 0.06em;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--ink-faint);
   padding: var(--s-7) var(--s-10);
@@ -406,14 +437,15 @@ button { font: inherit; color: inherit; }
 .card-head h2 {
   font-family: var(--font-display);
   font-size: var(--t-3);
-  line-height: 1.1;
+  line-height: var(--lh-title);
+  letter-spacing: var(--ls-display);
 }
 
 .card-head p {
   font-size: var(--t-2);
+  line-height: var(--lh-body);
   color: var(--ink-soft);
   max-width: 58ch;
-  line-height: 1.6;
 }
 
 /* ---------------------------------------------------------- services */
@@ -454,8 +486,8 @@ button { font: inherit; color: inherit; }
 .service-meta {
   grid-column: 1;
   font-size: var(--t-sm);
+  line-height: var(--lh-ui);
   color: var(--ink-soft);
-  line-height: 1.5;
 }
 
 .service-price {
@@ -465,9 +497,9 @@ button { font: inherit; color: inherit; }
   font-family: var(--font-body);
   font-size: var(--t-md);
   font-weight: 500;
-  letter-spacing: 0.01em;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-normal);
   color: var(--gold);
-  line-height: 1;
 }
 
 .service-dur {
@@ -480,7 +512,8 @@ button { font: inherit; color: inherit; }
   background: var(--surface-2);
   color: var(--ink-soft);
   font-size: var(--t-xs);
-  letter-spacing: 0.04em;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-normal);
 }
 
 .service.has-photo {
@@ -513,7 +546,7 @@ button { font: inherit; color: inherit; }
   border-radius: var(--r-3);
   background: var(--blush-wash);
   font-size: var(--t-2);
-  line-height: 1.6;
+  line-height: var(--lh-body);
   color: var(--ink-soft);
 }
 
@@ -545,8 +578,9 @@ button { font: inherit; color: inherit; }
 .pay-amount {
   font-size: var(--t-md);
   font-weight: 500;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-normal);
   color: var(--gold);
-  letter-spacing: 0.01em;
 }
 
 .pay-btn {
@@ -558,7 +592,8 @@ button { font: inherit; color: inherit; }
   background: var(--gold);
   color: var(--ground);
   font-weight: 500;
-  letter-spacing: 0.04em;
+  line-height: var(--lh-head);
+  letter-spacing: var(--ls-normal);
 }
 
 .pay-btn:hover { background: var(--gold-bright); }
@@ -581,7 +616,7 @@ button { font: inherit; color: inherit; }
 
 .diary-when { font-weight: 500; }
 .diary-meta { grid-column: 1; font-size: var(--t-sm); color: var(--ink-soft); }
-.diary-ref  { grid-row: 1 / span 2; grid-column: 2; font-size: var(--t-sm); color: var(--gold); letter-spacing: 0.1em; }
+.diary-ref  { grid-row: 1 / span 2; grid-column: 2; font-size: var(--t-sm); line-height: var(--lh-flat); letter-spacing: var(--ls-caps); color: var(--gold); }
 
 .block-list {
   display: grid;
@@ -604,6 +639,8 @@ button { font: inherit; color: inherit; }
 .svc-group span {
   font-family: var(--font-display);
   font-size: var(--t-md);
+  line-height: var(--lh-head);
+  letter-spacing: var(--ls-normal);
   color: var(--ink);
   white-space: nowrap;
 }
@@ -657,6 +694,8 @@ button { font: inherit; color: inherit; }
 .ac-group h3 {
   font-family: var(--font-display);
   font-size: var(--t-md);
+  line-height: var(--lh-head);
+  letter-spacing: var(--ls-normal);
   color: var(--gold);
 }
 
@@ -664,8 +703,8 @@ button { font: inherit; color: inherit; }
 
 .ac-group li {
   font-size: var(--t-2);
+  line-height: var(--lh-body);
   color: var(--ink-soft);
-  line-height: 1.55;
   padding-left: var(--s-4);
 }
 
@@ -696,7 +735,7 @@ button { font: inherit; color: inherit; }
 }
 
 .area-name { font-size: var(--t-1); font-weight: 500; }
-.area-days { font-size: var(--t-sm); color: var(--ink-soft); letter-spacing: 0.04em; }
+.area-days { font-size: var(--t-sm); line-height: var(--lh-ui); letter-spacing: var(--ls-normal); color: var(--ink-soft); }
 
 /* ---------------------------------------------------------- calendar */
 
@@ -718,7 +757,8 @@ button { font: inherit; color: inherit; }
 .cal-month {
   font-family: var(--font-display);
   font-size: var(--t-md);
-  letter-spacing: 0.02em;
+  line-height: var(--lh-head);
+  letter-spacing: var(--ls-normal);
 }
 
 .cal-nav { display: flex; gap: var(--s-5); }
@@ -744,7 +784,8 @@ button { font: inherit; color: inherit; }
 .cal-dow {
   text-align: center;
   font-size: var(--t-xs);
-  letter-spacing: 0.1em;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--ink-faint);
   padding-bottom: var(--s-5);
@@ -816,7 +857,13 @@ button { font: inherit; color: inherit; }
 
 .slots { display: grid; gap: var(--s-10); align-content: start; }
 
-.slots-title { font-size: var(--t-sm); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); }
+.slots-title {
+  font-size: var(--t-sm);
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
 
 .slot-list { display: grid; gap: var(--s-7); grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
 
@@ -829,7 +876,8 @@ button { font: inherit; color: inherit; }
   border-radius: var(--r-4);
   cursor: pointer;
   font-size: var(--t-2);
-  letter-spacing: 0.04em;
+  line-height: var(--lh-head);
+  letter-spacing: var(--ls-normal);
   transition: border-color 0.2s, background 0.2s, color 0.2s;
 }
 
@@ -851,8 +899,8 @@ button { font: inherit; color: inherit; }
 
 .slots-empty {
   font-size: var(--t-2);
+  line-height: var(--lh-body);
   color: var(--ink-faint);
-  line-height: 1.6;
   border: 1px dashed var(--line);
   border-radius: var(--r-3);
   padding: var(--s-15);
@@ -869,7 +917,8 @@ button { font: inherit; color: inherit; }
   background: var(--blush-wash);
   color: var(--blush);
   font-size: var(--t-xs);
-  letter-spacing: 0.08em;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -896,8 +945,8 @@ button { font: inherit; color: inherit; }
 
 .hold .clock {
   font-weight: 500;
+  letter-spacing: var(--ls-normal);
   color: var(--gold);
-  letter-spacing: 0.06em;
 }
 
 .hold[data-expired="true"] {
@@ -935,7 +984,8 @@ button { font: inherit; color: inherit; }
 
 .field label {
   font-size: var(--t-sm);
-  letter-spacing: 0.08em;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--ink-soft);
 }
@@ -954,7 +1004,7 @@ button { font: inherit; color: inherit; }
   transition: border-color 0.2s;
 }
 
-.field textarea { resize: vertical; min-height: 84px; line-height: 1.5; }
+.field textarea { resize: vertical; min-height: 84px; line-height: var(--lh-body); }
 
 .field input::placeholder,
 .field textarea::placeholder { color: var(--ink-faint); }
@@ -1003,8 +1053,8 @@ button { font: inherit; color: inherit; }
   gap: var(--s-10);
   align-items: flex-start;
   font-size: var(--t-2);
+  line-height: var(--lh-body);
   color: var(--ink-soft);
-  line-height: 1.6;
   border: 1px solid var(--line);
   border-radius: var(--r-3);
   padding: var(--s-15);
@@ -1032,7 +1082,8 @@ button { font: inherit; color: inherit; }
   cursor: pointer;
   font-size: var(--t-1);
   font-weight: 500;
-  letter-spacing: 0.04em;
+  line-height: var(--lh-head);
+  letter-spacing: var(--ls-normal);
   transition: background 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s;
 }
 
@@ -1075,12 +1126,18 @@ button { font: inherit; color: inherit; }
   background: var(--gold-wash);
 }
 
-.done h2 { font-family: var(--font-display); font-size: var(--t-3); line-height: 1.15; }
-.done p { font-size: var(--t-2); color: var(--ink-soft); max-width: 46ch; line-height: 1.65; }
+.done h2 {
+  font-family: var(--font-display);
+  font-size: var(--t-3);
+  line-height: var(--lh-title);
+  letter-spacing: var(--ls-display);
+}
+.done p { font-size: var(--t-2); line-height: var(--lh-body); color: var(--ink-soft); max-width: 46ch; }
 
 .ref {
   font-size: var(--t-2);
-  letter-spacing: 0.22em;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-caps-wide);
   color: var(--gold);
   border: 1px dashed var(--gold-dim);
   border-radius: var(--r-3);
@@ -1123,7 +1180,8 @@ button { font: inherit; color: inherit; }
   color: var(--ink-faint);
   padding: var(--s-7) var(--s-10);
   font-size: var(--t-xs);
-  letter-spacing: 0.1em;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   cursor: pointer;
 }
