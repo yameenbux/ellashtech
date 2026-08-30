@@ -17,14 +17,38 @@
   /* --- tokens: spacing (from design system) --- */
   --s-2:  2px;   --s-4:  4px;   --s-5:  5px;   --s-7:  7px;
   --s-8:  8px;   --s-10: 10px;  --s-15: 15px;  --s-25: 25px;
-  --s-40: 40px;  --s-55: 55px;  --s-80: 80px;
+  --s-20: 20px;  --s-40: 40px;  --s-55: 55px;  --s-80: 80px;
 
   /* --- tokens: radii (from design system) --- */
   --r-1: 4px;  --r-4: 8px;  --r-3: 10px;  --r-2: 20px;
 
-  /* --- tokens: type scale (anchored on 15 / 17 / 34) --- */
+  /* --- type scale ---------------------------------------------------
+     Two-part progression, anchored on the design system's 15 / 17 / 34.
+     Text steps are close (x1.15) because small sizes need fine
+     distinctions; display steps are wide (x1.27) to carry hierarchy.
+
+       13 --x1.15--> 15 --x1.13--> 17     text
+       17 --x1.24--> 21 --x1.62--> 34 --x1.29--> 44     display
+
+     12 is not a step: it is the optical size for uppercase micro-labels,
+     which read about 15% larger than their nominal size.
+     No size is used outside this list. */
   --t-xs: 12px;  --t-sm: 13px;  --t-2:  15px;  --t-1:  17px;
-  --t-md: 21px;  --t-lg: 26px;  --t-3:  34px;  --t-xl: 46px;
+  --t-md: 21px;  --t-3:  34px;  --t-xl: 44px;
+
+  /* --- line height: one value per size band --- */
+  --lh-flat:    1;      /* single-line labels and figures */
+  --lh-display: 1.05;   /* 44 */
+  --lh-title:   1.15;   /* 34 */
+  --lh-head:    1.25;   /* 21, and controls */
+  --lh-ui:      1.45;   /* 13 */
+  --lh-body:    1.6;    /* 15 and 17 running text */
+
+  /* --- letter spacing: four roles, no ad-hoc values --- */
+  --ls-display:   -0.01em;  /* Italiana tightens at 34 and above */
+  --ls-normal:    0;        /* body, headings, figures */
+  --ls-caps:      0.12em;   /* uppercase UI labels */
+  --ls-caps-wide: 0.18em;   /* uppercase display labels: ticker, reference */
 
   --font-display: 'Italiana', 'Didot', 'Bodoni MT', Georgia, serif;
   --font-body: 'Jost', 'Futura', 'Century Gothic', system-ui, sans-serif;
@@ -53,6 +77,11 @@
 
   --shadow: 0 var(--s-10) var(--s-40) rgba(0, 0, 0, 0.45);
   --ring: 0 0 0 3px rgba(168, 161, 131, 0.38);
+
+  /* --- motion: one curve, two durations, no overshoot --- */
+  --dur:      200ms;
+  --dur-slow: 300ms;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);   /* ease-out; y never exceeds 1 */
 }
 
 /* light: system preference, unless the viewer explicitly chose dark */
@@ -120,7 +149,8 @@ body {
   font-family: var(--font-body);
   font-size: var(--t-1);
   font-weight: 400;
-  line-height: 1.5;
+  line-height: var(--lh-body);
+  letter-spacing: var(--ls-normal);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -137,7 +167,8 @@ button { font: inherit; color: inherit; }
 .eyebrow {
   font-size: var(--t-xs);
   font-weight: 500;
-  letter-spacing: 0.18em;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--ink-faint);
 }
@@ -184,7 +215,8 @@ button { font: inherit; color: inherit; }
   gap: var(--s-15);
   padding: 0 var(--s-15);
   font-size: var(--t-sm);
-  letter-spacing: 0.16em;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-caps-wide);
   text-transform: uppercase;
   color: var(--ink-soft);
   white-space: nowrap;
@@ -193,8 +225,8 @@ button { font: inherit; color: inherit; }
 .ticker-item::after {
   content: "\2726";
   color: var(--gold);
-  font-size: 9px;
-  letter-spacing: 0;
+  font-size: 0.7em;
+  letter-spacing: var(--ls-normal);
 }
 
 .ticker-item b { color: var(--gold); font-weight: 500; }
@@ -255,15 +287,15 @@ button { font: inherit; color: inherit; }
 .wordmark {
   font-family: var(--font-display);
   font-size: var(--t-xl);
-  line-height: 1;
-  letter-spacing: 0.01em;
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
   color: var(--ink);
 }
 
 .brand-role {
   font-size: var(--t-2);
+  line-height: var(--lh-body);
   color: var(--ink-soft);
-  line-height: 1.6;
   max-width: 30ch;
 }
 
@@ -293,6 +325,8 @@ button { font: inherit; color: inherit; }
 .summary-title {
   font-family: var(--font-display);
   font-size: var(--t-md);
+  line-height: var(--lh-head);
+  letter-spacing: var(--ls-normal);
   color: var(--ink);
 }
 
@@ -322,14 +356,15 @@ button { font: inherit; color: inherit; }
   font-family: var(--font-body);
   font-size: var(--t-md);
   font-weight: 500;
-  letter-spacing: 0.01em;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-normal);
   color: var(--gold);
 }
 
 .deposit-note {
   font-size: var(--t-sm);
+  line-height: var(--lh-ui);
   color: var(--ink-faint);
-  line-height: 1.55;
 }
 
 /* ---------------------------------------------------------- steps */
@@ -350,13 +385,14 @@ button { font: inherit; color: inherit; }
   align-items: center;
   gap: var(--s-7);
   font-size: var(--t-sm);
-  letter-spacing: 0.06em;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--ink-faint);
   padding: var(--s-7) var(--s-10);
   border-radius: var(--r-3);
   border: 1px solid transparent;
-  transition: color 0.25s, border-color 0.25s, background 0.25s;
+  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease), background var(--dur) var(--ease);
 }
 
 .progress li .pip {
@@ -401,24 +437,25 @@ button { font: inherit; color: inherit; }
   .card { padding: var(--s-40); }
 }
 
-.card-head { display: grid; gap: var(--s-7); }
+.card-head { display: grid; gap: var(--s-15); }
 
 .card-head h2 {
   font-family: var(--font-display);
   font-size: var(--t-3);
-  line-height: 1.1;
+  line-height: var(--lh-title);
+  letter-spacing: var(--ls-display);
 }
 
 .card-head p {
   font-size: var(--t-2);
+  line-height: var(--lh-body);
   color: var(--ink-soft);
   max-width: 58ch;
-  line-height: 1.6;
 }
 
 /* ---------------------------------------------------------- services */
 
-.services { display: grid; gap: var(--s-10); }
+.services { display: grid; gap: var(--s-20); }
 
 .service {
   display: grid;
@@ -432,9 +469,8 @@ button { font: inherit; color: inherit; }
   border: 1px solid var(--line);
   border-radius: var(--r-3);
   cursor: pointer;
-  transition: border-color 0.2s, background 0.2s, transform 0.22s;
-  animation: rise 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) both;
-  animation-delay: calc(var(--i, 0) * 55ms);
+  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease),
+              transform var(--dur) var(--ease);
 }
 
 .service:not([aria-pressed="true"]):hover {
@@ -442,6 +478,10 @@ button { font: inherit; color: inherit; }
   background: var(--gold-wash);
   transform: translateY(-3px);
 }
+
+/* the photo is the product — let it come forward with its card */
+.service-photo { transition: transform var(--dur-slow) var(--ease), filter var(--dur-slow) var(--ease); }
+.service:hover .service-photo { transform: scale(1.05); filter: brightness(1.06); }
 
 .service[aria-pressed="true"] {
   border-color: var(--gold);
@@ -454,8 +494,8 @@ button { font: inherit; color: inherit; }
 .service-meta {
   grid-column: 1;
   font-size: var(--t-sm);
+  line-height: var(--lh-ui);
   color: var(--ink-soft);
-  line-height: 1.5;
 }
 
 .service-price {
@@ -465,9 +505,9 @@ button { font: inherit; color: inherit; }
   font-family: var(--font-body);
   font-size: var(--t-md);
   font-weight: 500;
-  letter-spacing: 0.01em;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-normal);
   color: var(--gold);
-  line-height: 1;
 }
 
 .service-dur {
@@ -480,7 +520,8 @@ button { font: inherit; color: inherit; }
   background: var(--surface-2);
   color: var(--ink-soft);
   font-size: var(--t-xs);
-  letter-spacing: 0.04em;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-normal);
 }
 
 .service.has-photo {
@@ -513,7 +554,7 @@ button { font: inherit; color: inherit; }
   border-radius: var(--r-3);
   background: var(--blush-wash);
   font-size: var(--t-2);
-  line-height: 1.6;
+  line-height: var(--lh-body);
   color: var(--ink-soft);
 }
 
@@ -545,8 +586,9 @@ button { font: inherit; color: inherit; }
 .pay-amount {
   font-size: var(--t-md);
   font-weight: 500;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-normal);
   color: var(--gold);
-  letter-spacing: 0.01em;
 }
 
 .pay-btn {
@@ -558,7 +600,8 @@ button { font: inherit; color: inherit; }
   background: var(--gold);
   color: var(--ground);
   font-weight: 500;
-  letter-spacing: 0.04em;
+  line-height: var(--lh-head);
+  letter-spacing: var(--ls-normal);
 }
 
 .pay-btn:hover { background: var(--gold-bright); }
@@ -567,7 +610,7 @@ button { font: inherit; color: inherit; }
 
 .diary { display: grid; gap: var(--s-25); }
 
-.diary-list { display: grid; gap: var(--s-10); }
+.diary-list { display: grid; gap: var(--s-15); }
 
 .diary-row {
   display: grid;
@@ -581,13 +624,13 @@ button { font: inherit; color: inherit; }
 
 .diary-when { font-weight: 500; }
 .diary-meta { grid-column: 1; font-size: var(--t-sm); color: var(--ink-soft); }
-.diary-ref  { grid-row: 1 / span 2; grid-column: 2; font-size: var(--t-sm); color: var(--gold); letter-spacing: 0.1em; }
+.diary-ref  { grid-row: 1 / span 2; grid-column: 2; font-size: var(--t-sm); line-height: var(--lh-flat); letter-spacing: var(--ls-caps); color: var(--gold); }
 
 .block-list {
   display: grid;
-  gap: var(--s-7);
+  gap: var(--s-8);
   grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
-  margin-top: var(--s-10);
+  margin-top: var(--s-15);
 }
 
 .blocked-day { text-decoration: line-through; color: var(--ink-faint); }
@@ -596,7 +639,7 @@ button { font: inherit; color: inherit; }
   display: flex;
   align-items: center;
   gap: var(--s-15);
-  margin-top: var(--s-10);
+  margin-top: var(--s-25);
 }
 
 .svc-group:first-child { margin-top: 0; }
@@ -604,6 +647,8 @@ button { font: inherit; color: inherit; }
 .svc-group span {
   font-family: var(--font-display);
   font-size: var(--t-md);
+  line-height: var(--lh-head);
+  letter-spacing: var(--ls-normal);
   color: var(--ink);
   white-space: nowrap;
 }
@@ -639,7 +684,7 @@ button { font: inherit; color: inherit; }
 
 @media (min-width: 720px) {
   /* the middle group is the long one — let it run full height beside the two short ones */
-  .aftercare-groups { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-15); align-items: start; }
+  .aftercare-groups { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-20); align-items: start; }
   .ac-group:nth-child(1) { grid-column: 1; grid-row: 1; }
   .ac-group:nth-child(2) { grid-column: 2; grid-row: 1 / span 2; }
   .ac-group:nth-child(3) { grid-column: 1; grid-row: 2; }
@@ -657,6 +702,8 @@ button { font: inherit; color: inherit; }
 .ac-group h3 {
   font-family: var(--font-display);
   font-size: var(--t-md);
+  line-height: var(--lh-head);
+  letter-spacing: var(--ls-normal);
   color: var(--gold);
 }
 
@@ -664,8 +711,8 @@ button { font: inherit; color: inherit; }
 
 .ac-group li {
   font-size: var(--t-2);
+  line-height: var(--lh-body);
   color: var(--ink-soft);
-  line-height: 1.55;
   padding-left: var(--s-4);
 }
 
@@ -673,7 +720,7 @@ button { font: inherit; color: inherit; }
 
 /* ---------------------------------------------------------- areas */
 
-.areas { display: grid; gap: var(--s-10); grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+.areas { display: grid; gap: var(--s-15); grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
 
 .area {
   padding: var(--s-15);
@@ -684,10 +731,15 @@ button { font: inherit; color: inherit; }
   cursor: pointer;
   display: grid;
   gap: var(--s-4);
-  transition: border-color 0.2s, background 0.2s;
+  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease),
+              transform var(--dur) var(--ease);
 }
 
-.area:not([aria-pressed="true"]):hover { border-color: var(--gold-dim); background: var(--gold-wash); }
+.area:not([aria-pressed="true"]):hover {
+  border-color: var(--gold-dim);
+  background: var(--gold-wash);
+  transform: translateY(-3px);
+}
 
 .area[aria-pressed="true"] {
   border-color: var(--gold);
@@ -696,7 +748,7 @@ button { font: inherit; color: inherit; }
 }
 
 .area-name { font-size: var(--t-1); font-weight: 500; }
-.area-days { font-size: var(--t-sm); color: var(--ink-soft); letter-spacing: 0.04em; }
+.area-days { font-size: var(--t-sm); line-height: var(--lh-ui); letter-spacing: var(--ls-normal); color: var(--ink-soft); }
 
 /* ---------------------------------------------------------- calendar */
 
@@ -718,14 +770,15 @@ button { font: inherit; color: inherit; }
 .cal-month {
   font-family: var(--font-display);
   font-size: var(--t-md);
-  letter-spacing: 0.02em;
+  line-height: var(--lh-head);
+  letter-spacing: var(--ls-normal);
 }
 
 .cal-nav { display: flex; gap: var(--s-5); }
 
 .cal-nav button {
-  width: 34px;
-  height: 34px;
+  width: 44px;
+  height: 44px;
   display: grid;
   place-items: center;
   background: transparent;
@@ -733,7 +786,7 @@ button { font: inherit; color: inherit; }
   border-radius: var(--r-4);
   color: var(--ink-soft);
   cursor: pointer;
-  transition: border-color 0.2s, color 0.2s;
+  transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
 }
 
 .cal-nav button:hover:not(:disabled) { border-color: var(--gold); color: var(--gold); }
@@ -744,7 +797,8 @@ button { font: inherit; color: inherit; }
 .cal-dow {
   text-align: center;
   font-size: var(--t-xs);
-  letter-spacing: 0.1em;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--ink-faint);
   padding-bottom: var(--s-5);
@@ -765,7 +819,7 @@ button { font: inherit; color: inherit; }
   position: relative;
   padding: 0;
   font-family: inherit;
-  transition: border-color 0.18s, background 0.18s, color 0.18s;
+  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease), color var(--dur) var(--ease);
 }
 
 .day.pad { visibility: hidden; }
@@ -816,7 +870,13 @@ button { font: inherit; color: inherit; }
 
 .slots { display: grid; gap: var(--s-10); align-content: start; }
 
-.slots-title { font-size: var(--t-sm); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); }
+.slots-title {
+  font-size: var(--t-sm);
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
 
 .slot-list { display: grid; gap: var(--s-7); grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
 
@@ -829,8 +889,9 @@ button { font: inherit; color: inherit; }
   border-radius: var(--r-4);
   cursor: pointer;
   font-size: var(--t-2);
-  letter-spacing: 0.04em;
-  transition: border-color 0.2s, background 0.2s, color 0.2s;
+  line-height: var(--lh-head);
+  letter-spacing: var(--ls-normal);
+  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease), color var(--dur) var(--ease);
 }
 
 .slot:not([aria-pressed="true"]):hover:not(:disabled) { border-color: var(--gold); background: var(--gold-wash); }
@@ -851,8 +912,8 @@ button { font: inherit; color: inherit; }
 
 .slots-empty {
   font-size: var(--t-2);
+  line-height: var(--lh-body);
   color: var(--ink-faint);
-  line-height: 1.6;
   border: 1px dashed var(--line);
   border-radius: var(--r-3);
   padding: var(--s-15);
@@ -869,7 +930,8 @@ button { font: inherit; color: inherit; }
   background: var(--blush-wash);
   color: var(--blush);
   font-size: var(--t-xs);
-  letter-spacing: 0.08em;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -896,8 +958,8 @@ button { font: inherit; color: inherit; }
 
 .hold .clock {
   font-weight: 500;
+  letter-spacing: var(--ls-normal);
   color: var(--gold);
-  letter-spacing: 0.06em;
 }
 
 .hold[data-expired="true"] {
@@ -935,7 +997,8 @@ button { font: inherit; color: inherit; }
 
 .field label {
   font-size: var(--t-sm);
-  letter-spacing: 0.08em;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--ink-soft);
 }
@@ -951,10 +1014,10 @@ button { font: inherit; color: inherit; }
   border-radius: var(--r-4);
   padding: var(--s-10) var(--s-15);
   width: 100%;
-  transition: border-color 0.2s;
+  transition: border-color var(--dur) var(--ease);
 }
 
-.field textarea { resize: vertical; min-height: 84px; line-height: 1.5; }
+.field textarea { resize: vertical; min-height: 84px; line-height: var(--lh-body); }
 
 .field input::placeholder,
 .field textarea::placeholder { color: var(--ink-faint); }
@@ -975,7 +1038,7 @@ button { font: inherit; color: inherit; }
 
 /* ---------------------------------------------------------- review */
 
-.review { display: grid; gap: var(--s-15); }
+.review { display: grid; gap: var(--s-25); }
 
 .review-block {
   border: 1px solid var(--line);
@@ -985,7 +1048,7 @@ button { font: inherit; color: inherit; }
   gap: var(--s-8);
 }
 
-.review-block .eyebrow { margin-bottom: var(--s-2); }
+.review-block .eyebrow { margin-bottom: var(--s-8); }
 
 .rrow {
   display: grid;
@@ -1003,15 +1066,15 @@ button { font: inherit; color: inherit; }
   gap: var(--s-10);
   align-items: flex-start;
   font-size: var(--t-2);
+  line-height: var(--lh-body);
   color: var(--ink-soft);
-  line-height: 1.6;
   border: 1px solid var(--line);
   border-radius: var(--r-3);
   padding: var(--s-15);
   background: var(--blush-wash);
 }
 
-.consent input { margin: var(--s-4) 0 0; accent-color: var(--gold); flex: none; width: 16px; height: 16px; }
+.consent input { margin: var(--s-2) 0 0; accent-color: var(--gold); flex: none; width: 22px; height: 22px; }
 .consent[data-invalid="true"] { border-color: var(--alert); }
 
 /* ---------------------------------------------------------- actions */
@@ -1032,8 +1095,9 @@ button { font: inherit; color: inherit; }
   cursor: pointer;
   font-size: var(--t-1);
   font-weight: 500;
-  letter-spacing: 0.04em;
-  transition: background 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s;
+  line-height: var(--lh-head);
+  letter-spacing: var(--ls-normal);
+  transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease), color var(--dur) var(--ease), opacity var(--dur) var(--ease);
 }
 
 .btn-primary { background: var(--gold); color: var(--ground); position: relative; overflow: hidden; }
@@ -1058,7 +1122,7 @@ button { font: inherit; color: inherit; }
 .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .btn-quiet { background: transparent; border-color: var(--line); color: var(--ink-soft); }
-.btn-quiet:hover { border-color: var(--gold-dim); color: var(--ink); }
+.btn-quiet:hover { border-color: var(--gold-dim); color: var(--ink); transform: translateY(-1px); }
 
 .hint { font-size: var(--t-sm); color: var(--ink-faint); }
 
@@ -1075,12 +1139,18 @@ button { font: inherit; color: inherit; }
   background: var(--gold-wash);
 }
 
-.done h2 { font-family: var(--font-display); font-size: var(--t-3); line-height: 1.15; }
-.done p { font-size: var(--t-2); color: var(--ink-soft); max-width: 46ch; line-height: 1.65; }
+.done h2 {
+  font-family: var(--font-display);
+  font-size: var(--t-3);
+  line-height: var(--lh-title);
+  letter-spacing: var(--ls-display);
+}
+.done p { font-size: var(--t-2); line-height: var(--lh-body); color: var(--ink-soft); max-width: 46ch; }
 
 .ref {
   font-size: var(--t-2);
-  letter-spacing: 0.22em;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-caps-wide);
   color: var(--gold);
   border: 1px dashed var(--gold-dim);
   border-radius: var(--r-3);
@@ -1103,7 +1173,7 @@ button { font: inherit; color: inherit; }
 .foot {
   grid-column: 1 / -1;
   border-top: 1px solid var(--line);
-  padding-top: var(--s-25);
+  padding-top: var(--s-40);
   display: flex;
   flex-wrap: wrap;
   gap: var(--s-15);
@@ -1113,26 +1183,45 @@ button { font: inherit; color: inherit; }
   color: var(--ink-faint);
 }
 
-.foot a { color: var(--gold); text-decoration: none; }
-.foot a:hover { text-decoration: underline; }
+.foot a {
+  color: var(--gold);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.foot a { transition: color var(--dur) var(--ease); }
+.foot a:hover { text-decoration: underline; color: var(--gold-bright); }
 
 .theme-toggle {
   background: transparent;
   border: 1px solid var(--line);
   border-radius: var(--r-3);
   color: var(--ink-faint);
-  padding: var(--s-7) var(--s-10);
+  padding: var(--s-15) var(--s-15);
   font-size: var(--t-xs);
-  letter-spacing: 0.1em;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   cursor: pointer;
+  min-height: 44px;
 }
 
 .theme-toggle:hover { border-color: var(--gold-dim); color: var(--ink); }
 
 /* ---------------------------------------------------------- motion */
 
-.step { animation: rise 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
+/* Added by script only, so nothing is ever hidden when JS does not run. */
+.reveal {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity var(--dur-slow) var(--ease), transform var(--dur-slow) var(--ease);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal.is-in { opacity: 1; transform: none; }
+
+.step { animation: rise var(--dur-slow) var(--ease) both; }
 
 @keyframes rise {
   from { opacity: 0; transform: translateY(10px); }
@@ -1164,6 +1253,7 @@ button { font: inherit; color: inherit; }
   .lashmark path { stroke-dashoffset: 0; }
   .ticker-track { animation: none; }
   .btn-primary::after { display: none; }
+  .reveal, .reveal.is-in { opacity: 1; transform: none; }
 }
 </style>
 
@@ -2163,6 +2253,45 @@ button { font: inherit; color: inherit; }
   function clearLive() {
     if (timers.hold) { clearInterval(timers.hold); timers.hold = null; }
     if (timers.sparkle) { cancelAnimationFrame(timers.sparkle); timers.sparkle = null; }
+    if (revealer) { revealer.disconnect(); revealer = null; }
+  }
+
+  /* ---------------------------------------------------- scroll reveal */
+
+  // What is worth revealing: list items and blocks that usually sit below
+  // the fold. The hidden state is only ever applied here, so the page reads
+  // fine with no JS, no IntersectionObserver, or reduced motion.
+  var REVEAL = ".service, .area, .review-block, .ac-group, .diary-row, .notice, .pay, .done-card";
+  var revealer = null;
+
+  function armReveal() {
+    if (reduced || !("IntersectionObserver" in window)) return;
+
+    var els = document.getElementById("stage").querySelectorAll(REVEAL);
+    if (!els.length) return;
+
+    revealer = new IntersectionObserver(function (entries) {
+      for (var i = 0; i < entries.length; i++) {
+        if (!entries[i].isIntersecting) continue;
+        entries[i].target.classList.add("is-in");
+        revealer.unobserve(entries[i].target);      // reveal once, never re-hide
+      }
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
+
+    // Only hide what is genuinely below the fold. render() re-runs on every
+    // click, so hiding something already on screen would flash it out and
+    // back in each time.
+    var fold = window.innerHeight;
+    var seen = new Map();
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i];
+      if (el.getBoundingClientRect().top < fold) continue;
+      var n = seen.get(el.parentElement) || 0;
+      seen.set(el.parentElement, n + 1);
+      el.style.setProperty("--reveal-delay", Math.min(n, 5) * 45 + "ms");
+      el.classList.add("reveal");
+      revealer.observe(el);
+    }
   }
 
   var HOLD_MS = 10 * 60 * 1000;
@@ -2276,6 +2405,7 @@ button { font: inherit; color: inherit; }
     renderSummary();
     if (state.step === 3) startHold();
     if (state.step === 4) startSparkle();
+    armReveal();
     save();
   }
 
