@@ -144,6 +144,66 @@ button { font: inherit; color: inherit; }
 
 .num { font-variant-numeric: tabular-nums; }
 
+/* ---------------------------------------------------------- ticker */
+/* design.md interaction evidence: transform matrix(1,0,0,1,-50,0) — a
+   translateX(-50%) marquee track. Duplicated content makes the loop seamless. */
+
+.ticker {
+  overflow: hidden;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: var(--s-10) 0;
+  position: relative;
+}
+
+.ticker::before,
+.ticker::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--s-55);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ticker::before { left: 0;  background: linear-gradient(to right, var(--surface), transparent); }
+.ticker::after  { right: 0; background: linear-gradient(to left,  var(--surface), transparent); }
+
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: ticker 46s linear infinite;
+}
+
+.ticker:hover .ticker-track { animation-play-state: paused; }
+
+.ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-15);
+  padding: 0 var(--s-15);
+  font-size: var(--t-sm);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.ticker-item::after {
+  content: "\2726";
+  color: var(--gold);
+  font-size: 9px;
+  letter-spacing: 0;
+}
+
+.ticker-item b { color: var(--gold); font-weight: 500; }
+
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
 /* ---------------------------------------------------------- shell */
 
 .shell {
@@ -310,6 +370,12 @@ button { font: inherit; color: inherit; }
 .progress li[data-state="current"] .pip {
   background: var(--gold);
   border-color: var(--gold);
+  animation: pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(168, 161, 131, 0.55); }
+  70%      { box-shadow: 0 0 0 6px rgba(168, 161, 131, 0); }
 }
 
 .progress li[data-state="done"] { color: var(--gold); }
@@ -360,10 +426,16 @@ button { font: inherit; color: inherit; }
   border: 1px solid var(--line);
   border-radius: var(--r-3);
   cursor: pointer;
-  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+  transition: border-color 0.2s, background 0.2s, transform 0.22s;
+  animation: rise 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+  animation-delay: calc(var(--i, 0) * 55ms);
 }
 
-.service:not([aria-pressed="true"]):hover { border-color: var(--gold-dim); background: var(--gold-wash); }
+.service:not([aria-pressed="true"]):hover {
+  border-color: var(--gold-dim);
+  background: var(--gold-wash);
+  transform: translateY(-3px);
+}
 
 .service[aria-pressed="true"] {
   border-color: var(--gold);
@@ -671,6 +743,70 @@ button { font: inherit; color: inherit; }
   padding: var(--s-15);
 }
 
+/* ---------------------------------------------------------- scarcity */
+
+.scarce {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-5);
+  padding: var(--s-2) var(--s-7);
+  border-radius: var(--r-1);
+  background: var(--blush-wash);
+  color: var(--blush);
+  font-size: var(--t-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.slots-title { display: flex; align-items: center; gap: var(--s-8); flex-wrap: wrap; }
+
+.day.free.low::after { background: var(--blush); }
+
+/* ---------------------------------------------------------- hold timer */
+
+.hold {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-10);
+  flex-wrap: wrap;
+  padding: var(--s-10) var(--s-15);
+  border: 1px dashed var(--gold-dim);
+  border-radius: var(--r-3);
+  background: var(--gold-wash);
+  font-size: var(--t-2);
+  color: var(--ink-soft);
+}
+
+.hold .clock {
+  font-weight: 500;
+  color: var(--gold);
+  letter-spacing: 0.06em;
+}
+
+.hold[data-expired="true"] {
+  border-color: var(--alert);
+  background: transparent;
+}
+
+.hold[data-expired="true"] .clock { color: var(--alert); }
+
+/* ---------------------------------------------------------- sparkle */
+
+.done { position: relative; }
+
+.sparkle {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.done > *:not(.sparkle) { position: relative; z-index: 2; }
+
 /* ---------------------------------------------------------- form */
 
 .fields { display: grid; gap: var(--s-15); }
@@ -785,7 +921,24 @@ button { font: inherit; color: inherit; }
   transition: background 0.2s, border-color 0.2s, color 0.2s, opacity 0.2s;
 }
 
-.btn-primary { background: var(--gold); color: var(--ground); }
+.btn-primary { background: var(--gold); color: var(--ground); position: relative; overflow: hidden; }
+
+.btn-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 42%, rgba(255, 255, 255, 0.34) 50%, transparent 58%);
+  transform: translateX(-100%);
+  animation: sweep 5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.btn-primary:disabled::after { display: none; }
+
+@keyframes sweep {
+  0%, 74% { transform: translateX(-100%); }
+  100%    { transform: translateX(100%); }
+}
 .btn-primary:hover:not(:disabled) { background: var(--gold-bright); }
 .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
 
@@ -874,11 +1027,18 @@ button { font: inherit; color: inherit; }
 .lashmark path {
   stroke-dasharray: var(--len);
   stroke-dashoffset: var(--len);
-  animation: draw 1.5s cubic-bezier(0.35, 0.6, 0.2, 1) both;
-  animation-delay: var(--delay);
+  animation:
+    draw 1.5s cubic-bezier(0.35, 0.6, 0.2, 1) var(--delay) both,
+    flow 3.6s ease-in-out calc(var(--delay) + 1.5s) infinite;
 }
 
 @keyframes draw { to { stroke-dashoffset: 0; } }
+
+/* a wave of brightness travels along the lash line, forever */
+@keyframes flow {
+  0%, 100% { stroke: var(--gold); }
+  50%      { stroke: var(--gold-bright); }
+}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -887,8 +1047,14 @@ button { font: inherit; color: inherit; }
     transition-duration: 0.001ms !important;
   }
   .lashmark path { stroke-dashoffset: 0; }
+  .ticker-track { animation: none; }
+  .btn-primary::after { display: none; }
 }
 </style>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track" id="tickerTrack"></div>
+</div>
 
 <div class="shell">
 
@@ -1052,6 +1218,28 @@ button { font: inherit; color: inherit; }
   var MONTHS = ["January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"];
 
+  /* ---------------------------------------------------- ticker */
+
+  function buildTicker() {
+    var track = document.getElementById("tickerTrack");
+    if (!track) return;
+
+    var next = nextOpeningAnywhere();
+    var items = [
+      next ? "Next availability <b>" + fmtDate(next.date) + "</b> in " + next.area
+           : "Fully booked for now \u2014 message me to join the waiting list",
+      "Mobile to <b>Birmingham \u00b7 Nuneaton \u00b7 Coventry</b>",
+      "All prices include travel to you",
+      "Fully qualified &amp; insured lash tech",
+      "\u00a3" + DEPOSIT + " deposit secures your slot",
+      "Aftercare guide with every set"
+    ];
+
+    // rendered twice so translateX(-50%) loops seamlessly
+    var one = items.map(function (t) { return '<span class="ticker-item">' + t + "</span>"; }).join("");
+    track.innerHTML = one + one;
+  }
+
   /* ---------------------------------------------------- state */
 
   var state = {
@@ -1064,6 +1252,7 @@ button { font: inherit; color: inherit; }
     details: { name: "", phone: "", email: "", address: "", postcode: "", history: "", notes: "" },
     consent: false,
     ref: null,
+    holdUntil: null,
     errors: {}
   };
 
@@ -1130,17 +1319,49 @@ button { font: inherit; color: inherit; }
     return seed(dateStr + time) % 100 < 34;
   }
 
-  function slotsFor(dateStr) {
-    var svc = service();
-    if (!svc || !dateStr) return [];
+  function shortestMins() {
+    var m = SERVICES[0].mins;
+    for (var i = 1; i < SERVICES.length; i++) if (SERVICES[i].mins < m) m = SERVICES[i].mins;
+    return m;
+  }
+
+  function slotsFor(dateStr, mins) {
+    if (!dateStr) return [];
+    if (mins == null) {
+      var svc = service();
+      if (!svc) return [];
+      mins = svc.mins;
+    }
     var out = [];
     for (var i = 0; i < START_TIMES.length; i++) {
       var t = START_TIMES[i];
       var p = t.split(":");
-      if (Number(p[0]) * 60 + Number(p[1]) + svc.mins > DAY_ENDS_AT) continue;
+      if (Number(p[0]) * 60 + Number(p[1]) + mins > DAY_ENDS_AT) continue;
       out.push({ time: t, taken: slotTaken(dateStr, t) });
     }
     return out;
+  }
+
+  function freeCount(dateStr, mins) {
+    var s = slotsFor(dateStr, mins), n = 0;
+    for (var i = 0; i < s.length; i++) if (!s[i].taken) n++;
+    return n;
+  }
+
+  // soonest opening across every area — drives the ticker
+  function nextOpeningAnywhere() {
+    var d = today();
+    d.setDate(d.getDate() + 1);
+    var mins = shortestMins();
+    for (var i = 0; i < 120; i++) {
+      for (var a = 0; a < AREAS.length; a++) {
+        if (AREAS[a].days.indexOf(d.getDay()) !== -1 && freeCount(iso(d), mins) > 0) {
+          return { date: iso(d), area: AREAS[a].name };
+        }
+      }
+      d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1);
+    }
+    return null;
   }
 
   function dayIsWorking(d) {
@@ -1251,7 +1472,7 @@ button { font: inherit; color: inherit; }
     setRow("sumDate", state.date ? fmtDate(state.date) : "");
     setRow("sumTime", state.time && svc ? state.time + "–" + endTime(state.time, svc.mins) : "");
 
-    document.getElementById("sumTotal").textContent = svc ? "£" + total() : "—";
+    animateTotal(svc ? total() : 0);
     document.getElementById("stepCount").textContent =
       state.step >= 4 ? "Booked" : "Step " + (state.step + 1) + " of 4";
 
@@ -1279,7 +1500,7 @@ button { font: inherit; color: inherit; }
         lastGroup = s.group;
       }
       html += '<button type="button" class="service" data-service="' + s.id + '" ' +
-        'aria-pressed="' + (state.serviceId === s.id) + '">' +
+        'style="--i:' + i + '" aria-pressed="' + (state.serviceId === s.id) + '">' +
         '<span class="service-name">' + esc(s.name) + "</span>" +
         '<span class="service-price num">\u00a3' + s.price + "</span>" +
         '<span class="service-meta"><span class="service-dur num">' + fmtMins(s.mins) + "</span>" + esc(s.note) + "</span>" +
@@ -1353,9 +1574,11 @@ button { font: inherit; color: inherit; }
       var ds = iso(d);
       var free = dayBookable(d);
       var working = dayIsWorking(d) && d >= today();
-      var cls = "day" + (free ? " free" : (working ? " full" : ""));
+      var left = free ? freeCount(ds) : 0;
+      var cls = "day" + (free ? " free" + (left <= 2 ? " low" : "") : (working ? " full" : ""));
       var label = DOW[d.getDay()] + " " + n + " " + MONTHS[v.getMonth()] +
-                  (free ? ", available" : (working ? ", fully booked" : ", not travelling"));
+                  (free ? ", " + left + (left === 1 ? " slot left" : " slots left")
+                        : (working ? ", fully booked" : ", not travelling"));
       html += "<" + (free ? "button" : "div") + ' class="' + cls + '" ' +
         (free ? 'type="button" data-date="' + ds + '" aria-pressed="' + (state.date === ds) + '" ' : "") +
         'aria-label="' + label + '"><span class="num">' + n + "</span></" + (free ? "button" : "div") + ">";
@@ -1369,14 +1592,18 @@ button { font: inherit; color: inherit; }
 
     html += '<div class="cal-key">' +
       '<span><span class="key-dot"></span>Free slots</span>' +
+      '<span><span class="key-dot" style="background:var(--blush)"></span>Almost gone</span>' +
       '<span><s>18</s>Fully booked</span>' +
       '<span><span class="key-line"></span>Not in ' + esc(area().name) + " that day</span></div>";
     return html;
   }
 
   function slotsHtml() {
+    var left = state.date ? freeCount(state.date) : 0;
     var html = '<div class="slots"><span class="slots-title">' +
-      (state.date ? fmtDate(state.date) : "Start times") + "</span>";
+      (state.date ? fmtDate(state.date) : "Start times") +
+      (state.date && left > 0 && left <= 2
+        ? '<span class="scarce">Only ' + left + " left</span>" : "") + "</span>";
 
     if (!state.date) {
       html += '<p class="slots-empty">Pick a date and your available start times will appear here.</p></div>';
@@ -1468,7 +1695,12 @@ button { font: inherit; color: inherit; }
         '<span class="eyebrow">Step 4</span>' +
         "<h2>Everything look right?</h2>" +
         "<p>Check it over, then confirm. You'll get a text from me to arrange the deposit — the slot is held for 24 hours until it's paid.</p>" +
-      '</div><div class="review">' +
+      "</div>" +
+      '<div class="hold" id="hold" data-expired="false">' +
+        '<span id="holdMsg">This slot is held while you finish booking.</span>' +
+        '<span class="clock num" id="holdClock">10:00</span>' +
+      "</div>" +
+      '<div class="review">' +
 
       '<div class="review-block"><span class="eyebrow">Appointment</span>' +
         row("Treatment", svc.label) +
@@ -1511,6 +1743,7 @@ button { font: inherit; color: inherit; }
   function stepDone() {
     var svc = service(), a = area(), d = state.details;
     return '<div class="card step"><div class="done">' +
+      '<canvas class="sparkle" id="sparkle" aria-hidden="true"></canvas>' +
       '<span class="done-mark" aria-hidden="true">' +
         '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg>' +
       "</span>" +
@@ -1551,9 +1784,113 @@ button { font: inherit; color: inherit; }
         esc(o.next) + "</button></span></div>";
   }
 
+  /* ---------------------------------------------------- live bits */
+
+  var timers = { hold: null, sparkle: null };
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function clearLive() {
+    if (timers.hold) { clearInterval(timers.hold); timers.hold = null; }
+    if (timers.sparkle) { cancelAnimationFrame(timers.sparkle); timers.sparkle = null; }
+  }
+
+  var HOLD_MS = 10 * 60 * 1000;
+
+  function startHold() {
+    var el = document.getElementById("holdClock");
+    var box = document.getElementById("hold");
+    if (!el || !box) return;
+    if (!state.holdUntil || state.holdUntil < Date.now()) state.holdUntil = Date.now() + HOLD_MS;
+
+    function tick() {
+      var ms = state.holdUntil - Date.now();
+      if (ms <= 0) {
+        el.textContent = "0:00";
+        box.dataset.expired = "true";
+        var msg = document.getElementById("holdMsg");
+        if (msg) msg.textContent = "Your hold has run out \u2014 the slot may still be free, so do carry on.";
+        clearInterval(timers.hold);
+        timers.hold = null;
+        return;
+      }
+      var total = Math.ceil(ms / 1000);
+      el.textContent = Math.floor(total / 60) + ":" + String(total % 60).padStart(2, "0");
+    }
+    tick();
+    timers.hold = setInterval(tick, 1000);
+  }
+
+  // a brief shower of gold, once, when the booking lands
+  function startSparkle() {
+    var cv = document.getElementById("sparkle");
+    if (!cv || reduced) return;
+    var box = cv.parentElement;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var w = box.clientWidth, h = box.clientHeight;
+    if (!w || !h) return;
+    cv.width = w * dpr; cv.height = h * dpr;
+    var ctx = cv.getContext("2d");
+    ctx.scale(dpr, dpr);
+
+    var gold = getComputedStyle(document.documentElement).getPropertyValue("--gold").trim() || "#a8a183";
+    var bits = [];
+    for (var i = 0; i < 70; i++) {
+      bits.push({
+        x: w / 2 + (Math.random() - 0.5) * w * 0.5,
+        y: h * 0.18 + (Math.random() - 0.5) * 40,
+        vx: (Math.random() - 0.5) * 1.5,
+        vy: -Math.random() * 2.2 - 0.4,
+        r: Math.random() * 1.8 + 0.6,
+        life: 0,
+        max: 90 + Math.random() * 70
+      });
+    }
+
+    function frame() {
+      ctx.clearRect(0, 0, w, h);
+      var alive = false;
+      for (var i = 0; i < bits.length; i++) {
+        var b = bits[i];
+        b.life++;
+        if (b.life > b.max) continue;
+        alive = true;
+        b.x += b.vx;
+        b.y += b.vy;
+        b.vy += 0.035;                       // gravity, so they arc and fall
+        ctx.globalAlpha = Math.max(0, 1 - b.life / b.max) * 0.9;
+        ctx.fillStyle = gold;
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      timers.sparkle = alive ? requestAnimationFrame(frame) : null;
+    }
+    frame();
+  }
+
+  // the total counts to its new value rather than snapping
+  var shownTotal = 0;
+  function animateTotal(to) {
+    var el = document.getElementById("sumTotal");
+    if (!el) return;
+    if (!to) { shownTotal = 0; el.textContent = "\u2014"; return; }
+    if (reduced) { shownTotal = to; el.textContent = "\u00a3" + to; return; }
+    var from = shownTotal, start = null;
+    function step(ts) {
+      if (start === null) start = ts;
+      var k = Math.min(1, (ts - start) / 420);
+      var v = Math.round(from + (to - from) * (1 - Math.pow(1 - k, 3)));
+      el.textContent = "\u00a3" + v;
+      if (k < 1) requestAnimationFrame(step); else shownTotal = to;
+    }
+    requestAnimationFrame(step);
+  }
+
   /* ---------------------------------------------------- render */
 
   function render() {
+    clearLive();
     var stage = document.getElementById("stage");
     var html;
     if (state.step === 0) html = stepService();
@@ -1565,6 +1902,8 @@ button { font: inherit; color: inherit; }
     stage.innerHTML = html;
     renderProgress();
     renderSummary();
+    if (state.step === 3) startHold();
+    if (state.step === 4) startSparkle();
     save();
   }
 
@@ -1649,7 +1988,7 @@ button { font: inherit; color: inherit; }
   function restart() {
     state.step = 0;
     state.serviceId = null; state.areaId = null; state.date = null; state.time = null;
-    state.consent = false; state.ref = null; state.errors = {};
+    state.consent = false; state.ref = null; state.errors = {}; state.holdUntil = null;
     state.details = { name: "", phone: "", email: "", address: "", postcode: "", history: "", notes: "" };
     state.view = startOfMonth(new Date());
     render();
@@ -1700,6 +2039,7 @@ button { font: inherit; color: inherit; }
 
     if (t.dataset.time) {
       state.time = t.dataset.time;
+      state.holdUntil = null;
       render();
       return;
     }
@@ -1759,6 +2099,7 @@ button { font: inherit; color: inherit; }
   /* ---------------------------------------------------- go */
 
   restore();
+  buildTicker();
   render();
 })();
 </script>
