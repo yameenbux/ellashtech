@@ -777,8 +777,8 @@ button { font: inherit; color: inherit; }
 .cal-nav { display: flex; gap: var(--s-5); }
 
 .cal-nav button {
-  width: 34px;
-  height: 34px;
+  width: 44px;
+  height: 44px;
   display: grid;
   place-items: center;
   background: transparent;
@@ -1074,7 +1074,7 @@ button { font: inherit; color: inherit; }
   background: var(--blush-wash);
 }
 
-.consent input { margin: var(--s-4) 0 0; accent-color: var(--gold); flex: none; width: 16px; height: 16px; }
+.consent input { margin: var(--s-2) 0 0; accent-color: var(--gold); flex: none; width: 22px; height: 22px; }
 .consent[data-invalid="true"] { border-color: var(--alert); }
 
 /* ---------------------------------------------------------- actions */
@@ -1183,7 +1183,13 @@ button { font: inherit; color: inherit; }
   color: var(--ink-faint);
 }
 
-.foot a { color: var(--gold); text-decoration: none; }
+.foot a {
+  color: var(--gold);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
 .foot a { transition: color var(--dur) var(--ease); }
 .foot a:hover { text-decoration: underline; color: var(--gold-bright); }
 
@@ -1192,12 +1198,13 @@ button { font: inherit; color: inherit; }
   border: 1px solid var(--line);
   border-radius: var(--r-3);
   color: var(--ink-faint);
-  padding: var(--s-7) var(--s-10);
+  padding: var(--s-15) var(--s-15);
   font-size: var(--t-xs);
   line-height: var(--lh-flat);
   letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   cursor: pointer;
+  min-height: 44px;
 }
 
 .theme-toggle:hover { border-color: var(--gold-dim); color: var(--ink); }
@@ -2271,11 +2278,14 @@ button { font: inherit; color: inherit; }
       }
     }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
 
-    // stagger only within a group of siblings, and cap it so a long list
-    // never leaves the last item waiting
+    // Only hide what is genuinely below the fold. render() re-runs on every
+    // click, so hiding something already on screen would flash it out and
+    // back in each time.
+    var fold = window.innerHeight;
     var seen = new Map();
     for (var i = 0; i < els.length; i++) {
       var el = els[i];
+      if (el.getBoundingClientRect().top < fold) continue;
       var n = seen.get(el.parentElement) || 0;
       seen.set(el.parentElement, n + 1);
       el.style.setProperty("--reveal-delay", Math.min(n, 5) * 45 + "ms");
