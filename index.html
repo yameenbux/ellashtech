@@ -477,6 +477,115 @@ button { font: inherit; color: inherit; }
   letter-spacing: 0.04em;
 }
 
+.service.has-photo {
+  grid-template-columns: 62px minmax(0, 1fr) auto;
+}
+
+.service-photo {
+  grid-row: 1 / span 2;
+  grid-column: 1;
+  width: 62px;
+  height: 62px;
+  border-radius: var(--r-4);
+  object-fit: cover;
+  background: var(--surface-2);
+  align-self: center;
+}
+
+.service.has-photo .service-name  { grid-column: 2; }
+.service.has-photo .service-meta  { grid-column: 2; }
+.service.has-photo .service-price { grid-column: 3; }
+
+/* ---------------------------------------------------------- notices */
+
+.notice {
+  display: grid;
+  gap: var(--s-8);
+  padding: var(--s-15);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--blush);
+  border-radius: var(--r-3);
+  background: var(--blush-wash);
+  font-size: var(--t-2);
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.notice strong { color: var(--ink); font-weight: 500; }
+.notice.warn { border-left-color: var(--alert); }
+.notice.good { border-left-color: var(--good); background: var(--gold-wash); }
+
+/* ---------------------------------------------------------- deposit */
+
+.pay {
+  display: grid;
+  gap: var(--s-10);
+  padding: var(--s-15);
+  border: 1px solid var(--gold-dim);
+  border-radius: var(--r-3);
+  background: var(--gold-wash);
+}
+
+.pay .hint { color: var(--ink-soft); }
+
+.pay-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-10);
+  flex-wrap: wrap;
+}
+
+.pay-amount {
+  font-size: var(--t-md);
+  font-weight: 500;
+  color: var(--gold);
+  letter-spacing: 0.01em;
+}
+
+.pay-btn {
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  padding: var(--s-10) var(--s-25);
+  border-radius: var(--r-3);
+  background: var(--gold);
+  color: var(--ground);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.pay-btn:hover { background: var(--gold-bright); }
+
+/* ---------------------------------------------------------- diary */
+
+.diary { display: grid; gap: var(--s-25); }
+
+.diary-list { display: grid; gap: var(--s-10); }
+
+.diary-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--s-5) var(--s-15);
+  padding: var(--s-15);
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  align-items: center;
+}
+
+.diary-when { font-weight: 500; }
+.diary-meta { grid-column: 1; font-size: var(--t-sm); color: var(--ink-soft); }
+.diary-ref  { grid-row: 1 / span 2; grid-column: 2; font-size: var(--t-sm); color: var(--gold); letter-spacing: 0.1em; }
+
+.block-list {
+  display: grid;
+  gap: var(--s-7);
+  grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+  margin-top: var(--s-10);
+}
+
+.blocked-day { text-decoration: line-through; color: var(--ink-faint); }
+
 .svc-group {
   display: flex;
   align-items: center;
@@ -1168,16 +1277,45 @@ button { font: inherit; color: inherit; }
     svg.innerHTML = out;
   })();
 
+  /* ====================================================================
+     CONFIG — everything a new client needs changing lives here.
+     ==================================================================== */
+
+  var CONFIG = {
+    // Where a completed booking is sent. Works on any normal host; the
+    // claude.ai artifact sandbox blocks outbound POSTs, so the page falls
+    // back to a prefilled email there. Swap for your own handler in time.
+    notifyEndpoint: "https://formsubmit.co/ajax/everythingwithyb@gmail.com",
+    notifyEmail: "everythingwithyb@gmail.com",
+
+    deposit: 10,
+    // Paste a Stripe Payment Link / Monzo.me / PayPal.me URL here and the
+    // deposit button goes live. Empty = show bank-transfer instructions.
+    paymentLink: "",
+
+    // A first set needs a patch test this many hours beforehand.
+    patchTestHours: 48,
+
+    // Reveals the diary at #diary. NOT security — it sits in the page
+    // source. Real protection needs a server. Fine for a private link.
+    diaryCode: "ellash",
+
+    // Infills are due this many weeks after a full set.
+    infillWeeks: 3
+  };
+
   /* ---------------------------------------------------- data */
 
+  // photo: set to an image URL (or a data: URI) and the card shows it.
+  // Left empty the card simply renders without one.
   var SERVICES = [
-    { id: "hybrid-full",    group: "Full sets",   name: "Hybrid",  label: "Hybrid full set",  price: 45, mins: 120,
+    { id: "hybrid-full",    group: "Full sets",   name: "Hybrid",  label: "Hybrid full set",  price: 45, mins: 120, photo: "",
       note: "Classic and volume mixed. Texture with a bit of fullness." },
-    { id: "russian-full",   group: "Full sets",   name: "Russian", label: "Russian full set", price: 50, mins: 135,
+    { id: "russian-full",   group: "Full sets",   name: "Russian", label: "Russian full set", price: 50, mins: 135, photo: "",
       note: "Handmade fans, 4\u20136D. The fullest, fluffiest finish." },
-    { id: "hybrid-infill",  group: "Infill sets", name: "Hybrid",  label: "Hybrid infills",   price: 35, mins: 75,
+    { id: "hybrid-infill",  group: "Infill sets", name: "Hybrid",  label: "Hybrid infills",   price: 35, mins: 75,  photo: "",
       note: "Top-up within 2\u20133 weeks, with at least 40% of your set still on." },
-    { id: "russian-infill", group: "Infill sets", name: "Russian", label: "Russian infills",  price: 40, mins: 90,
+    { id: "russian-infill", group: "Infill sets", name: "Russian", label: "Russian infills",  price: 40, mins: 90,  photo: "",
       note: "Top-up within 2\u20133 weeks, with at least 40% of your set still on." }
   ];
 
@@ -1209,9 +1347,14 @@ button { font: inherit; color: inherit; }
     ]}
   ];
 
+  var FIRST_TIME = "First time \u2014 never had lashes";
+
+  var LASH_HISTORY = ["", FIRST_TIME, "Yes, but not in the last 3 months",
+                      "Yes, I wear them regularly", "I currently have another tech's set on"];
+
   var START_TIMES = ["09:00", "11:00", "13:00", "15:00", "17:00", "19:00"];
   var DAY_ENDS_AT = 21 * 60;
-  var DEPOSIT = 10;
+  var DEPOSIT = CONFIG.deposit;
 
   var DOW = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   var DOW_LONG = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -1253,6 +1396,9 @@ button { font: inherit; color: inherit; }
     consent: false,
     ref: null,
     holdUntil: null,
+    sent: null,
+    payload: null,
+    diaryOpen: false,
     errors: {}
   };
 
@@ -1309,6 +1455,22 @@ button { font: inherit; color: inherit; }
     for (var i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); }
     return h >>> 0;
   }
+
+  function readStore(key, fallback) {
+    try { return JSON.parse(store.get(key) || fallback); } catch (e) { return JSON.parse(fallback); }
+  }
+
+  function blockedDays() { return readStore("ellash.blocked", "[]"); }
+
+  function isBlocked(dateStr) { return blockedDays().indexOf(dateStr) !== -1; }
+
+  function toggleBlock(dateStr) {
+    var b = blockedDays(), i = b.indexOf(dateStr);
+    if (i === -1) b.push(dateStr); else b.splice(i, 1);
+    store.set("ellash.blocked", JSON.stringify(b));
+  }
+
+  function savedBookings() { return readStore("ellash.diary", "[]"); }
 
   function bookedSlots() {
     try { return JSON.parse(store.get("ellash.booked") || "[]"); } catch (e) { return []; }
@@ -1375,6 +1537,7 @@ button { font: inherit; color: inherit; }
     min.setDate(min.getDate() + 1);           // needs a day's notice
     if (d < min) return false;
     if (!dayIsWorking(d)) return false;
+    if (isBlocked(iso(d))) return false;
     var s = slotsFor(iso(d));
     for (var i = 0; i < s.length; i++) if (!s[i].taken) return true;
     return false;
@@ -1405,6 +1568,61 @@ button { font: inherit; color: inherit; }
     return svc ? svc.price : 0;
   }
 
+  // A first set needs a patch test beforehand — insurers generally require it,
+  // and a reaction on the day is the worst possible outcome for both sides.
+  function needsPatchTest() {
+    return state.details.history === FIRST_TIME;
+  }
+
+  function hoursUntilAppointment() {
+    if (!state.date || !state.time) return Infinity;
+    var p = state.time.split(":");
+    var d = fromIso(state.date);
+    d.setHours(Number(p[0]), Number(p[1]), 0, 0);
+    return (d.getTime() - Date.now()) / 3600000;
+  }
+
+  function patchTestFits() {
+    return hoursUntilAppointment() >= CONFIG.patchTestHours;
+  }
+
+  // when the patch test has to happen by
+  function patchTestBy() {
+    var p = state.time.split(":");
+    var d = fromIso(state.date);
+    d.setHours(Number(p[0]), Number(p[1]), 0, 0);
+    d.setTime(d.getTime() - CONFIG.patchTestHours * 3600000);
+    return d;
+  }
+
+  function isFullSet() {
+    var svc = service();
+    return !!svc && svc.group === "Full sets";
+  }
+
+  // the matching infill for a full set, so a rebooking suggests the right thing
+  function infillFor(svc) {
+    if (!svc) return null;
+    for (var i = 0; i < SERVICES.length; i++) {
+      if (SERVICES[i].group === "Infill sets" && SERVICES[i].name === svc.name) return SERVICES[i];
+    }
+    return null;
+  }
+
+  // first bookable day at least infillWeeks out, in the same area
+  function suggestedInfillDate() {
+    var inf = infillFor(service());
+    var a = area();
+    if (!inf || !a || !state.date) return null;
+    var d = fromIso(state.date);
+    d.setDate(d.getDate() + CONFIG.infillWeeks * 7);
+    for (var i = 0; i < 28; i++) {
+      if (a.days.indexOf(d.getDay()) !== -1 && freeCount(iso(d), inf.mins) > 0) return iso(d);
+      d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1);
+    }
+    return null;
+  }
+
   function esc(s) {
     return String(s).replace(/[&<>"']/g, function (c) {
       return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c];
@@ -1414,6 +1632,7 @@ button { font: inherit; color: inherit; }
   /* ---------------------------------------------------- persistence */
 
   function save() {
+    if (state.step === "diary") return;
     store.set("ellash.draft", JSON.stringify({
       step: state.step, serviceId: state.serviceId, areaId: state.areaId,
       date: state.date, time: state.time, details: state.details, consent: state.consent
@@ -1456,7 +1675,7 @@ button { font: inherit; color: inherit; }
       html += '<li data-state="' + st + '"><span class="pip"></span>' + STEPS[i] + "</li>";
     }
     ol.innerHTML = html;
-    ol.style.display = state.step >= 4 ? "none" : "flex";
+    ol.style.display = (state.step === "diary" || state.step >= 4) ? "none" : "flex";
   }
 
   function setRow(id, value) {
@@ -1466,6 +1685,8 @@ button { font: inherit; color: inherit; }
   }
 
   function renderSummary() {
+    var card = document.querySelector(".summary");
+    if (card) card.hidden = state.step === "diary";
     var svc = service(), a = area();
     setRow("sumService", svc ? svc.label : "");
     setRow("sumArea", a ? a.name : "");
@@ -1474,7 +1695,8 @@ button { font: inherit; color: inherit; }
 
     animateTotal(svc ? total() : 0);
     document.getElementById("stepCount").textContent =
-      state.step >= 4 ? "Booked" : "Step " + (state.step + 1) + " of 4";
+      state.step === "diary" ? "Diary"
+        : state.step >= 4 ? "Booked" : "Step " + (state.step + 1) + " of 4";
 
     var note = document.getElementById("depositNote");
     note.textContent = svc
@@ -1499,8 +1721,9 @@ button { font: inherit; color: inherit; }
         html += '<div class="svc-group"><span>' + esc(s.group) + "</span></div>";
         lastGroup = s.group;
       }
-      html += '<button type="button" class="service" data-service="' + s.id + '" ' +
+      html += '<button type="button" class="service' + (s.photo ? " has-photo" : "") + '" data-service="' + s.id + '" ' +
         'style="--i:' + i + '" aria-pressed="' + (state.serviceId === s.id) + '">' +
+        (s.photo ? '<img class="service-photo" src="' + esc(s.photo) + '" alt="" loading="lazy">' : "") +
         '<span class="service-name">' + esc(s.name) + "</span>" +
         '<span class="service-price num">\u00a3' + s.price + "</span>" +
         '<span class="service-meta"><span class="service-dur num">' + fmtMins(s.mins) + "</span>" + esc(s.note) + "</span>" +
@@ -1675,10 +1898,15 @@ button { font: inherit; color: inherit; }
       field({ name: "postcode", label: "Postcode", placeholder: a ? postcodeHint(a.id) : "CV11", autocomplete: "postal-code" }) +
       field({ name: "address", label: "Address I'm coming to", placeholder: "House number and street", wide: true, autocomplete: "street-address" }) +
       field({ name: "history", label: "Have you had extensions before?", type: "select", wide: true,
-              options: ["", "First time — never had lashes", "Yes, but not in the last 3 months",
-                        "Yes, I wear them regularly", "I currently have another tech's set on"] }) +
+              options: LASH_HISTORY }) +
       field({ name: "notes", label: "Anything I should know?", type: "textarea", wide: true,
               placeholder: "Allergies, sensitive eyes, parking, pets, the style you're after…" }) +
+      "</div>" +
+      '<div class="notice" id="patchNotice"' + (needsPatchTest() ? "" : " hidden") + ">" +
+        "<span><strong>First set? You'll need a patch test.</strong> A small amount of " +
+        "adhesive goes behind your ear at least " + CONFIG.patchTestHours + " hours before, so any " +
+        "reaction shows up well away from your eyes. I'll sort it once you've booked — " +
+        "it takes two minutes.</span>" +
       "</div>" +
       actions({ next: "Review booking", back: "Back", ready: true, hint: "" }) + "</div>";
     return html;
@@ -1719,6 +1947,8 @@ button { font: inherit; color: inherit; }
         (d.notes ? row("Notes", d.notes) : "") +
       "</div>" +
 
+      patchTestHtml() +
+
       '<div class="review-block"><span class="eyebrow">Payment</span>' +
         row("Treatment", "£" + svc.price) +
         row("Deposit now", "£" + DEPOSIT) +
@@ -1757,10 +1987,65 @@ button { font: inherit; color: inherit; }
         row("Where", d.address + (d.postcode ? ", " + d.postcode.toUpperCase() : "") + " · " + a.name) +
         row("Deposit", "£" + DEPOSIT + " to hold the slot") +
       "</div>" +
+      sendStateHtml() +
+      depositHtml() +
+      patchTestHtml() +
+      rebookHtml() +
       aftercareHtml() +
       '<p class="hint">Need to change something? Message <a href="https://www.instagram.com/ellash_.x" target="_blank" rel="noopener" style="color:var(--gold)">@ellash_.x</a> — at least 48 hours before, please.</p>' +
       '<button type="button" class="btn btn-quiet" data-act="restart">Book another appointment</button>' +
       "</div></div>";
+  }
+
+  function sendStateHtml() {
+    if (state.sent === null) {
+      return '<div class="notice" id="sendState"><span>Sending your booking over\u2026</span></div>';
+    }
+    if (state.sent) {
+      return '<div class="notice good" id="sendState"><span><strong>Booking sent.</strong> ' +
+        "It's landed in the booking inbox and you'll get a text to confirm.</span></div>";
+    }
+    return '<div class="notice warn" id="sendState">' +
+      "<span><strong>I couldn't send this automatically.</strong> Nothing is lost \u2014 " +
+      'tap below and it will open a prefilled email with all your details.</span>' +
+      '<a class="pay-btn" style="justify-self:start" href="' + esc(mailtoFallback(state.payload || {})) +
+      '">Send my booking</a></div>';
+  }
+
+  function depositHtml() {
+    var svc = service();
+    return '<div class="pay">' +
+      '<div class="pay-row"><span>Deposit to secure the slot</span>' +
+        '<span class="pay-amount num">\u00a3' + DEPOSIT + "</span></div>" +
+      '<div class="pay-row"><span class="hint">\u00a3' + (svc.price - DEPOSIT) +
+        " due on the day, cash or transfer.</span>" +
+        (CONFIG.paymentLink
+          ? '<a class="pay-btn" href="' + esc(CONFIG.paymentLink) +
+            '" target="_blank" rel="noopener">Pay \u00a3' + DEPOSIT + " deposit</a>"
+          : '<span class="hint">I\'ll text you the payment details.</span>') +
+      "</div></div>";
+  }
+
+  function patchTestHtml() {
+    if (!needsPatchTest()) return "";
+    return '<div class="notice"><span><strong>Patch test first.</strong> ' +
+      "Because this is your first set, I'll patch test you by <strong>" +
+      esc(fmtDateLong(iso(patchTestBy()))) + "</strong> \u2014 at least " +
+      CONFIG.patchTestHours + " hours before your appointment. I'll be in touch to arrange it.</span></div>";
+  }
+
+  function rebookHtml() {
+    if (!isFullSet()) return "";
+    var inf = infillFor(service());
+    var when = suggestedInfillDate();
+    if (!inf || !when) return "";
+    return '<div class="notice"><span><strong>Keep them looking full.</strong> ' +
+      esc(inf.name) + " infills are due about " + CONFIG.infillWeeks +
+      " weeks on. I'm next in " + esc(area().name) + " on <strong>" + esc(fmtDate(when)) +
+      "</strong> \u2014 shall I pencil you in?</span>" +
+      '<button type="button" class="btn btn-quiet" style="justify-self:start" ' +
+      'data-act="rebook" data-svc="' + inf.id + '" data-when="' + when + '">' +
+      "Book my infill for " + esc(fmtDate(when)) + "</button></div>";
   }
 
   function aftercareHtml() {
@@ -1772,6 +2057,66 @@ button { font: inherit; color: inherit; }
       for (var j = 0; j < g.items.length; j++) html += "<li>" + esc(g.items[j]) + "</li>";
       html += "</ul></div>";
     }
+    return html + "</div></div>";
+  }
+
+  function stepDiary() {
+    if (!state.diaryOpen) {
+      return '<div class="card step"><div class="card-head">' +
+        '<span class="eyebrow">Private</span><h2>Your diary</h2>' +
+        "<p>Enter the code to see upcoming bookings and close off days you can't work.</p></div>" +
+        '<div class="field" data-invalid="' + (state.errors.code ? "true" : "false") + '">' +
+          '<label for="f_code">Access code</label>' +
+          '<input id="f_code" type="password" autocomplete="off" placeholder="Code">' +
+          '<span class="err">' + (state.errors.code ? esc(state.errors.code) : "") + "</span></div>" +
+        '<div class="actions"><a class="btn btn-quiet" href="#" data-act="leave-diary">Back to booking</a>' +
+        '<button type="button" class="btn btn-primary" data-act="diary-in">Open diary</button></div></div>';
+    }
+
+    var list = savedBookings().filter(function (b) { return b.date >= iso(today()); })
+      .sort(function (x, y) { return (x.date + x.time) < (y.date + y.time) ? -1 : 1; });
+
+    var html = '<div class="card step"><div class="diary">' +
+      '<div class="card-head"><span class="eyebrow">Private</span>' +
+      "<h2>Your diary</h2><p>" +
+      (list.length ? list.length + (list.length === 1 ? " booking" : " bookings") + " coming up."
+                   : "Nothing booked yet.") +
+      " Close a day off below and it disappears from the calendar straight away.</p></div>";
+
+    if (list.length) {
+      html += '<div class="diary-list">';
+      for (var i = 0; i < list.length; i++) {
+        var b = list[i];
+        html += '<div class="diary-row">' +
+          '<span class="diary-when">' + esc(fmtDate(b.date)) + " \u00b7 " + esc(b.time) +
+            "\u2013" + esc(endTime(b.time, b.mins)) + "</span>" +
+          '<span class="diary-meta">' + esc(b.treatment) + " \u00b7 " + esc(b.name) +
+            " \u00b7 " + esc(b.phone) + " \u00b7 " + esc(b.area) +
+            (b.patch ? " \u00b7 patch test needed" : "") + "</span>" +
+          '<span class="diary-ref num">' + esc(b.ref) + "</span></div>";
+      }
+      html += "</div>";
+    }
+
+    // next 21 travelling days, so she can close any of them
+    html += '<div><span class="eyebrow">Close off a day</span><div class="block-list">';
+    var d = today(), shown = 0;
+    for (var n = 0; n < 90 && shown < 21; n++) {
+      d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + (n === 0 ? 0 : 1));
+      var works = false;
+      for (var k = 0; k < AREAS.length; k++) if (AREAS[k].days.indexOf(d.getDay()) !== -1) works = true;
+      if (!works) continue;
+      shown++;
+      var ds = iso(d);
+      html += '<button type="button" class="slot' + (isBlocked(ds) ? " blocked-day" : "") +
+        '" data-block="' + ds + '" aria-pressed="' + isBlocked(ds) + '">' +
+        esc(fmtDate(ds)) + "</button>";
+    }
+    html += "</div></div>";
+
+    html += '<div class="actions"><a class="btn btn-quiet" href="#" data-act="leave-diary">Back to booking</a>' +
+      '<span class="hint">This code sits in the page source \u2014 it keeps a casual visitor out, nothing more.</span></div>';
+
     return html + "</div></div>";
   }
 
@@ -1893,7 +2238,8 @@ button { font: inherit; color: inherit; }
     clearLive();
     var stage = document.getElementById("stage");
     var html;
-    if (state.step === 0) html = stepService();
+    if (state.step === "diary") html = stepDiary();
+    else if (state.step === 0) html = stepService();
     else if (state.step === 1) html = stepWhen();
     else if (state.step === 2) html = stepDetails();
     else if (state.step === 3) html = stepConfirm();
@@ -1924,6 +2270,10 @@ button { font: inherit; color: inherit; }
     if (!/^[^@\s]+@[^@\s.]+\.[^@\s]+$/.test(d.email)) e.email = "Check the email address — that one won't reach you.";
     if (d.address.length < 5) e.address = "House number and street, so I know where to park.";
     if (!/^[a-z]{1,2}\d[a-z\d]?\s*\d?[a-z]{0,2}$/i.test(d.postcode)) e.postcode = "A UK postcode, e.g. CV11 4AB.";
+    if (needsPatchTest() && !patchTestFits()) {
+      e.history = "A first set needs a patch test " + CONFIG.patchTestHours +
+                  " hours beforehand. Go back and pick a date a little further out.";
+    }
     state.errors = e;
     for (var k in e) return false;
     return true;
@@ -1972,6 +2322,51 @@ button { font: inherit; color: inherit; }
     render();
   }
 
+  function bookingPayload() {
+    var svc = service(), a = area(), d = state.details;
+    return {
+      _subject: "New booking — " + svc.label + " — " + fmtDate(state.date) + " " + state.time,
+      reference: state.ref,
+      treatment: svc.label,
+      when: fmtDateLong(state.date) + ", " + state.time + "–" + endTime(state.time, svc.mins),
+      area: a.name,
+      name: d.name,
+      mobile: d.phone,
+      email: d.email,
+      address: d.address + (d.postcode ? ", " + d.postcode.toUpperCase() : ""),
+      lash_history: d.history || "not given",
+      patch_test: needsPatchTest()
+        ? "REQUIRED — by " + fmtDateLong(iso(patchTestBy())) + ", first set"
+        : "not needed",
+      notes: d.notes || "none",
+      price: "£" + svc.price,
+      deposit_due: "£" + DEPOSIT
+    };
+  }
+
+  // Posts the booking to the inbox. The claude.ai artifact sandbox blocks
+  // outbound POSTs, so this fails there by design and the page offers a
+  // prefilled email instead — on a normal host it just works.
+  function notify(payload) {
+    if (!CONFIG.notifyEndpoint) return Promise.resolve(false);
+    return fetch(CONFIG.notifyEndpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(payload)
+    }).then(function (r) { return r.ok; }).catch(function () { return false; });
+  }
+
+  function mailtoFallback(payload) {
+    var lines = [];
+    for (var k in payload) {
+      if (k === "_subject") continue;
+      lines.push(k.replace(/_/g, " ") + ": " + payload[k]);
+    }
+    return "mailto:" + CONFIG.notifyEmail +
+      "?subject=" + encodeURIComponent(payload._subject) +
+      "&body=" + encodeURIComponent(lines.join("\n"));
+  }
+
   function confirmBooking() {
     var taken = bookedSlots();
     var key = state.date + "T" + state.time;
@@ -1979,15 +2374,35 @@ button { font: inherit; color: inherit; }
     store.set("ellash.booked", JSON.stringify(taken));
 
     state.ref = "EL-" + String(seed(key + state.details.email) % 100000).padStart(5, "0");
+
+    var svc = service();
+    var diary = savedBookings();
+    diary.push({
+      ref: state.ref, date: state.date, time: state.time,
+      treatment: svc.label, mins: svc.mins, price: svc.price,
+      area: area().name, name: state.details.name, phone: state.details.phone,
+      patch: needsPatchTest()
+    });
+    store.set("ellash.diary", JSON.stringify(diary));
     state.step = 4;
     state.errors = {};
+    state.sent = null;
     render();
+
+    var payload = bookingPayload();
+    state.payload = payload;
+    notify(payload).then(function (ok) {
+      state.sent = ok;
+      var el = document.getElementById("sendState");
+      if (el) el.outerHTML = sendStateHtml();
+    });
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function restart() {
+  function restart(keepArea) {
+    var area0 = keepArea ? state.areaId : null;
     state.step = 0;
-    state.serviceId = null; state.areaId = null; state.date = null; state.time = null;
+    state.serviceId = null; state.areaId = area0; state.date = null; state.time = null;
     state.consent = false; state.ref = null; state.errors = {}; state.holdUntil = null;
     state.details = { name: "", phone: "", email: "", address: "", postcode: "", history: "", notes: "" };
     state.view = startOfMonth(new Date());
@@ -1998,8 +2413,9 @@ button { font: inherit; color: inherit; }
   /* ---------------------------------------------------- events */
 
   document.getElementById("stage").addEventListener("click", function (ev) {
-    var t = ev.target.closest("button");
+    var t = ev.target.closest("button, a[data-act]");
     if (!t) return;
+    if (t.tagName === "A" && t.dataset.act) ev.preventDefault();
 
     if (t.dataset.service) {
       state.serviceId = t.dataset.service;
@@ -2044,15 +2460,55 @@ button { font: inherit; color: inherit; }
       return;
     }
 
+    if (t.dataset.block) {
+      toggleBlock(t.dataset.block);
+      render();
+      return;
+    }
+
     var act = t.dataset.act;
     if (act === "next") goNext();
     else if (act === "back") { readDetailsIfOnForm(); goBack(); }
     else if (act === "restart") restart();
+    else if (act === "diary-in") {
+      var f = document.getElementById("f_code");
+      if (f && f.value.trim().toLowerCase() === CONFIG.diaryCode.toLowerCase()) {
+        state.diaryOpen = true;
+        state.errors = {};
+      } else {
+        state.errors.code = "That code isn't right.";
+      }
+      render();
+      return;
+    }
+    else if (act === "leave-diary") {
+      if (location.hash) location.hash = "";
+      state.step = 0; state.errors = {};
+      render();
+      return;
+    }
+    else if (act === "rebook") {
+      var svcId = t.dataset.svc, when = t.dataset.when;
+      restart(true);
+      state.serviceId = svcId;
+      state.date = when;
+      state.view = startOfMonth(fromIso(when));
+      state.step = 1;
+      render();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   });
 
   function readDetailsIfOnForm() { if (state.step === 2) readDetails(); }
 
   document.getElementById("stage").addEventListener("change", function (ev) {
+    if (ev.target.name === "history") {
+      state.details.history = ev.target.value;
+      var n = document.getElementById("patchNotice");
+      if (n) n.hidden = !needsPatchTest();
+      save();
+      return;
+    }
     if (ev.target.id === "consent") {
       state.consent = ev.target.checked;
       if (state.consent) delete state.errors.consent;
@@ -2098,8 +2554,22 @@ button { font: inherit; color: inherit; }
 
   /* ---------------------------------------------------- go */
 
+  function applyHash() {
+    if (location.hash.toLowerCase() === "#diary") {
+      state.step = "diary";
+      state.errors = {};
+      render();
+    }
+  }
+
+  window.addEventListener("hashchange", function () {
+    if (location.hash.toLowerCase() === "#diary") applyHash();
+    else if (state.step === "diary") { state.step = 0; render(); }
+  });
+
   restore();
   buildTicker();
   render();
+  applyHash();
 })();
 </script>

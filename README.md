@@ -48,6 +48,44 @@ every visit, and confirmed bookings are held in `localStorage` — book a slot
 and it shows as taken when you go back. Swapping in a real diary means
 replacing `slotTaken()` and `confirmBooking()` with API calls.
 
+## Configuration
+
+Everything a new client needs changing sits in one `CONFIG` block at the top of
+the script in `index.html`: notification endpoint and email, deposit amount,
+payment link, patch-test lead time, diary code, infill interval.
+
+## Where bookings go
+
+On confirming, the page POSTs the booking to `CONFIG.notifyEndpoint`. If that
+fails for any reason, it shows a **Send my booking** button that opens a
+prefilled email instead, so a booking is never silently lost. Both paths are
+tested.
+
+Two caveats:
+
+- **The claude.ai artifact sandbox blocks outbound POSTs**, so the demo link
+  always takes the email fallback. Self-hosted (or anywhere normal), the POST works.
+- The relay currently points at a third-party form service. It needs activating
+  once by clicking the link in its first email, and it receives customer names,
+  addresses and phone numbers — fine for testing, but production needs a proper
+  data-processing arrangement or a self-hosted handler.
+
+## The diary
+
+`#diary`, unlocked with `CONFIG.diaryCode`. Lists upcoming bookings with client
+contact details, and lets days be closed off — a blocked day leaves the customer
+calendar immediately.
+
+The code is client-side and sits in the page source. It keeps a casual visitor
+out; it is not security. Anything genuinely private needs a server.
+
+## Patch tests
+
+Selecting *"First time — never had lashes"* requires a patch test
+`CONFIG.patchTestHours` before the appointment. If the chosen slot is sooner
+than that, the booking is blocked with an explanation. The requirement is
+carried into the review screen, the confirmation and the booking email.
+
 ## Still to confirm with the client
 
 - **Appointment durations** — estimated, not supplied.
