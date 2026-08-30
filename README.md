@@ -54,6 +54,16 @@ Everything a new client needs changing sits in one `CONFIG` block at the top of
 the script in `index.html`: notification endpoint and email, deposit amount,
 payment link, patch-test lead time, diary code, infill interval.
 
+## Running it
+
+It is one self-contained file. Open `index.html` in a browser and it works —
+no build, no install, no dependencies.
+
+To put it somewhere Ellie's clients can reach, upload `index.html` to any
+static host (GitHub Pages, Netlify, Cloudflare Pages) and point the link at it.
+Hosting it properly is also what makes the booking email work, since the
+claude.ai artifact preview blocks outbound requests.
+
 ## Where bookings go
 
 On confirming, the page POSTs the booking to `CONFIG.notifyEndpoint`. If that
