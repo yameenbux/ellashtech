@@ -1426,15 +1426,15 @@ button { font: inherit; color: inherit; }
     // claude.ai artifact sandbox blocks outbound POSTs, so the page falls
     // back to a prefilled email there.
     //
-    // ANYONE CAN READ THIS. Once the address is activated, swap in the
-    // relay's aliased endpoint (a random token instead of the address) and
-    // blank notifyEmail — the inbox then works with no address in the page.
-    notifyEndpoint: "https://formsubmit.co/ajax/everythingwithyb@gmail.com",
+    // The relay's aliased endpoint. The token stands in for the inbox
+    // address, so no email address appears anywhere in this public page.
+    // Anyone reading the source can still post to it; if it ever collects
+    // rubbish, rotate the token with the relay and change this line.
+    notifyEndpoint: "https://formsubmit.co/ajax/93ec541f1b3daa0df7e38ae81d402a47",
 
-    // Optional. Only used for the "send it yourself" fallback when the POST
-    // is blocked. Leave empty to keep the address out of the page entirely;
-    // the fallback then points people at Instagram instead.
-    notifyEmail: "everythingwithyb@gmail.com",
+    // Deliberately empty: with no address here, a blocked POST points people
+    // at Instagram with their reference instead of opening a prefilled email.
+    notifyEmail: "",
 
     deposit: 10,
     // Paste a Stripe Payment Link / Monzo.me / PayPal.me URL here and the
