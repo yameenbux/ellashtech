@@ -1,4 +1,6 @@
+<!doctype html>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Book with èllash</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1215,6 +1217,19 @@ button { font: inherit; color: inherit; }
 }
 
 .theme-toggle:hover { border-color: var(--gold-dim); color: var(--ink); }
+
+/* A 7-column calendar sets a hard floor on the card's width: seven 40px
+   day cells plus gaps is 304px, and that floor propagates to every other
+   child of the card. On a 320px phone the frame around it has to give way,
+   or the whole card overflows. Below 390px the page tightens its margins
+   and the day cells shrink a little. At 375px this actually buys the
+   calendar more room than it had. */
+@media (max-width: 389px) {
+  .shell { padding-left: var(--s-10); padding-right: var(--s-10); }
+  .card { padding: var(--s-15); }
+  .cal-grid { gap: 3px; }
+  .day { min-height: 34px; }
+}
 
 /* ---------------------------------------------------------- motion */
 
