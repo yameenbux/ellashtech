@@ -17,7 +17,7 @@
   /* --- tokens: spacing (from design system) --- */
   --s-2:  2px;   --s-4:  4px;   --s-5:  5px;   --s-7:  7px;
   --s-8:  8px;   --s-10: 10px;  --s-15: 15px;  --s-25: 25px;
-  --s-40: 40px;  --s-55: 55px;  --s-80: 80px;
+  --s-20: 20px;  --s-40: 40px;  --s-55: 55px;  --s-80: 80px;
 
   /* --- tokens: radii (from design system) --- */
   --r-1: 4px;  --r-4: 8px;  --r-3: 10px;  --r-2: 20px;
@@ -432,7 +432,7 @@ button { font: inherit; color: inherit; }
   .card { padding: var(--s-40); }
 }
 
-.card-head { display: grid; gap: var(--s-7); }
+.card-head { display: grid; gap: var(--s-15); }
 
 .card-head h2 {
   font-family: var(--font-display);
@@ -450,7 +450,7 @@ button { font: inherit; color: inherit; }
 
 /* ---------------------------------------------------------- services */
 
-.services { display: grid; gap: var(--s-10); }
+.services { display: grid; gap: var(--s-20); }
 
 .service {
   display: grid;
@@ -602,7 +602,7 @@ button { font: inherit; color: inherit; }
 
 .diary { display: grid; gap: var(--s-25); }
 
-.diary-list { display: grid; gap: var(--s-10); }
+.diary-list { display: grid; gap: var(--s-15); }
 
 .diary-row {
   display: grid;
@@ -620,9 +620,9 @@ button { font: inherit; color: inherit; }
 
 .block-list {
   display: grid;
-  gap: var(--s-7);
+  gap: var(--s-8);
   grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
-  margin-top: var(--s-10);
+  margin-top: var(--s-15);
 }
 
 .blocked-day { text-decoration: line-through; color: var(--ink-faint); }
@@ -631,7 +631,7 @@ button { font: inherit; color: inherit; }
   display: flex;
   align-items: center;
   gap: var(--s-15);
-  margin-top: var(--s-10);
+  margin-top: var(--s-25);
 }
 
 .svc-group:first-child { margin-top: 0; }
@@ -676,7 +676,7 @@ button { font: inherit; color: inherit; }
 
 @media (min-width: 720px) {
   /* the middle group is the long one — let it run full height beside the two short ones */
-  .aftercare-groups { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-15); align-items: start; }
+  .aftercare-groups { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-20); align-items: start; }
   .ac-group:nth-child(1) { grid-column: 1; grid-row: 1; }
   .ac-group:nth-child(2) { grid-column: 2; grid-row: 1 / span 2; }
   .ac-group:nth-child(3) { grid-column: 1; grid-row: 2; }
@@ -712,7 +712,7 @@ button { font: inherit; color: inherit; }
 
 /* ---------------------------------------------------------- areas */
 
-.areas { display: grid; gap: var(--s-10); grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+.areas { display: grid; gap: var(--s-15); grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
 
 .area {
   padding: var(--s-15);
@@ -1025,7 +1025,7 @@ button { font: inherit; color: inherit; }
 
 /* ---------------------------------------------------------- review */
 
-.review { display: grid; gap: var(--s-15); }
+.review { display: grid; gap: var(--s-25); }
 
 .review-block {
   border: 1px solid var(--line);
@@ -1035,7 +1035,7 @@ button { font: inherit; color: inherit; }
   gap: var(--s-8);
 }
 
-.review-block .eyebrow { margin-bottom: var(--s-2); }
+.review-block .eyebrow { margin-bottom: var(--s-8); }
 
 .rrow {
   display: grid;
@@ -1160,7 +1160,7 @@ button { font: inherit; color: inherit; }
 .foot {
   grid-column: 1 / -1;
   border-top: 1px solid var(--line);
-  padding-top: var(--s-25);
+  padding-top: var(--s-40);
   display: flex;
   flex-wrap: wrap;
   gap: var(--s-15);
