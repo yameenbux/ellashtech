@@ -48,11 +48,75 @@ every visit, and confirmed bookings are held in `localStorage` — book a slot
 and it shows as taken when you go back. Swapping in a real diary means
 replacing `slotTaken()` and `confirmBooking()` with API calls.
 
+## Configuration
+
+Everything a new client needs changing sits in one `CONFIG` block at the top of
+the script in `index.html`: notification endpoint and email, deposit amount,
+payment link, patch-test lead time, diary code, infill interval.
+
+## Where bookings go
+
+On confirming, the page POSTs the booking to `CONFIG.notifyEndpoint`. If that
+fails for any reason, it shows a **Send my booking** button that opens a
+prefilled email instead, so a booking is never silently lost. Both paths are
+tested.
+
+Two caveats:
+
+- **The claude.ai artifact sandbox blocks outbound POSTs**, so the demo link
+  always takes the email fallback. Self-hosted (or anywhere normal), the POST works.
+- The relay currently points at a third-party form service. It needs activating
+  once by clicking the link in its first email, and it receives customer names,
+  addresses and phone numbers — fine for testing, but production needs a proper
+  data-processing arrangement or a self-hosted handler.
+
+## The diary
+
+`#diary`, unlocked with `CONFIG.diaryCode`. Lists upcoming bookings with client
+contact details, and lets days be closed off — a blocked day leaves the customer
+calendar immediately.
+
+The code is client-side and sits in the page source. It keeps a casual visitor
+out; it is not security. Anything genuinely private needs a server.
+
+## Patch tests
+
+Selecting *"First time — never had lashes"* requires a patch test
+`CONFIG.patchTestHours` before the appointment. If the chosen slot is sooner
+than that, the booking is blocked with an explanation. The requirement is
+carried into the review screen, the confirmation and the booking email.
+
 ## Still to confirm with the client
 
 - **Appointment durations** — estimated, not supplied.
 - **The £10 deposit and 48-hour cancellation terms** — placeholders. The wording
   lives in `stepConfirm()` and the `DEPOSIT` constant.
+
+## Photos
+
+Each treatment carries its own close-up, matched to the treatment by the
+client's own Instagram captions:
+
+| Treatment | From the post captioned |
+|---|---|
+| Hybrid full set | "DOLL eye light hybrids — smaller sizes (9mm–12mm)" |
+| Russian full set | "Russians on this doll" |
+| Hybrid infills | "14mm–9mm Cat-eye hybrids" |
+| Russian infills | "3D pre made fans 13mm–9mm" |
+ Hybrids read visibly
+wispier than the Russians side by side, which is the point: it is the only
+honest way to explain what the extra £5 buys.
+
+They are cropped square on the lash line (Instagram chrome removed), resized
+to 240px and embedded as data URIs — about 12 KB each, 50 KB in total, so the
+page stays self-contained with no external requests.
+
+To swap one, replace the `photo:` value on that treatment in `SERVICES`. A
+treatment with an empty `photo` simply renders without one.
+
+**These are identifiable clients.** They are already public on the business's
+own Instagram, but a booking page is a different use, and permission is the
+client's to obtain before this goes live.
 
 ## Live touches
 
