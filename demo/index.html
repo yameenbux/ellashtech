@@ -2,33 +2,33 @@
 <html lang="en-GB">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Book with Aurelle</title>
+<title>Séraphine Atelier</title>
 <meta name="description" content="A sample booking page for a mobile beauty studio: choose a treatment, pick a date and time, confirm. Built by YSB Designs.">
 <meta name="theme-color" content="#171315">
 
 <!-- Shared by DM more than it is searched for, so the preview card matters. -->
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Aurelle">
-<meta property="og:title" content="Aurelle — booking page sample">
+<meta property="og:site_name" content="Séraphine">
+<meta property="og:title" content="Séraphine — booking page sample">
 <meta property="og:description" content="A working sample of a booking page for a mobile beauty business. Your branding, your treatments, your prices.">
 <meta property="og:url" content="https://ellashtech.ysbdesigns.uk/demo/">
 <meta property="og:image" content="https://ellashtech.ysbdesigns.uk/demo/share.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Aurelle — booking page sample">
+<meta property="og:image:alt" content="Séraphine — booking page sample">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Aurelle — booking page sample">
+<meta name="twitter:title" content="Séraphine — booking page sample">
 <meta name="twitter:description" content="A working sample of a booking page for a mobile beauty business.">
 <meta name="twitter:image" content="https://ellashtech.ysbdesigns.uk/demo/share.jpg">
 
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23171315'/%3E%3Cg stroke='%23c99aa5' fill='none' stroke-linecap='round'%3E%3Cpath d='M5 23 Q16 26 27 23' stroke-width='1.6'/%3E%3Cpath d='M8 23 Q8 16 10 12' stroke-width='1.4'/%3E%3Cpath d='M13 23 Q13 14 15 10' stroke-width='1.6'/%3E%3Cpath d='M18 23 Q19 14 22 11' stroke-width='1.6'/%3E%3Cpath d='M23 23 Q25 17 27 14' stroke-width='1.4'/%3E%3C/g%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Jost:wght@300;400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Jost:wght@300;400;500;600&display=swap">
 
 <style>
 /* ============================================================
-   Aurelle — sample booking page
+   Séraphine — sample booking page
    Structure (spacing / radii / type scale) from the supplied
    design tokens, in the blush palette from that same system.
    Dark-first: :root is the dark set; light is redefined for
@@ -56,7 +56,7 @@
      which read about 15% larger than their nominal size.
      No size is used outside this list. */
   --t-xs: 12px;  --t-sm: 13px;  --t-2:  15px;  --t-1:  17px;
-  --t-md: 21px;  --t-3:  34px;  --t-xl: 44px;
+  --t-md: 21px;  --t-lg: 26px;  --t-3:  34px;  --t-xl: 44px;
 
   /* --- line height: one value per size band --- */
   --lh-flat:    1;      /* single-line labels and figures */
@@ -72,27 +72,35 @@
   --ls-caps:      0.12em;   /* uppercase UI labels */
   --ls-caps-wide: 0.18em;   /* uppercase display labels: ticker, reference */
 
-  --font-display: 'Italiana', 'Didot', 'Bodoni MT', Georgia, serif;
+  --font-display: 'Cormorant Garamond', 'Didot', 'Bodoni MT', Georgia, serif;
   --font-body: 'Jost', 'Futura', 'Century Gothic', system-ui, sans-serif;
 
   /* --- identity palette: dark (default) --- */
-  --ground:      #171315;
-  --surface:     #201b1e;
-  --surface-2:   #292227;
-  --line:        #393136;
-  --line-strong: #50454c;
+  --ground:      #0d0a0c;
+  --surface:     #171015;
+  --surface-2:   #1e161b;
+  --line:        #2c2128;
+  --line-strong: #42313a;
 
-  --ink:         #f8f1f4;
-  --ink-soft:    #cabdc3;
-  --ink-faint:   #a2939a;
+  --ink:         #f6eee9;
+  --ink-soft:    #cbb7ae;
+  --ink-faint:   #9d8880;
 
-  --gold:        #c99aa5;
-  --gold-bright: #e4c0c9;
-  --gold-dim:    #7d616a;
-  --gold-wash:   rgba(201, 154, 165, 0.12);
+  /* the accent is a metal, so it has three stops, not one */
+  --metal-deep:  #a9705e;
+  --metal:       #dda98f;
+  --metal-light: #f3dfcb;
+  --foil: linear-gradient(100deg,
+            var(--metal-deep) 0%, var(--metal-light) 34%,
+            var(--metal) 50%, var(--metal-light) 66%, var(--metal-deep) 100%);
 
-  --blush:       #a8a183;
-  --blush-wash:  rgba(168, 161, 131, 0.16);
+  --gold:        #dda98f;
+  --gold-bright: #f3dfcb;
+  --gold-dim:    #8a5a4b;
+  --gold-wash:   rgba(221, 169, 143, 0.10);
+
+  --blush:       #c98f9e;
+  --blush-wash:  rgba(201, 143, 158, 0.13);
 
   --good:        #8fae87;
   --alert:       #d69a8f;
@@ -106,61 +114,9 @@
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);   /* ease-out; y never exceeds 1 */
 }
 
-/* light: system preference, unless the viewer explicitly chose dark */
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) {
-    --ground:      #f8f1f4;
-    --surface:     #ffffff;
-    --surface-2:   #fbf3f7;
-    --line:        #e7dae2;
-    --line-strong: #cfb9c4;
-
-    --ink:         #393939;
-    --ink-soft:    #5f4f56;
-    --ink-faint:   #6f5c64;
-
-    --gold:        #8e5c69;
-    --gold-bright: #6d434e;
-    --gold-dim:    #c9a8b3;
-    --gold-wash:   rgba(179, 132, 143, 0.10);
-
-    --blush:       #6b6656;
-    --blush-wash:  rgba(231, 218, 226, 0.65);
-
-    --good:        #4f6b48;
-    --alert:       #9a4f42;
-
-    --shadow: 0 var(--s-10) var(--s-40) rgba(63, 32, 33, 0.10);
-    --ring: 0 0 0 3px rgba(95, 90, 65, 0.32);
-  }
-}
-
-/* light: explicit viewer choice, beats a dark OS */
-:root[data-theme="light"] {
-  --ground:      #f8f1f4;
-  --surface:     #ffffff;
-  --surface-2:   #fbf3f7;
-  --line:        #e7dae2;
-  --line-strong: #cfb9c4;
-
-  --ink:         #393939;
-  --ink-soft:    #5f4f56;
-  --ink-faint:   #6f5c64;
-
-  --gold:        #8e5c69;
-  --gold-bright: #6d434e;
-  --gold-dim:    #c9a8b3;
-  --gold-wash:   rgba(179, 132, 143, 0.10);
-
-  --blush:       #6b6656;
-  --blush-wash:  rgba(231, 218, 226, 0.65);
-
-  --good:        #4f6b48;
-  --alert:       #9a4f42;
-
-  --shadow: 0 var(--s-10) var(--s-40) rgba(63, 32, 33, 0.10);
-  --ring: 0 0 0 3px rgba(95, 90, 65, 0.32);
-}
+/* This page commits to a single world — a lit room after dark — so there is
+   no light variant. Every colour is painted explicitly and the page holds on
+   any host background. */
 
 * { box-sizing: border-box; }
 
@@ -196,6 +152,54 @@ button { font: inherit; color: inherit; }
 }
 
 .num { font-variant-numeric: tabular-nums; }
+
+/* ---------------------------------------------------------- atmosphere */
+
+/* A slow warm light drifting behind everything, drawn at a tiny resolution
+   and blown up, so it costs almost nothing and reads as soft by nature. */
+.ambient {
+  position: fixed;
+  inset: -12%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.44;
+}
+
+.ambient canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  filter: blur(58px) saturate(1.15);
+}
+
+/* Grain stops the gradients banding and gives the dark a printed texture. */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.shell, .ticker { position: relative; z-index: 2; }
+
+/* Foil: a metal reads as metal only when a gradient runs across it. */
+.foil {
+  background: var(--foil);
+  background-size: 260% 100%;
+  background-position: 130% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: foil 11s ease-in-out infinite;
+}
+
+@keyframes foil {
+  0%, 68%, 100% { background-position: 130% 0; }
+  88%           { background-position: -30% 0; }
+}
 
 /* ---------------------------------------------------------- ticker */
 /* design.md interaction evidence: transform matrix(1,0,0,1,-50,0) — a
@@ -308,9 +312,12 @@ button { font: inherit; color: inherit; }
 
 .wordmark {
   font-family: var(--font-display);
-  font-size: var(--t-xl);
-  line-height: var(--lh-display);
-  letter-spacing: var(--ls-display);
+  font-weight: 300;
+  font-size: var(--t-3);
+  line-height: var(--lh-title);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-indent: 0.22em;          /* balances the trailing tracking */
   color: var(--ink);
 }
 
@@ -357,7 +364,8 @@ button { font: inherit; color: inherit; }
 
 .summary-title {
   font-family: var(--font-display);
-  font-size: var(--t-md);
+  font-weight: 400;
+  font-size: var(--t-lg);
   line-height: var(--lh-head);
   letter-spacing: var(--ls-normal);
   color: var(--ink);
@@ -475,9 +483,10 @@ button { font: inherit; color: inherit; }
 
 .card-head h2 {
   font-family: var(--font-display);
-  font-size: var(--t-3);
+  font-weight: 300;
+  font-size: var(--t-xl);
   line-height: var(--lh-title);
-  letter-spacing: var(--ls-display);
+  letter-spacing: -0.015em;
 }
 
 .card-head p {
@@ -503,14 +512,31 @@ button { font: inherit; color: inherit; }
   border: 1px solid var(--line);
   border-radius: var(--r-3);
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0px));
   transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease),
-              transform var(--dur) var(--ease);
+              transform var(--dur-slow) var(--ease), box-shadow var(--dur-slow) var(--ease);
 }
+
+/* light catching the surface where the pointer is */
+.service::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 0%),
+              rgba(243, 223, 203, 0.10), transparent 62%);
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease);
+}
+
+.service:hover::before { opacity: 1; }
 
 .service:not([aria-pressed="true"]):hover {
   border-color: var(--gold-dim);
   background: var(--gold-wash);
-  transform: translateY(-3px);
+  --lift: -3px;
 }
 
 /* the photo is the product — let it come forward with its card */
@@ -518,9 +544,9 @@ button { font: inherit; color: inherit; }
 .service:hover .service-photo { transform: scale(1.05); filter: brightness(1.06); }
 
 .service[aria-pressed="true"] {
-  border-color: var(--gold);
+  border-color: transparent;
   background: var(--gold-wash);
-  box-shadow: inset 0 0 0 1px var(--gold);
+  box-shadow: inset 0 0 0 1px var(--metal), 0 18px 50px -28px var(--metal);
 }
 
 .service-name { font-size: var(--t-1); font-weight: 500; }
@@ -680,7 +706,8 @@ button { font: inherit; color: inherit; }
 
 .svc-group span {
   font-family: var(--font-display);
-  font-size: var(--t-md);
+  font-weight: 400;
+  font-size: var(--t-lg);
   line-height: var(--lh-head);
   letter-spacing: var(--ls-normal);
   color: var(--ink);
@@ -735,6 +762,7 @@ button { font: inherit; color: inherit; }
 
 .ac-group h3 {
   font-family: var(--font-display);
+  font-weight: 400;
   font-size: var(--t-md);
   line-height: var(--lh-head);
   letter-spacing: var(--ls-normal);
@@ -776,9 +804,9 @@ button { font: inherit; color: inherit; }
 }
 
 .area[aria-pressed="true"] {
-  border-color: var(--gold);
+  border-color: transparent;
   background: var(--gold-wash);
-  box-shadow: inset 0 0 0 1px var(--gold);
+  box-shadow: inset 0 0 0 1px var(--metal), 0 16px 44px -30px var(--metal);
 }
 
 .area-name { font-size: var(--t-1); font-weight: 500; }
@@ -809,7 +837,8 @@ button { font: inherit; color: inherit; }
 
 .cal-month {
   font-family: var(--font-display);
-  font-size: var(--t-md);
+  font-weight: 400;
+  font-size: var(--t-lg);
   line-height: var(--lh-head);
   letter-spacing: var(--ls-normal);
 }
@@ -1181,7 +1210,8 @@ button { font: inherit; color: inherit; }
 
 .done h2 {
   font-family: var(--font-display);
-  font-size: var(--t-3);
+  font-weight: 300;
+  font-size: var(--t-xl);
   line-height: var(--lh-title);
   letter-spacing: var(--ls-display);
 }
@@ -1307,8 +1337,13 @@ button { font: inherit; color: inherit; }
   .ticker-track { animation: none; }
   .btn-primary::after { display: none; }
   .reveal, .reveal.is-in { opacity: 1; transform: none; }
+  .foil { animation: none; background-position: 50% 0; }
+  .ambient { opacity: 0.4; }
 }
 </style>
+
+<div class="ambient" aria-hidden="true"><canvas id="ambient" width="34" height="22"></canvas></div>
+<div class="grain" aria-hidden="true"></div>
 
 <div class="ticker" aria-hidden="true">
   <div class="ticker-track" id="tickerTrack"></div>
@@ -1320,11 +1355,11 @@ button { font: inherit; color: inherit; }
    <div class="rail-inner">
     <div class="brand">
       <svg class="lashmark" viewBox="0 0 300 96" aria-hidden="true" id="lashmark"></svg>
-      <h1 class="wordmark">Aurelle</h1>
+      <h1 class="wordmark foil">Séraphine</h1>
       <span class="sample-tag">Sample page</span>
       <p class="brand-role">
-        Lashes, brows and nails, brought to your door.
-        A mobile studio that comes to you.
+        Lashes, brows and nails, in your own front room.
+        A mobile atelier, by appointment across the city.
       </p>
     </div>
 
@@ -1341,7 +1376,7 @@ button { font: inherit; color: inherit; }
       </dl>
       <div class="summary-total">
         <span class="eyebrow">Total</span>
-        <span class="amount num" id="sumTotal">—</span>
+        <span class="amount num foil" id="sumTotal">—</span>
       </div>
       <p class="deposit-note" id="depositNote">
         A £10 deposit secures the slot and comes off your total on the day.
@@ -1356,9 +1391,8 @@ button { font: inherit; color: inherit; }
   </main>
 
   <footer class="foot">
-    <span>Aurelle · Mobile beauty studio · A sample booking page, not a real business</span>
+    <span>Séraphine · Mobile beauty atelier · A sample booking page, not a real business</span>
     <span style="display:flex; gap:var(--s-15); align-items:center;">
-      <button class="theme-toggle" id="themeToggle" type="button">Theme</button>
     </span>
   </footer>
 
@@ -1451,23 +1485,23 @@ button { font: inherit; color: inherit; }
   // Left empty the card simply renders without one.
   var SERVICES = [
     { id: "classic-full", group: "Full sets",   name: "Classic", label: "Classic full set", price: 40, mins: 105,
-      photo: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCADwAPADASIAAhEBAxEB/8QAGgABAQEBAQEBAAAAAAAAAAAAAgEAAwYFCP/EACIQAQEBAQACAQQDAQAAAAAAAAABEQIDMUESIVFhEyJSMv/EABcBAQEBAQAAAAAAAAAAAAAAAAABAwL/xAAWEQEBAQAAAAAAAAAAAAAAAAAAEQH/2gAMAwEAAhEDEQA/AP0izMrVmZgZmYGSqgMlUaKlClQoDRpUKKNGlQqKNGlRorJVSgjMwMzMDIqUVmZgSs1YH2mRlZKza2gzMwMioDUaVGijQp0KA0KdCoo0KdCijRpUaKyKgIzMDMzaDIzCs2owMzID7TI2qzVk1RGbWYGZk0VaNVKA0KdCgNCnQqKNCnQoo0aVGisiiDNqMDM2oKqamtoNrJqaCto62g+1raOtqsz1tHV0CbR1dBWTW0GqM1BKFKjQGhTo0UKFOjUUKNKjRUqVaNBkajaKupqWpoFqaOpoFqampoq2to6mg+3ramsrMtXQXQLV0JV0Ql0dbQXWTWBKlWjQSjSo0UKNKhUUaFKjRUo2rRtBLRta0bRV1NS0bQLU0bRtFK1NC1NFPU0LW0H39bRXVZFraOroE2jq6BauiwFrCwKlZKCUaVGgNClQoo0KXQVFG0LS6rnaK1o2taFoq2jaNo2gVo2paNopWpoWpainqaGpoPSNqa2umS6oqBauhqgWqOsIWtqa2grJqA1GrRoDQpWh0KNrn1StDqoodULVtDqip1QtbqhaK1o2paNo6W0bUtHUC1NHU0UtTR1NB6hkbVYquprAqiqi6o6wFq6GyfKXycz5EdNS1yvl/EqXydfHIsdbQtc715L6mDf5P0Dpa59Ubz3/AKc7z3/oU+q5dVOvrnq659Xv9IpWuXVTrvr8OfXk/MosK0LRvkg3qX1RWtG1rRorWpa1o2oq6OtUFXU1NQHq2ZLZPdVgrBfJPj7p/fr9QHTc9jfJzB/j33bSnHM+AT6+uv8AmNnd93DZQJ4/zbSnHM+FYG+0a1NTQW0bWtG0EtDqra59UUeq52l1Q6qKHVc+i6oUdYHUn4cuuZ8fZ06Ciud5s9Ubep7mug1FD658/Zti9SULxBSFM6nqp9We4BM0svpgen/v1+mnj/1ddGVgkknqKzAyazKNrMmgqayA1qayUGtG1rRtBLXPqla59VFHqh1Stc+qOh6oVaNFChToUVKNIRUo0kRUTCQAvMqZZ6ptgPVMzKwZFQGZk0GqM1UaoyUGqWtRtBrQtW0LRUtc6VCoo9Vz6p9VzoqUKVCijRpVKKKUqgooeIA4hY2IotisD07MysGRagMK1AZKtQGoqlUSjVo0UaFKhUBo1aNFCjVo0dDRpUaCUaSCi2LiCoysCJhY2AONhYmA9IzMMUrNWBKipQRqyAiVaNUSjVqUUKFKjUUaFKhRRoUqNFSotSijWWoCMrAONi4wqITALEmA9EmqgxZKoisi1Aao1QREVKqjRpUKA0KVGoo0KXQUUaNKjRUqValFRqzAjK2AjLiAzYzAmNisD0FRqwySotQVqjVqCCQg1SrUoDQp0KAUaVGih0FOjRQqValFGstQUWWoDMzAzMwMzMDY2MwP/9k=", note: "One extension per natural lash. Soft, everyday definition." },
+      photo: "data:image/jpeg;base64,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", note: "One extension per natural lash. Soft, everyday definition." },
     { id: "hybrid-full",  group: "Full sets",   name: "Hybrid",  label: "Hybrid full set",  price: 45, mins: 120,
-      photo: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCADwAPADASIAAhEBAxEB/8QAGgAAAwEBAQEAAAAAAAAAAAAAAAECAwQFBv/EACIQAQEBAQEAAQQDAQEAAAAAAAABEQISQQMTMVEhMmFSIv/EABcBAQEBAQAAAAAAAAAAAAAAAAABAgX/xAAVEQEBAAAAAAAAAAAAAAAAAAAAEf/aAAwDAQACEQMRAD8A+9B4MadEgAAAAAAAAAAAAAAAAAAAAA4RwDOEcA4cKKgHFQocBUMoqCGZGDiB4WCgsMAkGQAAAAAAAAAAAAAAAAAyUAMoqAcOFFQDioUOCKhwooBDAByYSsAqSVhARHQCQZAAAAAAAAAAAAAMBDBwAZRUA4cKKgHFQoqCHDhRUAGIAc2Fi8LARhLsKwEFVUhSKnQCQdIAAAAAAAAAojAGDgBUKKgCKhRUA4cEOCGYhwAeCGDDCsaYVgM7E2NLCsBnYmtLE2AgquxOCkWHgBIUASDMCwwABwHAEOA4AioUioAioUVBDhwQ4BwwYAYYBNhWNMKwGVibGtibAZWJsa2JsBnYmxpYVgM8LF2FgJwsXhYKnBisGAWA8PALDw5DwCkOQ8PAEOQSKkEEOQSKkAQ4JFSADBgMB4YKsTY28pvIjKxNjaxNgrGxNjaxN5BjYmxteU3kGNhY2vKbyDLBjTCwEYMXgwEYMXgwE4eKw8BMhyHhyAUipBisApFSCQ5AEhyHIeAMOQYeAMBngOi8pvLfyXkRheU3lveU3kGF5TeW95TeQYXlN5b3lN5BjeU3ltYi3n9is/JeV3qfEtLer+OQR5HlWd34wvPdAsHk/t9fsfb6/YFh4PHc+Rnf+AMPC3r/AJOd/vkDw8Kdxcsv4oFIch4rAKQ5Dw5ALDw5DwQhisPAd3kvLbym5PyqMrym8r67nxNTZ31/kQRZIz6vMbfY/wCrac+lzPgHJfXX9eSv0+7+bjs8leQcf2f3bR9qT4dV5K8iubx/heXReSvIOfyXlveSvIMfJeW3kvIMsGNPIwGeFjTBgM7xL8Jv0p8fw2wYDH7dn46P/wBz8zWuHgMp3Pn+Gksvyd5l/MT9qfH8AqRWInHfP4unO7P7QF4eFz1L+KvAd2d9f4J9H/q2unBis1hOJPxB5bYXkGN5Ly28leRWPkry28l5BheSvLe8leQYXlN5b3krygwvKby6Lym8gwvKby3vKbyKxvJY2sTYDLCxrhYDPCxphYCcGKw8BOHIeHgFh5+zw8Bnfpy/4Xjuf1utsPAevhYvBisowsaYMBnheWmDAZeSvLXCwGV5K8tcKwGN5TY2sTYDKxNjaxFgrKxNjWxNgM7E2NLE2IM7CsaWJsBGFi8GCowYrBgFgxWDALDwxghHhgHshQVE4MUWAWFisGAnCxZYCMKxdhWAzsTY0sTQZ2JsaVNBnYitKmis6mrpUEWJsWSCLCxVGAnBh4ALDwYeAQwwAwAwe1gwBULBhgCwGAIqYBNKmQJqaqpoJqKuooJqKuooqamqqaBVNVSqCaSgCQeDAIHgwCPDAEYAPZACoAAAAAFQCoEVMqCamqqKCamqqKCamnU0VNKnSAqQpUAAEAAAAAAAAAAAeyAFQAAAKCoAqZAVTTpUE1NVUUE1NVUUE1NOpopJp0qBFTIAAEAAAAAAAAAAAf/Z", note: "Classic and volume mixed. Texture with a bit of fullness." },
+      photo: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCADwAPADASIAAhEBAxEB/8QAGwAAAwEBAQEBAAAAAAAAAAAAAAEDAgQGBQf/xAAlEAEBAQEAAQIGAgMAAAAAAAAAAQIRAxIxEyEyQVFhBHEjYoH/xAAYAQEBAQEBAAAAAAAAAAAAAAAAAQIDBP/EABURAQEAAAAAAAAAAAAAAAAAAAAR/9oADAMBAAIRAxEAPwDy4AcHpAENQABAFwwKzWa2zVRPSWltJ6gIbiG46dRHcBy+SOfyR17jn3Gkcnkjm8kdm45/JlRx7iG4695Q3lUcm4lqOneUdRUQ1E9RfUT1ASsZ4rYxYoxYXG7C4DIaIH6+YDg2AAABmqsg+DiBVmtFYoxYnqLWMWCIaiO46dRLUBy7iG8uveUd5UcW8ufeXdvLn3lUcO8oby7t5c+8Kji3lHWXZvKO8qOTUT1HTrKWsqiFjFi9yxYCNhcVsZsBPg43wcB+tgzcXQuAwAAAADg4BA+DgMWM2KcKwEbE9ZdFjGsqjl1lLeXXrKWsg4t5R3l27yjvCjg3hDeHfvCG8Kj5+8I7y794c+8Kji3hHWXbvCO8KOTWWLl06ynrKo57lm5XuWbkEeFxW5L0g/VgA4ugA4YAA+AQ4Z8AuDh8HAZ4XG+DgJ2M2K8KwENZT1l03LGsqjk1lLeHZrKWsg4d4Q3h37wjvCj5+8Ibw+hvCG8Kj5+8I6w794Q3hUcOsJay7dZS1hRyXLFy6dZYuRHPcl6Vrln0qP03hgccXQHwGBHwHwAOGfALh8Ph8Bng41w+AxwuKcHASuWblb0lcg57lPWXTcsayo49YR3h3awjvAjh3hDeHfvCG8KODeHPvD6G8IbwqPn7wlrLu3hDeFRx6ynrLr1lPWVHLcs3LouWbkR+hg+G5OhcMcMAfBDkAcPh8PgFw+Hw+AXD4ch8FZ4fGuHwE+Fcq8HBEbli5dFyxcg59ZS1l1aynrIOPeEN4d28obyqOHeEN4d28obyqODeEN4d28obyo4tZS1l2byjrKo5rli5dGssXIPd8M+BzbHD4OHwBw5D4cgFI1IJDkFEh8EjUgFw+HIciBcPhyNcBng41w+AxxmxXhWAhcsayvYxqKjl1lHeXXrKW8iOPeXPvLt3lDeVHFvLn3l27yhvKo495R1l17yjrKjm1lO5dOsp3Kj2nDPg45tCQ+CHIA4fD4cgo4fBJapPHq/YGIas8P51I16PHPfSCMjUisvjntLTnkk9swE5m32h+m/iqfFv2kh/G1+gTmb+Kfpv4qnxtfo/jb/QJem/ii5v4qvxdD4uv0DnsY1HVfL/AKxm6xffIji1Etx3az4r7WxLXhzfp1FHz9xDcd/k8Op7fNy+TFnvKqOPcc+469xDcVHJuJajp3EdRRz6jFi+onYD1/D43nx6vtFJ4s5+vTDSMjefHq+0U9ec/Tlm+TV+4rU8PPfUP/Hn91MRBX4v4zIV8mr92DA/mBDAQ4IYHDhRqQBGiOAODhgGaxYpWKIlqJaX0lqKI3Wp7VO+W/eSqbQ2IzveNfVnn9Ib8ONfTqf9a3EdqJ+Xwant85+nLvNnvHTdaz7Ur5u/LeZVHDqMWO3WPFv2vpqW/wCPqfT85+hHqdeTWvuz/YPjLRGY4AMCCnADiAOAwEMoYNQ4UOAbRQwAAAqzWqzRE9JaV0lpRLSG19I7BDaG19o7VENRLUW0lpRKxma1n2tjdjFgj1Q4YZaAB8AjAANFDRQZDoHDI4BtMxqCGcKGKYLoEKs07WbQY0nqt6qWqonpHauqjuiJbR2rtHSiWk9KaT0CdYqlYqj1QPg4ypA+DgED4OAIZGKAAIcOMxqAcNloDNkdQa6VpdK0BazaLWLQLVS1WtVLVUY1UtVvVR1RGNVLVa1UtVRnVTrWqxaDNZp2s1R60AMgAAoAAAAAAD4AggAGZQAfR0i6gdpWlazaoLWNUWp6oFqparWqjqiFqpap6qWqDOqnqnqpaqg1U7TtYtAWs2i1m1R7EAMgAAAAAAALQZQxAAAAA6KCtDNoC1i07WLQLVT1T1UtUQtVHVa1UdUC1UtU9VLVULVT1Rqp2gLWbStZtUO0us9HQe1ADIAAAAAAAAAABgh0DIFQFZtOsWgVrGqemNUGNVLVb1UtUGNVHVb1UdVRjVT1T1U9UGdVO1rVTtUFrFotZtA+l0ujoj//2Q==", note: "Classic and volume mixed. Texture with a bit of fullness." },
     { id: "russian-full", group: "Full sets",   name: "Russian", label: "Russian full set", price: 50, mins: 135,
-      photo: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCADwAPADASIAAhEBAxEB/8QAGQAAAwEBAQAAAAAAAAAAAAAAAAECAwQH/8QAHhABAQEBAQACAwEAAAAAAAAAAAECERIxUSJBYSH/xAAWAQEBAQAAAAAAAAAAAAAAAAAAAQT/xAAVEQEBAAAAAAAAAAAAAAAAAAAAEf/aAAwDAQACEQMRAD8A9zqbRam1GoWptFqbQFqLRam0UWotGqztFO1NpWptA7U2ptK0VXS6npdBfT6z6Og16crKVUoNZVSspVSiNs1crCVc0DeVUrGaXKI3lVKxlVNCN5VSsZpU0DXp9Zyn1UY2ptTaVqKdqbStRdCnai0taZ3Qp2ptTdIuhVWpukXSboFWldIuk3Qq7oemfovQNfQ9MvQ9A29HNMfRzQN5pc055pU0I6Jpc055pc0DeaXNOeaXNCOiaXK55pU0I6JpU0wmlTQN5o5pj6P0Ii1N0i6TdCqukXSbpF0Kq6RdJ1pGtCndIuk60i6FVdJukXSbQXdJuk2p6Kvo6z6OoL6fWXT9A0lOaZdPoNppU0xlOVUbzS5pzzS5oHRNLmnNNLmhHRNKmmE0qaB0TSpphNHNCOiaOaYTR+ghXSbpF0m6FVdIuiukXQHrSLpN0i0U7pFpWptFO1NpWptQVanqbStBXR1HR0VfR1n0+g06Oo6Og1lVKylOURrKqVlKqUGsq5pjKqVUbTS5phKqUG80qaYSqmhG80fpjNHNAVqbpN0m0VV0i0rUWgdqLRai1FO1FotTaAtK0rU9FO0ugugYIgUEgFdNMMFSnKhUBcqpWcqpRGkqpWcqpQaSqlZSqlUaynKzlOURr0+spT6BWptT0uinam0WotQO1FotTaAtTaLSFBdBAAOkBjpAD6OkAUOlACjSYK6cqTBcVKiHAXKqVEOCLlV1Ep9BfT6gdUT0rStTagdqbRam0Bam0UlUEKSAIAAAAAAAAADgEABSVAIqJMFQ4lUBUOJOAuH1I6Io+pPoM7StKlQFpUUqqlSpkgRU6QAAvU+wMJ9T9Dt/UBQT+X0Py/gKCeX7HL9guBP5fqj8v4ClI7fo/X3AUaZqdV0DOEcBUEIwUCAKHS6BGZArRQRXRXt/gHU3Ug8/Y5IBdt+IXNX5qgCfP3T5PowAAAAAAAABwAAZlDAcHmCGBcs+KcuoZwCmp+/8VKVko8wFwI5Z8UTXPmAsFNS/swY/lf4OfZ0qBCikAIyAAAAAAAAAAAAAAMAAcMoYCGIIBnCOAYgEAwABXMLmp8VQBmVMqoVI6SApHSAAAAAAAAAAAAIDgAAAcMADOEcAHCOAYgEAwAAA4YMqVUQJpKSApHSAAqBTAgEAAAAAAYgAHCOAYgEAzhHABwjgGIBAM4IAAMcBnU1aaCaVVU0CpHSAqBQKDICGAAABwAAYCGAAMQADhGoDhHAMyioAOA0QA+AGdTVFRU1KqmgVSqlQTQdIAAAEMoYAxAAOCGAEBgADiggAAzKGBnCNEOKhQwOAGDIqpNBNTVVNFTSqkgVIyoAAADIwOAQ4BgCAYAA4AFAZGBiAwEVChwQ4qFDiBw4DUf/Z", note: "Handmade fans. The fullest, fluffiest finish." },
+      photo: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCADwAPADASIAAhEBAxEB/8QAGgAAAwEBAQEAAAAAAAAAAAAAAAECAwUEB//EACIQAQEBAQABBAIDAQAAAAAAAAABEQIDEzFBURIyIWGRYv/EABgBAQEBAQEAAAAAAAAAAAAAAAABAwIE/8QAFREBAQAAAAAAAAAAAAAAAAAAABH/2gAMAwEAAhEDEQA/APk4Aed7oAAAAADCwwBAwBAYAKkZKFSqqVAkqSIKmqpUE0qZKiamrqaCKmqqaqJqaqpEKpqiUdrBh4MZtSwYeDALBh4ATgMAQMsEAAAqR0AmlVVNUJKkiClTpUCSpKoSapNBNTVVNVE1NVU1USRkDuYMMM2pYDAEDAESiwCwGASMPCAiqiETSqqmqJpVVTRCpU6QElSVQk1SaCamqqaqJqaqpqokjIHeBhm1IHgwCB4MAsLFYQEDGAkGWAkUyETSqk0EpqqVVE0jpASVJVCTVJoJqaqpqompqqmiFSp0lHfwYYZtSwYYAsGGAIGATgPACSUQJpVRAmpq00RFTV1NUTU1VKiJSupqolNXU0EVNXU1UTU1RUEpVSVHfBhlGxAwoQMJAgeDAIsMKhFToBNKqTQTSqk0RFTV1NUTUqpURKVEqJKqqaCamrqaqIpVRAilV2JwR3gQZtjA0KgAAAAACMgBGQFSp0gTSqk0RNTVVNUTU1dTRE0qqpqiaVVSoiKVVSqoiwlUrAThKLAdoFo1w0MFp6A09ICmCxU46vwBE09L76kH48T360ozJr+XjntNL1J8cwRnl+iy/TS+W/EkL1egZ5fpN5v019XpN8vQjO836Reb9Nr5uk+r1/SjGwq29X/mFe+L78iMKVb2eO+1sTfHL7dQGNS1vi6nxqLzZ7xURSqqVURSsXUiJLFUYDqHonFvtFTiT9unDROq556vwf588/rP9TfJ1fkGnp/fUG8c/wB1joBtfL9SRN8nV+UaNA9oLRoGWkNACkBBU06mqER0hEkZAVKnSqg/Lqe1OeS/P8ppCL/Pjr9uf8L0+b+vSCBXXi6nt/M/pnYqdWe1V6m/tJVGRY2vPHXtcqb4up7fyD3XydX3qdTo1w6Xo1OjQVp6jT0FaNTo0FaNTo0FDU6WqK0tLS0D0i0CAqNKgKQKgCopKCkAIRUyoEVMqoDnVntSAPTo1GnrlV6NRo0GmjUaNFXo1GnoitGp0aCtGp0aB6NTo0FFpaWgegiUMhpAZUUhAQoAqR0lAVMgAAEaaeo0ajpejU6NBWnqNGgvRqdGgrRqdGiK0anRoK0anRoK0anRoGNTo0FaRaAMtAAAtIDIFQAAUAAEPRqdGiq0anRqCtPUaegrRqdGgrRqdGgrRqdLQXo1GjVRejUaNBejU6NBWjU6BVENGgANGiCkAKAAIAACAQA9BAFaNSAVo1IBWjU6NBWhOgFaNSAVo0tGgejS0AoaQ0DNJgYIwAAAAAAAAZ6NIAYIAYIAYIAYIAYIANMgBgtGgYGgDgI9A4aTgGNAA9BADAAAAA//2Q==", note: "Handmade fans. The fullest, fluffiest finish." },
 
     { id: "classic-infill", group: "Infill sets", name: "Classic", label: "Classic infills", price: 25, mins: 60,
-      photo: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCADwAPADASIAAhEBAxEB/8QAGQABAQEBAQEAAAAAAAAAAAAAAgEAAwQH/8QAIxABAQEBAAEDBAMBAAAAAAAAAAERAhIDMUETIVFhIjJSQv/EABYBAQEBAAAAAAAAAAAAAAAAAAABBP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/APrbMw2szMDJVSgiKgDRpUaAUKdCgNClRoo0aVGgiatQFWCoFFgwoBRYMKAUVIsAlgxQVmYHrZmEZmYGFagNRq1KCUKVGgFCnQoDQpUaKNGlRoJWZNBWjMBRYKwDiwYUAosGEBKKwFiooPWyIISIwLUaoDDVqUEoUqFAaFOhQGjVo0UaNKjQSotRBlRlUoUFYIUKDFgHFgxYBxRUCaJFB6mRhF1tRtBrU1qmg1qVkoJQpUKCUKVoUVKNWjQGjVqUERaiK2qjKFFgrBDiwYUAoUCFAKFBiwCiiQPQwtoitqa2gtqalqAto1rUtBKNW0aKlCrRoJRq0bQS0atEGTWZFXWRoCwoKqFCgwoIUKBCgFCGLAJmjA76mpraIusmoC2o2poNqWslBLRq2jRUo1aNBKFWjQajWqVFasjaC6oqCwoKqFCgxYIcKBCgFCgxQJUUHTW1G0RtZNYG1GqAyMlFajVoglGrRoDaNKjQSitGorM1TVFVNYCiwYsA4UCFBDhQYsA4sGFAKLEiwCZmEZK1QGaslBkVBRSrbAvfP5BqNS+pPiWheur7cgVGjb3faYN8wKiPj1/pPHr/AEikznnc+dbe/wBKOjRz8uvwvn+ZQdCjlO5T56l9qDpCgQoIcKDCgFCgwoBRYkWATNiWye4iil9SfH3H+fX6A7ZA67k+W+n+bas4k+ADy6v9YmdX3uOrCuP0/wA21fCT4dBoBiUqlAKFdKNBzo06NAUq1KKiowL4y/DeE+PsqwEnNntSl7nxqw4Cc+pPn7OvPUvyGS+8WenBHWFHGc9T2ulO7P7QHaLA56ln2pwE/n1+mnpz/q664giTmT2jKwImFiALYSYA0aaWAFg2Olg2A50bHSwLBQsCx0sGwHOodg2AONisKyxIUBYcCHBChwIcAoQwoCXiX9N49c+104ojoyoDNjMCMrAiYWICJhIAWJYdg2AFgWOtgWA52DY6WDYK52DY6WDYAYh4mAKyLiyA0KNIUgLCiQpAKFIkWAsJIsEdWZgTGxWAWJMBGXGBMRWAcSwksALBsdLBsBzsGx0sGwHOwbHSxLBXPEx0xMAMWQsXASRZFkKQEkORpCkBpCjSFIIi4si4BMzAzMwMzMDMzAjKwChIA1LDxACwbDxLAc7EsdMTAc8THXEwAxsdMXxAJFkOclOQCQpCnJSAMiyFIUgBi4eNgAzMDMzAzMwMzMDMzAyKwC2K2AKYTAONhY2AGLh42AGLOTkKQAnKzk5FkEGcrIeLgBIuHi4AY2HjYDzMzCszMDMzAzMwMzMDMzAzMwMzNBGbFXATFxcWQEkKRZFkBJCkWQpBBkWQpCkAMWQ8aQAxcLFwH//Z", note: "Top-up within 2\u20133 weeks, with 40%+ of your set still on." },
+      photo: "data:image/jpeg;base64,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", note: "Top-up within 2\u20133 weeks, with 40%+ of your set still on." },
     { id: "hybrid-infill",  group: "Infill sets", name: "Hybrid",  label: "Hybrid infills",  price: 30, mins: 75,
-      photo: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCADwAPADASIAAhEBAxEB/8QAGQAAAwEBAQAAAAAAAAAAAAAAAAECAwUH/8QAIhABAQEBAAEDBAMAAAAAAAAAAAERAkEDEjETISJhMlFS/8QAGAEBAQEBAQAAAAAAAAAAAAAAAAEDAgT/xAAVEQEBAAAAAAAAAAAAAAAAAAAAEf/aAAwDAQACEQMRAD8A93AA9IAAAAABoADTIAYLT0AAAOAoYBSTBUOJhwRUOFDgKhwocBUXERcEXFxnFwRUVExUEcQEBqYIaBmnT0D0aWgDNIBQLTEGmRwBDIwBwjgHDhQ4Io4RgcVExUA4uIi4iLi4iKioqKiYqA4ejS0aND0aWjQPRpaNBWhJgZ6k9AwR6B6aTgijiYYGcI4Bw4UMRRkYHFRMVAOLiIuIi4qJioqKiomKgjg6NLRo1PRpaNA9GkAMEAVoLQCjSAUcTqoCjTDghwyOAqGmKgKMjEOKiYqAcXERcRFxUTFRUVFRMMHAAA0AAAAAANAA9BAD0yAKOJOAuHEw4C4cSYiocTFAqKiIqCKioiKgKioiLgi4qIi4IqKiIrQcAEBoYIAY0gB6CAKBDQMaABnEw4C4cTDgLhxMUIqHEnAXFREVBFQ4mKgKioiKgi4qVEVKC4rWcqtEcIGQ0AAAAAAAAAAA4aQChCMFQ4lUBUVERUEVDiVQFRURKqCKioiKgKUiGC5VSohyiLlVrOU9QckDArssGGASFFgEDwgAGpvfM8goI+pPEtHv6vxyK0Nlvd8SH+f6BrDjKc9/6Oc9/wChG0OMZO58XTn1Abw2Pv7/AMn9T++aDaKjLn1OV89S/FRFw4mHBFxURDUVDTDEVp6kwc3ArCuTyOyLCvc8TS/O/oDv2K9yeR9P+7ac45ngEXrq/wAYXt7vzca4BWc9Kebac4k8RYBOfozAhQweADhGBxUSoDhwjgg9svgr6c8fZRgj2dT46Pe58zVqQTz6k8/Zc6nilkvzE/S58CNTjGc98/F056ln8oo2Gp5756+KoHP/AD6/Rz0v7+7bBg6rOcyfEGLwsBGDF4WAjBisGAjBisGAnBisGAWDFYMAsODDkAoqDDEIxDAGIIBnAaIIqFBAM/n5I4om+nzf0n298/xutQDHBisGCowYrBgIwYrBgIwYrBgIwYrBgJwYrBgJwYrBgFgw8PAThngwCPDwYBGYwBDgNEBlDUBwGAAAFgxWDARgxeFgIwsaYWAjCxphYCMGLwYCMGLwYCMGLwYCMGLwYCMGLwYCMM8GAWDDwYAB4AEAOIAwFAAAXgw8AhYSgCcGKLBSwsVgwE4MVgwE4MVgwE4MUQFhYoYCcGKwgTgxRYBYSgCQoAUMAAAAAABqDAhAwBYMPBgJwYrBgJwYrBgJwYrBgJwKwgIsUAThKICwlEBDDwhSBkAAAAAAAADcGBEhQBIUASFAEhRAR4MMCIxgEDwAkqqkBEZUCIwBAAUgZAAAAAAP/9k=", note: "Top-up within 2\u20133 weeks, with 40%+ of your set still on." },
+      photo: "data:image/jpeg;base64,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", note: "Top-up within 2\u20133 weeks, with 40%+ of your set still on." },
     { id: "russian-infill", group: "Infill sets", name: "Russian", label: "Russian infills", price: 35, mins: 90,
-      photo: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCADwAPADASIAAhEBAxEB/8QAGwAAAwEBAQEBAAAAAAAAAAAAAAECAwUGBAf/xAAhEAEBAQEBAAICAwEBAAAAAAAAARECEjFBUWEDEyEycf/EABgBAQEBAQEAAAAAAAAAAAAAAAABAgME/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8A/TKAWj3CgACGikAMgKcOFDEOKiTgLioiLgLjTlnFwRry05rHmtJRG3NXzWMq5QbSrlYyqlEaaes/Q9AvS1HovQLtK1F6TegXaVqLS0HGBaQ2YIAAAAAAoMjgHFJioIqKiIqA0iozi5QaStJWMq5RG0qpWMqp0I2nR+mPo/QNvRemfovQNfRemfovQNL0XpneivQNPRemfovQObo0gNgAAAABwCAQHCOCnDKGBqiYcEXKqVEpyg0lVKylOUGsp+mWn6Ea+j9MfQ9A29F6Zei9A19D0y9F6Br6L0y9D0DT0PTP0WivmBADAAoAPAEAOADAAQwAEMjEPT1I0F6NRo0F6NRpaDT0PTP0XoGvovTP0NBppaz0egaaNZ6NBpo1no0EgDBQDwAAeABhg8AjB4IQPABAUCgaVKiHpaVpWgelqdLRV6Wo0aC9Go0aC9Go0aC9Gp0aC9Gp0aDTBisGCJw8PDwE4eHh4CcPDw8Ahh4MAsJRAVIyoFU06mgVK0VNootK0rS0D0tIaB6NLQCtCdMFaaYYHp6QB9WHi8GCIwYvDwEYMXgwE4MVgwE4MVgwEFVpoJqaqpoJqKqpoqam06igKmnUgYIgUEqA4ChgZwoYGcIA6eDGnkYMs8GNMLARgxeDARgxeFgIwsXUXvmfYFU0X+SfUtReuvrkU6ilb3fpN9/oB0ijrnr8s7z1+RTqKLOp96i+v0CiTb1+C9/mUFBPuHLvxRTNOmIoQoYGZHAOGlQO35GNMK5PkYRhYd7n1/pZ31+oBXJ8p665iv6vzbTn8fM+hWW9X/mF57vzcb4VgMP6/wA20eJPprYmwGeRFaVFBnUdNOmfQrPpHS+mfQqaiqqaBUqCArJforxP/FAVPmz4p71PozAp1Pv/ABWwsl+R5giziM6nxdE6z5gLUiWVYO/nfX6E/i/N1vgwYZTmT4gxphYDOwrF2FYDOwrF2JsBFiK0qKDOs+mlR0Kz6Z9NOmXQqOmfS+kdCoqKqpoFSFAoAAAyMDhlDghmUMC8SjOp8VYwHqcLF4Q5owrF2FYCLE2LsKgzsRWlRQRUVpWfQrPpn006Z9Cs+mXTXpl0Kz6Z9NOmfQIqaqpoqaBQKAAAhiHBDMoYHDhGBmUMHq8BlRzJNWkE1NXU0GdRWlRQZ1FaVHQrLpn016ZdCsumfTTpn0Ky6Z9NemfQrOpq6igmgyACHgFCihiCKhGBw4SgBiAHrKRkORUqqpFKpqqmgiorSooM6z6a9M6Ky6Z9NemfQrHpl026ZdCsumfTXpn0DOpq6iopEdJQAHAEOAwOHCUAhwGAMQweqKmKOREZUUqmqqaCKmrqKDPpFaVHQrLpl026ZdAy6ZdNemfQrLpn016Z9CsqmrqaipIwoUMCAIqEoBFQjgHDhKAHhQwepAA5EKdIE0qpNFRU1dRQR0z6aVHQMumfTXpn0Kx6ZdNumXQrLpn016Z9QVnUVdiaKigywAZYYCKhRUARUIwOGBAMAwf/2Q==", note: "Top-up within 2\u20133 weeks, with 40%+ of your set still on." },
+      photo: "data:image/jpeg;base64,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", note: "Top-up within 2\u20133 weeks, with 40%+ of your set still on." },
 
     { id: "brow-lam", group: "Brows & nails", name: "Brow lamination", label: "Brow lamination", price: 35, mins: 60,
-      photo: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCADwAPADASIAAhEBAxEB/8QAGQABAQEBAQEAAAAAAAAAAAAAAAECAwQH/8QAIxABAQEAAQQBBQEBAAAAAAAAABEBAgMSMUFhEyEiUVIyQv/EABYBAQEBAAAAAAAAAAAAAAAAAAABBP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/APsWo0yNYAKaioAYAKAKLUAUqAi0qAKhqAogCriANY1jK4I1jWM41gK0y0AqKDzJqoCAAJqmioAILUBVClFApQBAF1BKIolUBUUFxrGcawRrFxnGsBppnGgFRRHmAFTUaZAAFTRUAAAAFAQCglBRKgNCKCiYoitYy1gNY1jONYI1jTONAKYA8wACKAyLqAGgKgAAAqaACagABqAq4igqooitYy1gNY1jON4IuNM40CgYDzAAAAIoDI0kBIigqC7iAmi6grIAIAC4qYuAqpjWCLjWM41gNY1jON4IuLiYuAq4i4DygAAQAUBBQGRYAyau4gqJqgM6jTIoQAFxGgXFxFEaxrGcawGsaxnGsEVpFAVMUHlIoACwEWCgkIsICRGogMxI0mgyjWporOo0gqCgIuCguLiNYIuNYzjWCNY1iYuAuKYAuBgDzRYpARRYCRVASLFhAZguzGd58c9gRIm9TPWbrO8uW+OIq6mp+e+om5z+AXUZ3jy/pO3l/QNkY7eeeNpOp8Ctrjn3cv5Xv/eaI6YuMZzxvjub40GsaxMawRcaTFwFBcAAEcYRqJszzooRnepnrKfny+MBv7YzvPM9mdLPe7rXHhmeMBju5b/nDt5752OsUHLOlnvd1fp8f06JAZ7c/SbjabgOe4m43uJuA57iRvcSAwNQgqCxYCdub6Pp5vj7NZjWA55w5Z41rN555yt41gjHHqZ7+zpm5+03jm+cZ3pcQdFxz7eWeNpnU3P9YDoJnLN8aojh+fL4XOnn/W10iwVnOOZ4xYqwRILFgJCLFgMwjUSAykbiQGNxNxuJBXPcSOm4kBzhG4QGIsahATMXFhAMUWAuAuAYAIzvDN+E7eWeNrYKQjUIIkI1CAkI1CAkWLCAkSNwgMRI3CA5xI6RIDnCNxIDEI3EgMQjcIDMI1CAgsAIKQEFUEhFAahGoQEhGoQEhGoQEhGoQEhGoQRmEahAYhG4QHOJHSEFcokdYkBziR1iQHOEdIkBiEbhAYhG4QGYRqEBmEahAdIRYQRIRqAIRYsBILFgMxY1CAzFjUIDMSOkIDnCOkSA5wjpEgOcI3CA5wjcIDnCNwgMQjcIDEI3CAxCNwgLCNQgJCNQgMxY1CCJCNQgJFixYCQjUWAzCNQgMwjUIDEI3CA5xI6QgOcSOkIDnCOkSA5w7XSEBzh2ukIDnCOkIDMI0AzFiqDMXMVQSEVYCLFACKCJCNQgJCLAEiRoBmEahAZiRuEBiEahAZhGoQGYRqEBmEahAf/Z", note: "Brushed up and set for a fuller shape. Lasts six to eight weeks." },
+      photo: "data:image/jpeg;base64,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", note: "Brushed up and set for a fuller shape. Lasts six to eight weeks." },
     { id: "biab",     group: "Brows & nails", name: "BIAB overlay",    label: "BIAB overlay",    price: 30, mins: 90,
-      photo: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCADwAPADASIAAhEBAxEB/8QAGgABAQEBAQEBAAAAAAAAAAAAAgEAAwYFCP/EACIQAQEBAQACAQQDAQAAAAAAAAABEQIDMUESIVFhEyJSMv/EABcBAQEBAQAAAAAAAAAAAAAAAAABAwL/xAAWEQEBAQAAAAAAAAAAAAAAAAAAEQH/2gAMAwEAAhEDEQA/AP0izMrVmZgZmYGSqgMlUaKlClQoDRpUKKNGlQqKNGlRorJVSgjMwMzMDIqUVmZgSs1YH2mRlZKza2gzMwMioDUaVGijQp0KA0KdCoo0KdCijRpUaKyKgIzMDMzaDIzCs2owMzID7TI2qzVk1RGbWYGZk0VaNVKA0KdCgNCnQqKNCnQoo0aVGisiiDNqMDM2oKqamtoNrJqaCto62g+1raOtqsz1tHV0CbR1dBWTW0GqM1BKFKjQGhTo0UKFOjUUKNKjRUqVaNBkajaKupqWpoFqaOpoFqampoq2to6mg+3ramsrMtXQXQLV0JV0Ql0dbQXWTWBKlWjQSjSo0UKNKhUUaFKjRUo2rRtBLRta0bRV1NS0bQLU0bRtFK1NC1NFPU0LW0H39bRXVZFraOroE2jq6BauiwFrCwKlZKCUaVGgNClQoo0KXQVFG0LS6rnaK1o2taFoq2jaNo2gVo2paNopWpoWpainqaGpoPSNqa2umS6oqBauhqgWqOsIWtqa2grJqA1GrRoDQpWh0KNrn1StDqoodULVtDqip1QtbqhaK1o2paNo6W0bUtHUC1NHU0UtTR1NB6hkbVYquprAqiqi6o6wFq6GyfKXycz5EdNS1yvl/EqXydfHIsdbQtc715L6mDf5P0Dpa59Ubz3/AKc7z3/oU+q5dVOvrnq659Xv9IpWuXVTrvr8OfXk/MosK0LRvkg3qX1RWtG1rRorWpa1o2oq6OtUFXU1NQHq2ZLZPdVgrBfJPj7p/fr9QHTc9jfJzB/j33bSnHM+AT6+uv8AmNnd93DZQJ4/zbSnHM+FYG+0a1NTQW0bWtG0EtDqra59UUeq52l1Q6qKHVc+i6oUdYHUn4cuuZ8fZ06Ciud5s9Ubep7mug1FD658/Zti9SULxBSFM6nqp9We4BM0svpgen/v1+mnj/1ddGVgkknqKzAyazKNrMmgqayA1qayUGtG1rRtBLXPqla59VFHqh1Stc+qOh6oVaNFChToUVKNIRUo0kRUTCQAvMqZZ6ptgPVMzKwZFQGZk0GqM1UaoyUGqWtRtBrQtW0LRUtc6VCoo9Vz6p9VzoqUKVCijRpVKKKUqgooeIA4hY2IotisD07MysGRagMK1AZKtQGoqlUSjVo0UaFKhUBo1aNFCjVo0dDRpUaCUaSCi2LiCoysCJhY2AONhYmA9IzMMUrNWBKipQRqyAiVaNUSjVqUUKFKjUUaFKhRRoUqNFSotSijWWoCMrAONi4wqITALEmA9EmqgxZKoisi1Aao1QREVKqjRpUKA0KVGoo0KXQUUaNKjRUqValFRqzAjK2AjLiAzYzAmNisD0FRqwySotQVqjVqCCQg1SrUoDQp0KAUaVGih0FOjRQqValFGstQUWWoDMzAzMwMzMDY2MwP/9k=", note: "Builder gel on natural nails, shaped and finished." }
+      photo: "data:image/jpeg;base64,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", note: "Builder gel on natural nails, shaped and finished." }
   ];
 
   // The studio travels on set days — the calendar filters by where you are.
@@ -1512,6 +1546,97 @@ button { font: inherit; color: inherit; }
   var MONTHS = ["January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"];
 
+  /* ---------------------------------------------------- atmosphere */
+
+  // Five warm blobs drifting on slow, unequal sine paths across a 34x22
+  // canvas that CSS blurs and stretches to fill the screen. Cheap enough to
+  // leave running, and the low resolution is what makes it soft.
+  function ambientLight() {
+    var cv = document.getElementById("ambient");
+    if (!cv) return;
+    var ctx = cv.getContext("2d");
+    var W = cv.width, H = cv.height;
+    var blobs = [
+      { x: 0.20, y: 0.18, r: 0.42, c: "#6d3b3a", sx: 0.011, sy: 0.007, p: 0.0 },
+      { x: 0.78, y: 0.26, r: 0.36, c: "#8a5a4b", sx: 0.008, sy: 0.013, p: 1.7 },
+      { x: 0.62, y: 0.72, r: 0.46, c: "#4a2b33", sx: 0.013, sy: 0.009, p: 3.1 },
+      { x: 0.28, y: 0.82, r: 0.34, c: "#7b4b46", sx: 0.009, sy: 0.011, p: 4.4 },
+      { x: 0.50, y: 0.48, r: 0.30, c: "#a9705e", sx: 0.007, sy: 0.008, p: 2.3 }
+    ];
+
+    if (reduced) {                       // paint one still frame and stop
+      draw(0);
+      return;
+    }
+
+    var raf = null;
+    function draw(t) {
+      ctx.globalCompositeOperation = "source-over";
+      ctx.fillStyle = "#0d0a0c";
+      ctx.fillRect(0, 0, W, H);
+      ctx.globalCompositeOperation = "lighter";
+      for (var i = 0; i < blobs.length; i++) {
+        var b = blobs[i];
+        var cx = (b.x + Math.sin(t * b.sx + b.p) * 0.16) * W;
+        var cy = (b.y + Math.cos(t * b.sy + b.p) * 0.14) * H;
+        var rr = b.r * W;
+        var g = ctx.createRadialGradient(cx, cy, 0, cx, cy, rr);
+        g.addColorStop(0, b.c);
+        g.addColorStop(1, "rgba(13,10,12,0)");
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(cx, cy, rr, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalCompositeOperation = "source-over";
+    }
+
+    var t0 = performance.now();
+    function frame(now) {
+      draw((now - t0) / 1000);
+      raf = requestAnimationFrame(frame);
+    }
+    frame(t0);
+
+    // stop burning frames on a page nobody is looking at
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) { if (raf) cancelAnimationFrame(raf); raf = null; }
+      else if (!raf) { t0 = performance.now() - 1; raf = requestAnimationFrame(frame); }
+    });
+  }
+
+  // The pointer catches the light on a card, and tips it very slightly.
+  function reactiveCards() {
+    if (reduced || !window.matchMedia("(hover: hover)").matches) return;
+    var stage = document.getElementById("stage");
+
+    stage.addEventListener("pointermove", function (ev) {
+      var card = ev.target.closest(".service");
+      if (!card) return;
+      var r = card.getBoundingClientRect();
+      var px = (ev.clientX - r.left) / r.width;
+      var py = (ev.clientY - r.top) / r.height;
+      card.style.setProperty("--mx", (px * 100).toFixed(1) + "%");
+      card.style.setProperty("--my", (py * 100).toFixed(1) + "%");
+      card.style.setProperty("--ry", ((px - 0.5) * 3).toFixed(2) + "deg");
+      card.style.setProperty("--rx", ((0.5 - py) * 2).toFixed(2) + "deg");
+    });
+
+    stage.addEventListener("pointerleave", reset, true);
+    stage.addEventListener("pointerout", function (ev) {
+      var card = ev.target.closest(".service");
+      if (card && !card.contains(ev.relatedTarget)) clear(card);
+    });
+    function clear(card) {
+      card.style.setProperty("--rx", "0deg");
+      card.style.setProperty("--ry", "0deg");
+    }
+    function reset() {
+      var all = stage.querySelectorAll(".service");
+      for (var i = 0; i < all.length; i++) clear(all[i]);
+    }
+  }
+
   /* ---------------------------------------------------- ticker */
 
   function buildTicker() {
@@ -1522,7 +1647,7 @@ button { font: inherit; color: inherit; }
     var items = [
       next ? "Next availability <b>" + fmtDate(next.date) + "</b> in " + next.area
            : "Fully booked for now \u2014 message me to join the waiting list",
-      "A mobile studio that <b>comes to you</b>",
+      "A mobile atelier that <b>comes to you</b>",
       "All prices include travel",
       "Fully qualified &amp; insured",
       "\u00a3" + DEPOSIT + " deposit secures your slot",
@@ -1877,7 +2002,7 @@ button { font: inherit; color: inherit; }
         (s.photo ? '<img class="service-photo" src="' + esc(s.photo) +
           '" alt="' + esc(s.label) + ", close up\" loading=\"lazy\">" : "") +
         '<span class="service-name">' + esc(s.name) + "</span>" +
-        '<span class="service-price num">\u00a3' + s.price + "</span>" +
+        '<span class="service-price num foil">\u00a3' + s.price + "</span>" +
         '<span class="service-meta"><span class="service-dur num">' + fmtMins(s.mins) + "</span>" + esc(s.note) + "</span>" +
         "</button>";
     }
@@ -2747,26 +2872,7 @@ button { font: inherit; color: inherit; }
     save();
   });
 
-  /* ---------------------------------------------------- theme */
-
-  (function theme() {
-    var btn = document.getElementById("themeToggle");
-    var saved = store.get("ellash.theme");
-    if (saved === "light" || saved === "dark") document.documentElement.dataset.theme = saved;
-
-    btn.addEventListener("click", function () {
-      var root = document.documentElement;
-      var current = root.dataset.theme;
-      if (!current) {
-        // no explicit choice yet — flip away from whatever the OS is showing
-        var osLight = window.matchMedia("(prefers-color-scheme: light)").matches;
-        current = osLight ? "light" : "dark";
-      }
-      var next = current === "dark" ? "light" : "dark";
-      root.dataset.theme = next;
-      store.set("ellash.theme", next);
-    });
-  })();
+  /* This page commits to one visual world, so there is no theme switch. */
 
   /* ---------------------------------------------------- go */
 
@@ -2787,5 +2893,7 @@ button { font: inherit; color: inherit; }
   buildTicker();
   render();
   applyHash();
+  ambientLight();
+  reactiveCards();
 })();
 </script>
