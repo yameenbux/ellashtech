@@ -853,7 +853,11 @@ button { font: inherit; color: inherit; }
   transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
 }
 
-.cal-nav button:hover:not(:disabled) { border-color: var(--gold); color: var(--gold); }
+.cal-nav button:hover:not(:disabled) {
+  border-color: var(--gold);
+  color: var(--gold-bright);
+  background: var(--gold-wash);
+}
 .cal-nav button:disabled { opacity: 0.3; cursor: not-allowed; }
 
 .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: var(--s-4); }
@@ -890,11 +894,25 @@ button { font: inherit; color: inherit; }
 
 .day.free {
   color: var(--ink);
-  border-color: var(--line);
+  border-color: var(--line-strong);
   cursor: pointer;
+  overflow: hidden;
 }
 
-.day.free:not([aria-pressed="true"]):hover { border-color: var(--gold); background: var(--gold-wash); }
+/* light gathers under a free day when you reach for it */
+.day.free::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  border-radius: inherit;
+  background: radial-gradient(circle at 50% 60%, rgba(221, 169, 143, 0.30), transparent 66%);
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease);
+  pointer-events: none;
+}
+
+.day.free:not([aria-pressed="true"]):hover { border-color: var(--gold); }
+.day.free:not([aria-pressed="true"]):hover::before { opacity: 1; }
 
 .day.free::after {
   content: "";
@@ -903,17 +921,23 @@ button { font: inherit; color: inherit; }
   width: var(--s-4);
   height: var(--s-4);
   border-radius: 50%;
-  background: var(--gold-dim);
+  background: var(--metal);
+  opacity: 0.7;
 }
 
 .day.full { color: var(--ink-faint); text-decoration: line-through; }
 
 .day[aria-pressed="true"] {
-  background: var(--gold);
-  border-color: var(--gold);
-  color: var(--ground);
+  background: var(--foil);
+  background-size: 220% 100%;
+  background-position: 40% 0;
+  border-color: transparent;
+  color: #201317;
   font-weight: 500;
+  box-shadow: 0 10px 34px -14px var(--metal);
 }
+
+.day[aria-pressed="true"]::before { opacity: 0; }
 
 .day[aria-pressed="true"]::after { background: var(--ground); opacity: 0.5; }
 
@@ -958,7 +982,11 @@ button { font: inherit; color: inherit; }
   transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease), color var(--dur) var(--ease);
 }
 
-.slot:not([aria-pressed="true"]):hover:not(:disabled) { border-color: var(--gold); background: var(--gold-wash); }
+.slot:not([aria-pressed="true"]):hover:not(:disabled) {
+  border-color: var(--gold);
+  background: var(--gold-wash);
+  transform: translateY(-1px);
+}
 
 .slot:disabled {
   color: var(--ink-faint);
@@ -968,10 +996,13 @@ button { font: inherit; color: inherit; }
 }
 
 .slot[aria-pressed="true"] {
-  background: var(--gold);
-  border-color: var(--gold);
-  color: var(--ground);
+  background: var(--foil);
+  background-size: 220% 100%;
+  background-position: 40% 0;
+  border-color: transparent;
+  color: #201317;
   font-weight: 500;
+  box-shadow: 0 12px 34px -18px var(--metal);
 }
 
 .slots-empty {
@@ -1002,7 +1033,7 @@ button { font: inherit; color: inherit; }
 
 .slots-title { display: flex; align-items: center; gap: var(--s-8); flex-wrap: wrap; }
 
-.day.free.low::after { background: var(--blush); }
+.day.free.low::after { background: var(--blush); opacity: 0.95; }
 
 /* ---------------------------------------------------------- hold timer */
 
@@ -1037,16 +1068,14 @@ button { font: inherit; color: inherit; }
 
 .done { position: relative; }
 
-.sparkle {
-  position: absolute;
-  inset: 0;
+.flourish {
   width: 100%;
-  height: 100%;
+  max-width: 460px;
+  margin: 0 auto;
   pointer-events: none;
-  z-index: 1;
 }
 
-.done > *:not(.sparkle) { position: relative; z-index: 2; }
+.flourish canvas { display: block; width: 100%; }
 
 /* ---------------------------------------------------------- form */
 
@@ -1299,11 +1328,25 @@ button { font: inherit; color: inherit; }
 
 .reveal.is-in { opacity: 1; transform: none; }
 
-.step { animation: rise var(--dur-slow) var(--ease) both; }
+.step { animation: rise 420ms var(--ease) both; }
+
+/* the month slides the way you paged it, and nothing else moves */
+.cal-next { animation: monthIn 320ms var(--ease) both; }
+.cal-prev { animation: monthInBack 320ms var(--ease) both; }
+
+@keyframes monthIn {
+  from { opacity: 0; transform: translateX(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes monthInBack {
+  from { opacity: 0; transform: translateX(-14px); }
+  to   { opacity: 1; transform: none; }
+}
 
 @keyframes rise {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: none; }
+  from { opacity: 0; transform: translateY(12px); filter: blur(6px); }
+  to   { opacity: 1; transform: none; filter: blur(0); }
 }
 
 @keyframes draw { to { stroke-dashoffset: 0; } }
@@ -1323,6 +1366,7 @@ button { font: inherit; color: inherit; }
   .ticker-track { animation: none; }
   .btn-primary::after { display: none; }
   .reveal, .reveal.is-in { opacity: 1; transform: none; }
+  .cal-next, .cal-prev { animation: none; }
   .foil { animation: none; background-position: 50% 0; }
   .ambient { opacity: 0.4; }
 }
@@ -1891,6 +1935,7 @@ button { font: inherit; color: inherit; }
     date: null,        // "YYYY-MM-DD"
     time: null,        // "HH:MM"
     view: startOfMonth(new Date()),
+    calDir: 0,
     details: { name: "", phone: "", email: "", address: "", postcode: "", history: "", notes: "" },
     consent: false,
     ref: null,
@@ -2206,7 +2251,7 @@ button { font: inherit; color: inherit; }
   /* ---------------------------------------------------- render: steps */
 
   function stepService() {
-    var html = '<div class="card step">' +
+    var html = '<div class="card">' +
       '<div class="card-head">' +
         '<span class="eyebrow">Welcome</span>' +
         "<h2>What are we booking you in for?</h2>" +
@@ -2239,7 +2284,7 @@ button { font: inherit; color: inherit; }
 
   function stepWhen() {
     var svc = service();
-    var html = '<div class="card step">' +
+    var html = '<div class="card">' +
       '<div class="card-head">' +
         '<span class="eyebrow">Step 2 · ' + esc(svc.label) + " · " + fmtMins(svc.mins) + "</span>" +
         "<h2>Where are you, and when suits?</h2>" +
@@ -2279,7 +2324,7 @@ button { font: inherit; color: inherit; }
     var maxMonth = new Date(thisMonth.getFullYear(), thisMonth.getMonth() + 4, 1);
 
     var html = '<div class="cal-head">' +
-      '<span class="cal-month">' + MONTHS[v.getMonth()] + " " + v.getFullYear() + "</span>" +
+      '<span class="cal-month foil">' + MONTHS[v.getMonth()] + " " + v.getFullYear() + "</span>" +
       '<span class="cal-nav">' +
         '<button type="button" data-cal="-1" aria-label="Previous month"' +
           (v <= thisMonth ? " disabled" : "") + ">&#8592;</button>" +
@@ -2386,7 +2431,7 @@ button { font: inherit; color: inherit; }
 
   function stepDetails() {
     var a = area();
-    var html = '<div class="card step">' +
+    var html = '<div class="card">' +
       '<div class="card-head">' +
         '<span class="eyebrow">Step 3</span>' +
         "<h2>Where am I coming to?</h2>" +
@@ -2418,7 +2463,7 @@ button { font: inherit; color: inherit; }
 
   function stepConfirm() {
     var svc = service(), a = area(), d = state.details;
-    var html = '<div class="card step">' +
+    var html = '<div class="card">' +
       '<div class="card-head">' +
         '<span class="eyebrow">Step 4</span>' +
         "<h2>Everything look right?</h2>" +
@@ -2472,8 +2517,7 @@ button { font: inherit; color: inherit; }
 
   function stepDone() {
     var svc = service(), a = area(), d = state.details;
-    return '<div class="card step"><div class="done">' +
-      '<canvas class="sparkle" id="sparkle" aria-hidden="true"></canvas>' +
+    return '<div class="card"><div class="done">' +
       '<span class="done-mark" aria-hidden="true">' +
         '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9.5 18 20 6.5"/></svg>' +
       "</span>" +
@@ -2481,6 +2525,7 @@ button { font: inherit; color: inherit; }
       "<p>I'll text " + esc(d.phone) + " within a few hours to confirm and send over the deposit details. " +
       "A confirmation is on its way to " + esc(d.email) + " too.</p>" +
       '<span class="ref num">' + esc(state.ref) + "</span>" +
+      '<div class="flourish"><canvas id="flourish" aria-hidden="true"></canvas></div>' +
       '<div class="done-card">' +
         row("Treatment", svc.label) +
         row("When", fmtDateLong(state.date) + ", " + state.time) +
@@ -2572,7 +2617,7 @@ button { font: inherit; color: inherit; }
 
   function stepDiary() {
     if (!state.diaryOpen) {
-      return '<div class="card step"><div class="card-head">' +
+      return '<div class="card"><div class="card-head">' +
         '<span class="eyebrow">Private</span><h2>Your diary</h2>' +
         "<p>Enter the code to see upcoming bookings and close off days you can't work.</p></div>" +
         '<div class="field" data-invalid="' + (state.errors.code ? "true" : "false") + '">' +
@@ -2586,7 +2631,7 @@ button { font: inherit; color: inherit; }
     var list = savedBookings().filter(function (b) { return b.date >= iso(today()); })
       .sort(function (x, y) { return (x.date + x.time) < (y.date + y.time) ? -1 : 1; });
 
-    var html = '<div class="card step"><div class="diary">' +
+    var html = '<div class="card"><div class="diary">' +
       '<div class="card-head"><span class="eyebrow">Private</span>' +
       "<h2>Your diary</h2><p>" +
       (list.length ? list.length + (list.length === 1 ? " booking" : " bookings") + " coming up."
@@ -2642,6 +2687,7 @@ button { font: inherit; color: inherit; }
   /* ---------------------------------------------------- live bits */
 
   var timers = { hold: null, sparkle: null };
+  var lastStep = null;
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function clearLive() {
@@ -2714,53 +2760,42 @@ button { font: inherit; color: inherit; }
     timers.hold = setInterval(tick, 1000);
   }
 
-  // a brief shower of gold, once, when the booking lands
-  function startSparkle() {
-    var cv = document.getElementById("sparkle");
-    if (!cv || reduced) return;
+  // The page opens by applying a set and closes the same way: the treatment
+  // you actually booked, drawn once beneath the reference. The dust burst
+  // this replaces was inherited from another brand and never belonged here.
+  function startFlourish() {
+    var cv = document.getElementById("flourish");
+    if (!cv) return;
+    var svc = service();
+    var motif = (svc && svc.motif && svc.motif.type === "lash")
+      ? svc.motif
+      : SERVICES[1].motif;
+
     var box = cv.parentElement;
+    var w = box.clientWidth, h = 150;
+    if (!w) return;
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    var w = box.clientWidth, h = box.clientHeight;
-    if (!w || !h) return;
     cv.width = w * dpr; cv.height = h * dpr;
+    cv.style.width = w + "px"; cv.style.height = h + "px";
     var ctx = cv.getContext("2d");
     ctx.scale(dpr, dpr);
 
-    var gold = getComputedStyle(document.documentElement).getPropertyValue("--gold").trim() || "#a8a183";
-    var bits = [];
-    for (var i = 0; i < 70; i++) {
-      bits.push({
-        x: w / 2 + (Math.random() - 0.5) * w * 0.5,
-        y: h * 0.18 + (Math.random() - 0.5) * 40,
-        vx: (Math.random() - 0.5) * 1.5,
-        vy: -Math.random() * 2.2 - 0.4,
-        r: Math.random() * 1.8 + 0.6,
-        life: 0,
-        max: 90 + Math.random() * 70
-      });
-    }
+    var opts = {
+      count: Math.round(motif.count * 0.62), fan: motif.fan, len: motif.len * 1.05,
+      curl: motif.curl, spread: motif.spread * 1.2, weight: motif.weight * 1.1,
+      alpha: Math.min(1, motif.alpha * 1.1), map: motif.map, grow: 0
+    };
 
-    function frame() {
+    if (reduced) { opts.grow = 1; ctx.clearRect(0, 0, w, h); drawLashSet(ctx, w, h, opts, 11); return; }
+
+    var t0 = performance.now();
+    function frame(now) {
+      opts.grow = Math.min(1, (now - t0) / 1800);
       ctx.clearRect(0, 0, w, h);
-      var alive = false;
-      for (var i = 0; i < bits.length; i++) {
-        var b = bits[i];
-        b.life++;
-        if (b.life > b.max) continue;
-        alive = true;
-        b.x += b.vx;
-        b.y += b.vy;
-        b.vy += 0.035;                       // gravity, so they arc and fall
-        ctx.globalAlpha = Math.max(0, 1 - b.life / b.max) * 0.9;
-        ctx.fillStyle = gold;
-        ctx.beginPath();
-        ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      ctx.globalAlpha = 1;
-      timers.sparkle = alive ? requestAnimationFrame(frame) : null;
+      drawLashSet(ctx, w, h, opts, 11);
+      timers.sparkle = opts.grow < 1 ? requestAnimationFrame(frame) : null;
     }
-    frame();
+    timers.sparkle = requestAnimationFrame(frame);
   }
 
   // the total counts to its new value rather than snapping
@@ -2805,10 +2840,22 @@ button { font: inherit; color: inherit; }
     else html = stepDone();
 
     stage.innerHTML = html;
+
+    // Every click re-renders the stage, so without this the card replayed its
+    // entrance on each one. Only a genuine change of step earns the animation.
+    var card = stage.querySelector(".card");
+    if (card && state.step !== lastStep) card.classList.add("step");
+    if (card && state.calDir) {
+      var grid = card.querySelector(".cal-grid");
+      if (grid) grid.classList.add(state.calDir > 0 ? "cal-next" : "cal-prev");
+      state.calDir = 0;
+    }
+    lastStep = state.step;
+
     renderProgress();
     renderSummary();
     if (state.step === 3) startHold();
-    if (state.step === 4) startSparkle();
+    if (state.step === 4) startFlourish();
     armReveal();
     save();
   }
@@ -3004,6 +3051,7 @@ button { font: inherit; color: inherit; }
 
     if (t.dataset.cal) {
       var step = Number(t.dataset.cal);
+      state.calDir = step;
       state.view = new Date(state.view.getFullYear(), state.view.getMonth() + step, 1);
       render();
       return;
